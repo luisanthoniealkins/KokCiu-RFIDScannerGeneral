@@ -48,11 +48,15 @@ class MainViewModel : BaseViewModel() {
         mServerService = VolleyRepository.getInstance()
         mBluetoothScannerService = BluetoothScannerService.getInstance()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            launch { mNetworkService.sfStatus.collect{ refreshNetworkStatus() } }
-            launch { mServerService.sfStatus.collect{ refreshServerStatus(it) } }
-            launch { mBluetoothScannerService.sfStatus.collect{ refreshBluetoothStatus(it) } }
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            launch { mNetworkService.sfStatus.collect{ refreshNetworkStatus() } }
+//            launch { mServerService.sfStatus.collect{ refreshServerStatus(it) } }
+//            launch { mBluetoothScannerService.sfStatus.collect{ refreshBluetoothStatus(it) } }
+//        }
+
+        mNetworkService.sfStatus.observeForever { refreshNetworkStatus() }
+        mServerService.sfStatus.observeForever { refreshServerStatus(it) }
+        mBluetoothScannerService.sfStatus.observeForever { refreshBluetoothStatus(it) }
 //        checkServer()
     }
 

@@ -18,13 +18,13 @@ class Extension {
             findNavController().previousBackStackEntry?.savedStateHandle?.set(key, result)
         }
 
-        fun <T> CoroutineScope.mergeChannels(vararg channels: ReceiveChannel<T>) : ReceiveChannel<T> {
-            return produce {
-                channels.forEach {
-                    launch { it.consumeEach { send(it) }}
-                }
-            }
-        }
+//        fun <T> CoroutineScope.mergeChannels(vararg channels: ReceiveChannel<T>) : ReceiveChannel<T> {
+//            return produce {
+//                channels.forEach {
+//                    launch { it.consumeEach { send(it) }}
+//                }
+//            }
+//        }
     }
 
 }

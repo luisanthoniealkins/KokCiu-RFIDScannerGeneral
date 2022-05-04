@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,17 +13,11 @@ import com.example.rfid_scanner.data.model.status.ScanStatus
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_NOT_CONNECTED
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BLE
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BTE
-import com.example.rfid_scanner.utils.generic.HandleEvent
+import com.example.rfid_scanner.utils.generic.HandledEvent
 import com.rscja.deviceapi.RFIDWithUHFBLE
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flattenMerge
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
 
-class BluetoothScannerService(context: Context, coroutineScope: CoroutineScope) {
+class BluetoothScannerService(context: Context) {
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -33,21 +26,24 @@ class BluetoothScannerService(context: Context, coroutineScope: CoroutineScope) 
         fun getInstance() = mInstance!!
 
         fun init(context: Context, coroutineScope: CoroutineScope) {
-            mInstance = BluetoothScannerService(context, coroutineScope)
+            mInstance = BluetoothScannerService(context)
         }
     }
 
-    private val _ldTags = MutableLiveData<HandleEvent<List<TagEPC>>>()
-    val ldTags : LiveData<HandleEvent<List<TagEPC>>> = _ldTags
+//    private val _ldTags = MutableLiveData<List<TagEPC>>()
+//    val ldTags : LiveData<List<TagEPC>> = _ldTags
 
-    private val _sfScanStatus = MutableStateFlow(ScanStatus())
-    val sfScanStatus = _sfScanStatus.asStateFlow()
+    private val _ldTags = MutableLiveData<HandledEvent<List<TagEPC>>>()
+    val ldTags : LiveData<HandledEvent<List<TagEPC>>> = _ldTags
 
-    private val _sfStatus = MutableStateFlow(MConnectionStatus())
-    val sfStatus = _sfStatus.asStateFlow()
+    private val _sfScanStatus = MutableLiveData<ScanStatus>()
+    val sfScanStatus : LiveData<ScanStatus> = _sfScanStatus
 
-    private val mBluetoothBLEService = BluetoothBLEService(CoroutineScope(Dispatchers.IO))
-    private val mBluetoothBTEService = BluetoothBTEService(context, CoroutineScope(Dispatchers.IO))
+    private val _sfStatus = MutableLiveData<MConnectionStatus>()
+    val sfStatus : LiveData<MConnectionStatus> = _sfStatus
+
+    private val mBluetoothBLEService = BluetoothBLEService()
+    private val mBluetoothBTEService = BluetoothBTEService(context)
     private val mUHFService = RFIDWithUHFBLE.getInstance()
 
 
@@ -56,31 +52,20 @@ class BluetoothScannerService(context: Context, coroutineScope: CoroutineScope) 
     init {
         mUHFService.init(context)
 
-        mBluetoothBLEService.ldTags.observeForever { _ldTags.postValue(it) }
-        mBluetoothBTEService.ldTags.observeForever { Log.d("12345-",it.toString()); _ldTags.postValue(it) }
+//        mBluetoothBLEService.ldTags.observeForever { _ldTags.postValue(it) }
+        mBluetoothBTEService.ldTags.observeForever { _ldTags.postValue(it) }
 
-        coroutineScope.launch {
-            launch {
-                flowOf(
-                    mBluetoothBLEService.sfStatus,
-                    mBluetoothBTEService.sfStatus
-                ).flattenMerge().collect {
-                    if (it.isConnected) {
-                        connectedType = if (mBluetoothBLEService.isConnected) DEVICE_TYPE_BLE
-                        else DEVICE_TYPE_BTE
-                    }
-                    _sfStatus.value = it
-                }
-            }
-            launch {
-                flowOf(
-                    mBluetoothBLEService.sfScanStatus,
-                    mBluetoothBTEService.sfScanStatus
-                ).flattenMerge().collect {
-                    _sfScanStatus.value = it
-                }
-            }
+        mBluetoothBLEService.sfStatus.observeForever {
+            if (it.isConnected) connectedType = DEVICE_TYPE_BLE
+            _sfStatus.postValue(it)
         }
+        mBluetoothBTEService.sfStatus.observeForever {
+            if (it.isConnected) connectedType = DEVICE_TYPE_BTE
+            _sfStatus.value = it
+        }
+
+        mBluetoothBLEService.sfScanStatus.observeForever { _sfScanStatus.postValue(it) }
+        mBluetoothBTEService.sfScanStatus.observeForever { _sfScanStatus.postValue(it) }
     }
 
     val isBluetoothEnabled

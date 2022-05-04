@@ -1,6 +1,6 @@
 package com.example.rfid_scanner.utils.generic
 
-class HandleEvent<T>(content: T?) {
+class HandledEvent<T>(content: T) {
     private val mContent: T
     private var hasBeenHandled = false
     val contentIfNotHandled: T?

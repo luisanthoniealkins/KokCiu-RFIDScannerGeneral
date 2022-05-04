@@ -1,48 +1,73 @@
 package com.example.rfid_scanner.module.main.non_transaction.tag_scanner
 
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rfid_scanner.databinding.FragmentTagScannerBinding
 import com.example.rfid_scanner.utils.generic.BaseFragment
 
-class TagScannerFragment : BaseFragment<FragmentTagScannerBinding, TagScannerViewModel>() {
+class TagScannerFragment : Fragment() {
 
-    override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentTagScannerBinding.inflate(inflater, container, false)
+    private lateinit var viewModel: TagScannerViewModel
+    private var _binding: FragmentTagScannerBinding? = null
+    private val binding get() = _binding!!
 
-    override fun getViewModelClass() = TagScannerViewModel::class.java
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
-    override fun setUpViews() = with(binding) {
-        rvItem.layoutManager = LinearLayoutManager(context)
-        rvItem.adapter = viewModel.adapter
+        viewModel = ViewModelProvider(this)[TagScannerViewModel::class.java]
+        _binding = FragmentTagScannerBinding.inflate(layoutInflater)
 
-        btnScan.setOnClickListener { viewModel.mBluetoothScannerService.startScan() }
-        btnStop.setOnClickListener { viewModel.mBluetoothScannerService.stopScan() }
-        btnReset.setOnClickListener { viewModel.clearTags() }
-    }
+        viewModel.mBluetoothScannerService.ldTags.removeObservers(this)
 
-    override fun observeData() = with(viewModel) {
-        Log.d("123456-", tagCount.hasObservers().toString())
-        tagCount.observe(viewLifecycleOwner, { binding.tvTagCount.text = ("$it tag") })
+        with(binding) {
+            rvItem.layoutManager = LinearLayoutManager(context)
+            rvItem.adapter = viewModel.adapter
 
-        scanStatus.observe(viewLifecycleOwner, {
-            binding.btnReset.isEnabled = !it.isScanning
-            if (it.isConnected) {
-                if (it.isScanning) {
-                    binding.btnScan.isEnabled = false
-                    binding.btnStop.isEnabled = !it.isPressing
+            btnScan.setOnClickListener { viewModel.mBluetoothScannerService.startScan() }
+            btnStop.setOnClickListener { viewModel.mBluetoothScannerService.stopScan() }
+            btnReset.setOnClickListener { viewModel.clearTags() }
+        }
+
+        with(viewModel) {
+            Log.d("123456-", tagCount.hasObservers().toString())
+            tagCount.observe(viewLifecycleOwner, { binding.tvTagCount.text = ("$it tag") })
+
+            scanStatus.observe(viewLifecycleOwner, {
+                binding.btnReset.isEnabled = !it.isScanning
+                if (it.isConnected) {
+                    if (it.isScanning) {
+                        binding.btnScan.isEnabled = false
+                        binding.btnStop.isEnabled = !it.isPressing
+                    } else {
+                        binding.btnScan.isEnabled = true
+                        binding.btnStop.isEnabled = false
+                    }
                 } else {
-                    binding.btnScan.isEnabled = true
+                    binding.btnScan.isEnabled = false
                     binding.btnStop.isEnabled = false
                 }
-            } else {
-                binding.btnScan.isEnabled = false
-                binding.btnStop.isEnabled = false
-            }
-        })
+            })
+        }
+
+        return binding.root
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.mBluetoothScannerService.stopScan()
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

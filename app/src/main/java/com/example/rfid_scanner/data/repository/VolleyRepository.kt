@@ -3,6 +3,7 @@ package com.example.rfid_scanner.data.repository
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -35,8 +36,8 @@ class VolleyRepository(private val context: Context) {
         fun init(context: Context) { mInstance = VolleyRepository(context) }
     }
 
-    private val _sfStatus = MutableStateFlow(false)
-    val sfStatus = _sfStatus.asStateFlow()
+    private val _sfStatus = MutableLiveData<Boolean>()
+    val sfStatus : LiveData<Boolean> = _sfStatus
 
     private var requestQueue: RequestQueue? = null
 
@@ -64,10 +65,11 @@ class VolleyRepository(private val context: Context) {
             { response ->
                 if (IS_DEBUG) Log.d("12345", response.toString())
                 if (isServerAvailable(response)) {
-                    _sfStatus.value = true
+                    updateStatus(true)
+
                     data.postValue(response)
                 } else {
-                    _sfStatus.value = false
+                    updateStatus(false)
                     ToastHelper.showToast(
                         context,
                         "Server Error: pastikan server online dan koneksi wifi benar"
@@ -76,7 +78,7 @@ class VolleyRepository(private val context: Context) {
             }
         ) { errorResponse ->
             if (IS_DEBUG) Log.d("12345", errorResponse.toString())
-            _sfStatus.value = false
+            updateStatus(false)
             error.postValue(errorResponse)
             ToastHelper.showToast(
                 context,
@@ -85,6 +87,10 @@ class VolleyRepository(private val context: Context) {
         }
         requestQueue?.add(request)
         return ResponseLiveData(data, error)
+    }
+
+    private fun updateStatus(isSuccess: Boolean) {
+        _sfStatus.postValue(isSuccess)
     }
 
     private fun isServerAvailable(response: JSONObject): Boolean {

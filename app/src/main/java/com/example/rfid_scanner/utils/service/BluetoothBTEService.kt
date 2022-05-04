@@ -13,17 +13,13 @@ import com.example.rfid_scanner.data.model.status.MConnectionStatus
 import com.example.rfid_scanner.data.model.status.ScanStatus
 import com.example.rfid_scanner.utils.constant.Constant.BTE_START_SCAN_COMMAND
 import com.example.rfid_scanner.utils.constant.Constant.BTE_STOP_SCAN_COMMAND
-import com.example.rfid_scanner.utils.generic.HandleEvent
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.example.rfid_scanner.utils.generic.HandledEvent
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.*
 
-class BluetoothBTEService(context: Context, private val coroutineScope: CoroutineScope) {
+class BluetoothBTEService(context: Context) {
 
     companion object {
         val allowedDelimiter = setOf('!','*','@')
@@ -34,14 +30,14 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
             UUID.fromString("00001101-0000-1000-8000-00805F9B34FB") // "random" unique identifier
     }
 
-    private val _ldTags = MutableLiveData<HandleEvent<List<TagEPC>>>()
-    val ldTags : LiveData<HandleEvent<List<TagEPC>>> = _ldTags
+    private val _ldTags = MutableLiveData<HandledEvent<List<TagEPC>>>()
+    val ldTags : LiveData<HandledEvent<List<TagEPC>>> = _ldTags
 
-    private val _sfStatus = MutableStateFlow(MConnectionStatus())
-    val sfStatus = _sfStatus.asStateFlow()
+    private val _sfScanStatus = MutableLiveData<ScanStatus>()
+    val sfScanStatus : LiveData<ScanStatus> = _sfScanStatus
 
-    private val _sfScanStatus = MutableStateFlow(ScanStatus())
-    val sfScanStatus = _sfScanStatus.asStateFlow()
+    private val _sfStatus = MutableLiveData<MConnectionStatus>()
+    val sfStatus : LiveData<MConnectionStatus> = _sfStatus
 
     private var mConnectedThread: ConnectedThread? = null
     private val mBTAdapter: BluetoothAdapter =
@@ -63,33 +59,35 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
     }
 
     fun makeConnection(address: String?) {
-        coroutineScope.launch {
-            var isFailed = false
-            val device: BluetoothDevice = mBTAdapter.getRemoteDevice(address)
-            try {
-                mBTSocket = createBluetoothSocket(device)
-            } catch (e: IOException) {
-                isFailed = true
-                Log.e(TAG, "Socket creation failed")
-            }
+        object : Thread() {
+            override fun run() {
+                var isFailed = false
+                val device: BluetoothDevice = mBTAdapter.getRemoteDevice(address)
+                try {
+                    mBTSocket = createBluetoothSocket(device)
+                } catch (e: IOException) {
+                    isFailed = true
+                    Log.e(TAG, "Socket creation failed")
+                }
 
-            // Establish the Bluetooth socket connection.
-            try {
-                kotlin.runCatching { mBTSocket?.connect() }
-            } catch (e: IOException) {
-                isFailed = true
-                kotlin.runCatching { mBTSocket?.close() }
-                Log.e(TAG, "Socket creation failed")
-            }
+                // Establish the Bluetooth socket connection.
+                try {
+                    kotlin.runCatching { mBTSocket?.connect() }
+                } catch (e: IOException) {
+                    isFailed = true
+                    kotlin.runCatching { mBTSocket?.close() }
+                    Log.e(TAG, "Socket creation failed")
+                }
 
-            if (!isFailed) {
-                mConnectedThread = ConnectedThread(mBTSocket)
-                mConnectedThread?.start()
-                currentDevice = device
-                StorageService.getInstance().lastConnectedBluetoothDevice = device.address
+                if (!isFailed) {
+                    mConnectedThread = ConnectedThread(mBTSocket)
+                    mConnectedThread?.start()
+                    currentDevice = device
+                    StorageService.getInstance().lastConnectedBluetoothDevice = device.address
+                }
+                updateStatus(isFailed)
             }
-            updateStatus(isFailed)
-        }
+        }.start()
     }
 
     fun closeConnection() {
@@ -100,12 +98,12 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
     }
 
     private fun updateStatus(isFailed: Boolean) {
-        _sfStatus.value = MConnectionStatus(isConnected, isFailed)
+        _sfStatus.postValue(MConnectionStatus(isConnected, isFailed))
         updateScanStatus()
     }
 
     private fun updateScanStatus() {
-        _sfScanStatus.value = ScanStatus(isConnected, isScanning, isPressing)
+        _sfScanStatus.postValue(ScanStatus(isConnected, isScanning, isPressing))
     }
 
     private inner class ConnectedThread(socket: BluetoothSocket?) : Thread() {
@@ -175,7 +173,7 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
                     }
                 }
 
-                if (tags.isNotEmpty()) _ldTags.postValue(HandleEvent(tags))
+                if (tags.isNotEmpty()) _ldTags.postValue(HandledEvent(tags))
             }
         }
 

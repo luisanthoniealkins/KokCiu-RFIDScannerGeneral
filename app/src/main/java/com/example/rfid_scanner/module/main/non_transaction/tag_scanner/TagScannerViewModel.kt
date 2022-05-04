@@ -31,28 +31,19 @@ class TagScannerViewModel : BaseViewModel() {
     val mBluetoothScannerService = BluetoothScannerService.getInstance()
 
     init {
-
+        Log.d("1234567----", mBluetoothScannerService.ldTags.hasObservers().toString())
         mBluetoothScannerService.ldTags.observeForever {
-            Log.d("12345----", it.toString())
+            Log.d("1234567----", it.hasBeenHandled().toString())
             it.contentIfNotHandled?.let { tags ->
-                CoroutineScope(Dispatchers.Main).launch {
-                    addTags(tags)
-                }
+                addTags(tags)
             }
+//            it.contentIfNotHandled?.let { tags -> addTags(tags) }
         }
 
 
 
-//        CoroutineScope(Dispatchers.IO).launch {
-//            Handler(Looper.getMainLooper()).postDelayed({
-//                addTags(listOf(TagEPC("123")))
-//            },1000)
-//        }
-//        Log.d("12345", this.)
+        mBluetoothScannerService.sfScanStatus.observeForever{ _scanStatus.postValue(it) }
 
-//        CoroutineScope(Dispatchers.Default).launch {
-//            mBluetoothScannerService.sfScanStatus.collect{ _scanStatus.postValue(it) }
-//        }
     }
 
     private fun addTags(tags: List<TagEPC>) {

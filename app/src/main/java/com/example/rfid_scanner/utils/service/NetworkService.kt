@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.*
@@ -28,8 +30,8 @@ class NetworkService(private val context: Context) {
     private val mConnectivityManager: ConnectivityManager =
         context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    private val _sfStatus = MutableStateFlow(false)
-    val sfStatus = _sfStatus.asStateFlow()
+    private val _sfStatus = MutableLiveData<Boolean>()
+    val sfStatus : LiveData<Boolean> = _sfStatus
 
     fun stopService() {
         context.unregisterReceiver(mWifiStateReceiver)
@@ -55,7 +57,7 @@ class NetworkService(private val context: Context) {
         get() = WifiManager.calculateSignalLevel(mWifiManager.connectionInfo.rssi, 100)
 
     fun updateStatus() {
-        _sfStatus.value = true
+        _sfStatus.postValue(true)
     }
 
 
