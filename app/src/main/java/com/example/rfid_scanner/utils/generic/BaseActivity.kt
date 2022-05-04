@@ -70,7 +70,7 @@ abstract class BaseActivity<VBinding : ViewBinding, ViewModel : BaseViewModel> :
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
-    fun reColor(resColorId: Int) : Int{
+    fun gColor(resColorId: Int) : Int{
         return ContextCompat.getColor(this@BaseActivity, resColorId)
     }
 

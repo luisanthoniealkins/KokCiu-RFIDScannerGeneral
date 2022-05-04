@@ -11,20 +11,7 @@ import kotlinx.coroutines.launch
 class Extension {
 
     companion object {
-        fun Fragment.getNavigationResult(key: String = "result") =
-            findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>(key)
 
-        fun Fragment.setNavigationResult(result: String, key: String = "result") {
-            findNavController().previousBackStackEntry?.savedStateHandle?.set(key, result)
-        }
-
-        fun <T> CoroutineScope.mergeChannels(vararg channels: ReceiveChannel<T>) : ReceiveChannel<T> {
-            return produce {
-                channels.forEach {
-                    launch { it.consumeEach { send(it) }}
-                }
-            }
-        }
     }
 
 }

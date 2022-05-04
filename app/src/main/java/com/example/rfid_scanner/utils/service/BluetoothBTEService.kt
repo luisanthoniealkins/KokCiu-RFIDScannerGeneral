@@ -6,18 +6,17 @@ import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.rfid_scanner.data.model.TagEPC
 import com.example.rfid_scanner.data.model.status.MConnectionStatus
 import com.example.rfid_scanner.data.model.status.ScanStatus
 import com.example.rfid_scanner.utils.constant.Constant.BTE_START_SCAN_COMMAND
 import com.example.rfid_scanner.utils.constant.Constant.BTE_STOP_SCAN_COMMAND
-import com.example.rfid_scanner.utils.generic.HandleEvent
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -34,8 +33,6 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
             UUID.fromString("00001101-0000-1000-8000-00805F9B34FB") // "random" unique identifier
     }
 
-    private val _ldTags = MutableLiveData<HandleEvent<List<TagEPC>>>()
-    val ldTags : LiveData<HandleEvent<List<TagEPC>>> = _ldTags
 
     private val _sfStatus = MutableStateFlow(MConnectionStatus())
     val sfStatus = _sfStatus.asStateFlow()
@@ -43,6 +40,7 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
     private val _sfScanStatus = MutableStateFlow(ScanStatus())
     val sfScanStatus = _sfScanStatus.asStateFlow()
 
+    private var channelTags: Channel<List<TagEPC>>? = null
     private var mConnectedThread: ConnectedThread? = null
     private val mBTAdapter: BluetoothAdapter =
         (context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
@@ -175,7 +173,9 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
                     }
                 }
 
-                if (tags.isNotEmpty()) _ldTags.postValue(HandleEvent(tags))
+                if (tags.isNotEmpty()) {
+                    CoroutineScope(Dispatchers.IO).launch { channelTags?.send(tags) }
+                }
             }
         }
 
@@ -191,10 +191,6 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
         fun cancel() = mmSocket?.close()
     }
 
-//    private suspend fun addTags(tags: MutableList<TagEPC>) {
-//        channelTags.send(tags)
-//    }
-
     @Throws(Exception::class)
     private fun createBluetoothSocket(device: BluetoothDevice): BluetoothSocket {
         //creates secure outgoing connection with BT device using UUID
@@ -209,6 +205,10 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
     fun stopScan() {
         if (!isScanning || isPressing) return
         mConnectedThread?.write(BTE_STOP_SCAN_COMMAND, false)
+    }
+
+    fun setChannel(channelTags: Channel<List<TagEPC>>) {
+        this.channelTags = channelTags
     }
 
 }

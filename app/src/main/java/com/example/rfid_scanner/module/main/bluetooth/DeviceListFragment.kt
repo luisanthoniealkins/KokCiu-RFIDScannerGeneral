@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rfid_scanner.databinding.FragmentDeviceListBinding
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BLE
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BTE
-import com.example.rfid_scanner.utils.generic.BaseFragment
+import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
 class DeviceListFragment : BaseFragment<FragmentDeviceListBinding, DeviceListViewModel>() {
 

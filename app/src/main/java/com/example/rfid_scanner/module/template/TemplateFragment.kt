@@ -3,7 +3,7 @@ package com.example.rfid_scanner.module.template
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.rfid_scanner.databinding.FragmentTemplateBinding
-import com.example.rfid_scanner.utils.generic.BaseFragment
+import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
 class TemplateFragment : BaseFragment<FragmentTemplateBinding, TemplateViewModel>() {
 

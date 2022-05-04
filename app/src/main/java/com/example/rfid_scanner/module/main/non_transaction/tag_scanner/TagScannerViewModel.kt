@@ -1,8 +1,5 @@
 package com.example.rfid_scanner.module.main.non_transaction.tag_scanner
 
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -12,14 +9,13 @@ import com.example.rfid_scanner.data.model.status.ScanStatus
 import com.example.rfid_scanner.module.main.non_transaction.tag_scanner.TagScannerAdapter.TagScannerData
 import com.example.rfid_scanner.utils.generic.BaseViewModel
 import com.example.rfid_scanner.utils.service.BluetoothScannerService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 
 class TagScannerViewModel : BaseViewModel() {
 
-    private val mapOfTags = mutableMapOf<String, TagScannerData>()
+    val mBluetoothScannerService = BluetoothScannerService.getInstance()
     val adapter = TagScannerAdapter()
 
     private val _tagCount = MutableLiveData<Int>()
@@ -28,36 +24,19 @@ class TagScannerViewModel : BaseViewModel() {
     private val _scanStatus = MutableLiveData<ScanStatus>()
     val scanStatus : LiveData<ScanStatus> = _scanStatus
 
-    val mBluetoothScannerService = BluetoothScannerService.getInstance()
+    private val mapOfTags = mutableMapOf<String, TagScannerData>()
+    private val channelTags = Channel<List<TagEPC>>()
+
 
     init {
-
-        mBluetoothScannerService.ldTags.observeForever {
-            Log.d("12345----", it.toString())
-            it.contentIfNotHandled?.let { tags ->
-                CoroutineScope(Dispatchers.Main).launch {
-                    addTags(tags)
-                }
-            }
+        viewModelScope.launch {
+            mBluetoothScannerService.setChannel(channelTags)
+            launch { channelTags.consumeEach { addTags(it) } }
+            launch { mBluetoothScannerService.sfScanStatus.collect{ _scanStatus.postValue(it) } }
         }
-
-
-
-//        CoroutineScope(Dispatchers.IO).launch {
-//            Handler(Looper.getMainLooper()).postDelayed({
-//                addTags(listOf(TagEPC("123")))
-//            },1000)
-//        }
-//        Log.d("12345", this.)
-
-//        CoroutineScope(Dispatchers.Default).launch {
-//            mBluetoothScannerService.sfScanStatus.collect{ _scanStatus.postValue(it) }
-//        }
     }
 
     private fun addTags(tags: List<TagEPC>) {
-//        Log.d("123456-", Thread.currentThread().name.toString())
-        Log.d("12345----", "0111111")
         tags.map {
 
             val isCreate = !mapOfTags.containsKey(it.epc)
@@ -71,12 +50,7 @@ class TagScannerViewModel : BaseViewModel() {
                 adapter.updateData(isCreate, adapterItem.position, adapterItem.data)
             }
 
-
             if (isCreate) _tagCount.postValue(mapOfTags.size)
-            Log.d("123456-", _tagCount.value.toString())
-            Log.d("123456------------", tagCount.value.toString())
-            Log.d("12345----", mapOfTags.size.toString())
-            Log.d("12345----", Thread.currentThread().name.toString())
         }
     }
 

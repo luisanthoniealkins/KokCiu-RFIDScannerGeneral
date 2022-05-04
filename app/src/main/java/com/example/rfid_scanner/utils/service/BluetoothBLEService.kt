@@ -2,12 +2,9 @@ package com.example.rfid_scanner.utils.service
 
 import android.bluetooth.BluetoothDevice
 import android.os.SystemClock
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.rfid_scanner.data.model.TagEPC
 import com.example.rfid_scanner.data.model.status.MConnectionStatus
 import com.example.rfid_scanner.data.model.status.ScanStatus
-import com.example.rfid_scanner.utils.generic.HandleEvent
 import com.rscja.deviceapi.RFIDWithUHFBLE
 import com.rscja.deviceapi.entity.UHFTAGInfo
 import com.rscja.deviceapi.interfaces.ConnectionStatus
@@ -23,9 +20,6 @@ class BluetoothBLEService(private val coroutineScope: CoroutineScope): Connectio
     var currentDevice: BluetoothDevice? = null
         private set
 
-    private val _ldTags = MutableLiveData<HandleEvent<List<TagEPC>>>()
-    val ldTags : LiveData<HandleEvent<List<TagEPC>>> = _ldTags
-
     private val _sfStatus = MutableStateFlow(MConnectionStatus())
     val sfStatus : StateFlow<MConnectionStatus> = _sfStatus
 
@@ -33,7 +27,7 @@ class BluetoothBLEService(private val coroutineScope: CoroutineScope): Connectio
     val sfScanStatus : StateFlow<ScanStatus> = _sfScanStatus
 
     private val mUHFService = RFIDWithUHFBLE.getInstance()
-
+    private var channelTags: Channel<List<TagEPC>>? = null
 
     override fun getStatus(conStatus: ConnectionStatus, _device: Any?) {
         Runnable {
@@ -69,7 +63,7 @@ class BluetoothBLEService(private val coroutineScope: CoroutineScope): Connectio
                     SystemClock.sleep(1)
                     continue
                 }
-                _ldTags.postValue(HandleEvent(list.map { TagEPC(it.epc) }))
+                channelTags?.send(list.map { TagEPC(it.epc) })
             }
         }
 
@@ -79,6 +73,10 @@ class BluetoothBLEService(private val coroutineScope: CoroutineScope): Connectio
         mUHFService.stopInventory()
         isScanning = false
         updateScanStatus()
+    }
+
+    fun setChannel(channelTags: Channel<List<TagEPC>>) {
+        this.channelTags = channelTags
     }
 
 }

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.findNavController
 import com.example.rfid_scanner.databinding.FragmentNetworkSettingBinding
-import com.example.rfid_scanner.utils.generic.BaseFragment
+import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
 class NetworkSettingFragment : BaseFragment<FragmentNetworkSettingBinding, NetworkSettingViewModel>(){
 

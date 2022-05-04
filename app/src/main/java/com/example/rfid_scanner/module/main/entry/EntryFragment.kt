@@ -8,7 +8,7 @@ import com.example.rfid_scanner.databinding.FragmentEntryBinding
 import com.example.rfid_scanner.module.main.MainViewModel
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_OK
 import com.example.rfid_scanner.utils.custom_view.dialog.PasswordDialog
-import com.example.rfid_scanner.utils.generic.BaseFragment
+import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
 class EntryFragment : BaseFragment<FragmentEntryBinding, EntryViewModel>(),
     PasswordDialog.PasswordDialogListener {

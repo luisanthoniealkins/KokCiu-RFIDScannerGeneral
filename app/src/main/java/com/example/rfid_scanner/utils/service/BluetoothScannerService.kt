@@ -4,27 +4,24 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.rfid_scanner.data.model.TagEPC
 import com.example.rfid_scanner.data.model.status.MConnectionStatus
 import com.example.rfid_scanner.data.model.status.ScanStatus
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_NOT_CONNECTED
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BLE
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BTE
-import com.example.rfid_scanner.utils.generic.HandleEvent
 import com.rscja.deviceapi.RFIDWithUHFBLE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flattenMerge
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
-class BluetoothScannerService(context: Context, coroutineScope: CoroutineScope) {
+class BluetoothScannerService(context: Context) {
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -32,13 +29,10 @@ class BluetoothScannerService(context: Context, coroutineScope: CoroutineScope) 
 
         fun getInstance() = mInstance!!
 
-        fun init(context: Context, coroutineScope: CoroutineScope) {
-            mInstance = BluetoothScannerService(context, coroutineScope)
+        fun init(context: Context) {
+            mInstance = BluetoothScannerService(context)
         }
     }
-
-    private val _ldTags = MutableLiveData<HandleEvent<List<TagEPC>>>()
-    val ldTags : LiveData<HandleEvent<List<TagEPC>>> = _ldTags
 
     private val _sfScanStatus = MutableStateFlow(ScanStatus())
     val sfScanStatus = _sfScanStatus.asStateFlow()
@@ -56,10 +50,7 @@ class BluetoothScannerService(context: Context, coroutineScope: CoroutineScope) 
     init {
         mUHFService.init(context)
 
-        mBluetoothBLEService.ldTags.observeForever { _ldTags.postValue(it) }
-        mBluetoothBTEService.ldTags.observeForever { Log.d("12345-",it.toString()); _ldTags.postValue(it) }
-
-        coroutineScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             launch {
                 flowOf(
                     mBluetoothBLEService.sfStatus,
@@ -120,6 +111,11 @@ class BluetoothScannerService(context: Context, coroutineScope: CoroutineScope) 
     fun stopScan() {
         if (connectedType == DEVICE_TYPE_BTE) mBluetoothBTEService.stopScan()
         else mBluetoothBLEService.stopScan()
+    }
+
+    fun setChannel(channelTags: Channel<List<TagEPC>>) {
+        mBluetoothBLEService.setChannel(channelTags)
+        mBluetoothBTEService.setChannel(channelTags)
     }
 
 
