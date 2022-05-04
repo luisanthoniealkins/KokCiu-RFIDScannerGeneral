@@ -13,7 +13,11 @@ import com.example.rfid_scanner.data.model.status.MConnectionStatus
 import com.example.rfid_scanner.data.model.status.ScanStatus
 import com.example.rfid_scanner.utils.constant.Constant.BTE_START_SCAN_COMMAND
 import com.example.rfid_scanner.utils.constant.Constant.BTE_STOP_SCAN_COMMAND
-import com.example.rfid_scanner.utils.generic.HandledEvent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -30,8 +34,10 @@ class BluetoothBTEService(context: Context) {
             UUID.fromString("00001101-0000-1000-8000-00805F9B34FB") // "random" unique identifier
     }
 
-    private val _ldTags = MutableLiveData<HandledEvent<List<TagEPC>>>()
-    val ldTags : LiveData<HandledEvent<List<TagEPC>>> = _ldTags
+//    private val _ldTags = MutableLiveData<HandledEvent<List<TagEPC>>>()
+//    val ldTags : LiveData<HandledEvent<List<TagEPC>>> = _ldTags
+
+    private var channelTags : Channel<List<TagEPC>>? = null
 
     private val _sfScanStatus = MutableLiveData<ScanStatus>()
     val sfScanStatus : LiveData<ScanStatus> = _sfScanStatus
@@ -173,7 +179,15 @@ class BluetoothBTEService(context: Context) {
                     }
                 }
 
-                if (tags.isNotEmpty()) _ldTags.postValue(HandledEvent(tags))
+                if (tags.isNotEmpty()) {
+//                    val b = channelTags?.trySend(tags)?.isSuccess
+//                    Log.d("1234567-", "isClose ${channelTags?.isClosedForSend} ${channelTags?.isClosedForReceive} ${channelTags?.isEmpty}")
+//                    Log.d("1234567-", "trysend $b")
+//                    coroutineScope.launch { channelTags.send(tags) }
+                    CoroutineScope(Dispatchers.IO).launch { channelTags?.send(tags) }
+
+//                    _ldTags.postValue(HandledEvent(tags))
+                }
             }
         }
 
@@ -207,6 +221,10 @@ class BluetoothBTEService(context: Context) {
     fun stopScan() {
         if (!isScanning || isPressing) return
         mConnectedThread?.write(BTE_STOP_SCAN_COMMAND, false)
+    }
+
+    fun setChannel(channelTags: Channel<List<TagEPC>>) {
+        this.channelTags = channelTags
     }
 
 }

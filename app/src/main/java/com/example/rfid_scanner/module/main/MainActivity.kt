@@ -2,7 +2,6 @@ package com.example.rfid_scanner.module.main
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.LayoutInflater
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
@@ -18,14 +17,11 @@ import com.example.rfid_scanner.databinding.ActivityMainBinding
 import com.example.rfid_scanner.databinding.BottomSheetStatusBinding
 import com.example.rfid_scanner.module.main.bluetooth.OnDeviceSelected
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_NOT_CONNECTED
-import com.example.rfid_scanner.utils.generic.BaseActivity
 import com.example.rfid_scanner.utils.helper.ToastHelper.Companion.showToast
 import com.example.rfid_scanner.utils.service.BluetoothScannerService
 import com.example.rfid_scanner.utils.service.NetworkService
 import com.example.rfid_scanner.utils.service.StorageService
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 
 class MainActivity : AppCompatActivity(), OnDeviceSelected{
@@ -141,7 +137,7 @@ class MainActivity : AppCompatActivity(), OnDeviceSelected{
         VolleyRepository.init(this)
         StorageService.init(this)
         NetworkService.init(this)
-        BluetoothScannerService.init(this, CoroutineScope(Dispatchers.IO))
+        BluetoothScannerService.init(this)
 
         viewModel.initService()
     }

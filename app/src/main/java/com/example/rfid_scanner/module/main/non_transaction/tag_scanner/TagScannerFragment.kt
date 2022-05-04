@@ -26,8 +26,6 @@ class TagScannerFragment : Fragment() {
         viewModel = ViewModelProvider(this)[TagScannerViewModel::class.java]
         _binding = FragmentTagScannerBinding.inflate(layoutInflater)
 
-        viewModel.mBluetoothScannerService.ldTags.removeObservers(this)
-
         with(binding) {
             rvItem.layoutManager = LinearLayoutManager(context)
             rvItem.adapter = viewModel.adapter

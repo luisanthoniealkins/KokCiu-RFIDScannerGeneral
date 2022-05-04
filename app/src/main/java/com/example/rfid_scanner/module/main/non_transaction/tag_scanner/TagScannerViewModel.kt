@@ -14,6 +14,7 @@ import com.example.rfid_scanner.utils.generic.BaseViewModel
 import com.example.rfid_scanner.utils.service.BluetoothScannerService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 
@@ -29,17 +30,34 @@ class TagScannerViewModel : BaseViewModel() {
     val scanStatus : LiveData<ScanStatus> = _scanStatus
 
     val mBluetoothScannerService = BluetoothScannerService.getInstance()
+    private val channelTags = Channel<List<TagEPC>>()
+
+//    val id = ('0'..'9').random()
 
     init {
-        Log.d("1234567----", mBluetoothScannerService.ldTags.hasObservers().toString())
-        mBluetoothScannerService.ldTags.observeForever {
-            Log.d("1234567----", it.hasBeenHandled().toString())
-            it.contentIfNotHandled?.let { tags ->
-                addTags(tags)
-            }
-//            it.contentIfNotHandled?.let { tags -> addTags(tags) }
+        mBluetoothScannerService.setChannel(channelTags)
+        viewModelScope.launch {
+            channelTags.consumeEach { addTags(it) }
         }
-
+//        Log.d("1234567----", mBluetoothScannerService.ldTags.hasObservers().toString())
+//        mBluetoothScannerService.channelTags.consumeEach {
+//            Log.d("1234567----", it.hasBeenHandled().toString())
+//            it.contentIfNotHandled?.let { tags ->
+//
+//            }
+//            addTags(it)
+//            it.contentIfNotHandled?.let { tags -> addTags(tags) }
+//        }
+//        viewModelScope.launch {
+//            Log.d("1234567-", "init + $id")
+//            launch {
+//                channelTags.consumeEach {
+//                    Log.d("1234567-", "hei + $id")
+//                    addTags(it)
+//                }
+//            }
+//
+//        }
 
 
         mBluetoothScannerService.sfScanStatus.observeForever{ _scanStatus.postValue(it) }

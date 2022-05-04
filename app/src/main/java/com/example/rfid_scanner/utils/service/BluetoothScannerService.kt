@@ -13,9 +13,8 @@ import com.example.rfid_scanner.data.model.status.ScanStatus
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_NOT_CONNECTED
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BLE
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BTE
-import com.example.rfid_scanner.utils.generic.HandledEvent
 import com.rscja.deviceapi.RFIDWithUHFBLE
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
 
 class BluetoothScannerService(context: Context) {
 
@@ -25,7 +24,7 @@ class BluetoothScannerService(context: Context) {
 
         fun getInstance() = mInstance!!
 
-        fun init(context: Context, coroutineScope: CoroutineScope) {
+        fun init(context: Context) {
             mInstance = BluetoothScannerService(context)
         }
     }
@@ -33,8 +32,10 @@ class BluetoothScannerService(context: Context) {
 //    private val _ldTags = MutableLiveData<List<TagEPC>>()
 //    val ldTags : LiveData<List<TagEPC>> = _ldTags
 
-    private val _ldTags = MutableLiveData<HandledEvent<List<TagEPC>>>()
-    val ldTags : LiveData<HandledEvent<List<TagEPC>>> = _ldTags
+//    private val _ldTags = MutableLiveData<HandledEvent<List<TagEPC>>>()
+//    val ldTags : LiveData<HandledEvent<List<TagEPC>>> = _ldTags
+
+//    val channelTags = Channel<List<TagEPC>>(UNLIMITED)
 
     private val _sfScanStatus = MutableLiveData<ScanStatus>()
     val sfScanStatus : LiveData<ScanStatus> = _sfScanStatus
@@ -53,7 +54,14 @@ class BluetoothScannerService(context: Context) {
         mUHFService.init(context)
 
 //        mBluetoothBLEService.ldTags.observeForever { _ldTags.postValue(it) }
-        mBluetoothBTEService.ldTags.observeForever { _ldTags.postValue(it) }
+//        mBluetoothBTEService.ldTags.observeForever { _ldTags.postValue(it) }
+
+//        CoroutineScope(Dispatchers.IO).launch {
+//            mBluetoothBTEService.channelTags.consumeEach {
+//                Log.d("1234567-", it.toString())
+//                channelTags.send(it)
+//            }
+//        }
 
         mBluetoothBLEService.sfStatus.observeForever {
             if (it.isConnected) connectedType = DEVICE_TYPE_BLE
@@ -105,6 +113,11 @@ class BluetoothScannerService(context: Context) {
     fun stopScan() {
         if (connectedType == DEVICE_TYPE_BTE) mBluetoothBTEService.stopScan()
         else mBluetoothBLEService.stopScan()
+    }
+
+    fun setChannel(channelTags: Channel<List<TagEPC>>) {
+//        mBluetoothBLEService.setChannel(channelTags)
+        mBluetoothBTEService.setChannel(channelTags)
     }
 
 
