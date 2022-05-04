@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/entryFragment">
+
+    <fragment
+        android:id="@+id/entryFragment"
+        android:name="com.example.rfid_scanner.module.main.entry.EntryFragment"
+        android:label="fragment_entry"
+        tools:layout="@layout/fragment_entry" >
+        <action
+            android:id="@+id/action_entryFragment_to_BLEDeviceListFragment"
+            app:destination="@id/deviceListFragment" />
+        <action
+            android:id="@+id/action_entryFragment_to_networkSettingFragment"
+            app:destination="@id/networkSettingFragment" />
+        <action
+            android:id="@+id/action_entryFragment_to_tagScannerFragment"
+            app:destination="@id/tagScannerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/deviceListFragment"
+        android:name="com.example.rfid_scanner.module.main.bluetooth.DeviceListFragment"
+        android:label="fragment_ble_device_list_"
+        tools:layout="@layout/fragment_device_list" />
+    <fragment
+        android:id="@+id/networkSettingFragment"
+        android:name="com.example.rfid_scanner.module.main.setting.network.NetworkSettingFragment"
+        android:label="fragment_network_setting"
+        tools:layout="@layout/fragment_network_setting" />
+    <fragment
+        android:id="@+id/tagScannerFragment"
+        android:name="com.example.rfid_scanner.module.main.non_transaction.tag_scanner.TagScannerFragment"
+        android:label="fragment_tag_scanner"
+        tools:layout="@layout/fragment_tag_scanner" />
+
+</navigation>
