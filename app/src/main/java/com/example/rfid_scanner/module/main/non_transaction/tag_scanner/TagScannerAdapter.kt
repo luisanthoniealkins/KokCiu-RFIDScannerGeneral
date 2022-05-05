@@ -11,12 +11,13 @@ class TagScannerAdapter : RecyclerView.Adapter<TagScannerAdapter.TagScannerVH>()
 
     private val dataList = mutableListOf<TagEPCQty>()
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int) =
-        TagScannerVH(ItemTagScannerBinding.inflate(LayoutInflater.from(viewGroup.context), viewGroup, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        TagScannerVH(ItemTagScannerBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
-    override fun onBindViewHolder(holder: TagScannerVH, position: Int) {
+    override fun onBindViewHolder(holder: TagScannerVH, position: Int) =
         holder.bind(dataList[position])
-    }
+
+    override fun getItemCount(): Int = dataList.size
 
     fun updateData(isCreate: Boolean, position: Int, data: TagEPCQty) {
         if (isCreate) {
@@ -33,8 +34,6 @@ class TagScannerAdapter : RecyclerView.Adapter<TagScannerAdapter.TagScannerVH>()
         dataList.clear()
         notifyDataSetChanged()
     }
-
-    override fun getItemCount(): Int = dataList.size
 
     class TagScannerVH ( private val binding : ItemTagScannerBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: TagEPCQty) {

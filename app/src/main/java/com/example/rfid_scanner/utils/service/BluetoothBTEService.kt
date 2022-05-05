@@ -24,6 +24,7 @@ import java.util.*
 
 class BluetoothBTEService(context: Context, private val coroutineScope: CoroutineScope) {
 
+
     companion object {
         val allowedDelimiter = setOf('!','*','@')
 

@@ -13,18 +13,16 @@ class Tag(
 ) {
 
     companion object {
-        const val STATUS_GUDANG = "Gudang"
-        const val STATUS_TERJUAL = "Terjual"
-        const val STATUS_RUSAK = "Rusak"
-        const val STATUS_HILANG = "Hilang"
-        const val STATUS_UNKNOWN = "Unknown"
+        const val STATUS_STORED = "Gudang"
+        const val STATUS_SOLD = "Terjual"
+        const val STATUS_BROKEN = "Rusak"
+        const val STATUS_LOST = "Hilang"
+        const val STATUS_UNKNOWN = "Asing"
     }
 
     val stockCode
         get() =
             if (stockId != null && stockId.split("#Q").size == 2) stockId.split("#Q")[0]
             else null
-
-    var isScanned = false
 
 }

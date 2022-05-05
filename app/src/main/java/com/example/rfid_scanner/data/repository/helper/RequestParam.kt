@@ -8,7 +8,7 @@ import java.util.ArrayList
 class RequestParam {
 
     companion object {
-        fun getRFIDS(tags: ArrayList<TagEPC>): JSONObject {
+        fun getRFIDS(tags: List<TagEPC>): JSONObject {
             val arr = JSONArray()
             tags.map { arr.put(it.epc) }
 

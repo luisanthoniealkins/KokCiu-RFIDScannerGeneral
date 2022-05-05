@@ -12,13 +12,24 @@ abstract class ScanFragment<VBinding : ViewBinding, ViewModel : BaseViewModel> :
      * */
 
     abstract fun getScanButton() : Button
-    abstract fun getStopButton() : Button
     abstract fun getOtherButton() : List<Button>
 
     fun updateUIButton(status: ScanStatus) {
         getOtherButton().map { it.isEnabled = !status.isScanning }
-        getScanButton().isEnabled = status.isConnected && !status.isScanning
-        getStopButton().isEnabled = status.isConnected && status.isScanning && !status.isPressing
+
+        with(getScanButton()) {
+            when {
+                status.isConnected && !status.isScanning -> {
+                    isEnabled = true
+                    text = ("Scan")
+                }
+                status.isConnected && status.isScanning && !status.isPressing -> {
+                    isEnabled = true
+                    text = ("Stop")
+                }
+                else -> isEnabled = false
+            }
+        }
     }
 
 }

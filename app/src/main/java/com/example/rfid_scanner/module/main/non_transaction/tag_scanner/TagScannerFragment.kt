@@ -15,16 +15,16 @@ class TagScannerFragment : ScanFragment<FragmentTagScannerBinding, TagScannerVie
 
     override fun getScanButton() = binding.btnScan
 
-    override fun getStopButton() = binding.btnStop
-
     override fun getOtherButton() = listOf( binding.btnReset )
 
     override fun setUpViews() = with(binding) {
         rvItem.layoutManager = LinearLayoutManager(context)
         rvItem.adapter = viewModel.adapter
 
-        btnScan.setOnClickListener { viewModel.mBluetoothScannerService.startScan() }
-        btnStop.setOnClickListener { viewModel.mBluetoothScannerService.stopScan() }
+        btnScan.setOnClickListener {
+            if (btnScan.text == "Scan") viewModel.mBluetoothScannerService.startScan()
+            else viewModel.mBluetoothScannerService.stopScan()
+        }
         btnReset.setOnClickListener { viewModel.clearTags() }
     }
 
@@ -34,6 +34,10 @@ class TagScannerFragment : ScanFragment<FragmentTagScannerBinding, TagScannerVie
         scanStatus.observe(viewLifecycleOwner, { updateUIButton(it) })
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.mBluetoothScannerService.stopScan()
+    }
 
 
 

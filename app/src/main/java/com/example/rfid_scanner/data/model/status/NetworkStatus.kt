@@ -10,6 +10,8 @@ data class NetworkStatus (
 
     var strength: Int,
 
-    var message: String
+    var message: String,
+
+    var toastMessage: String?,
 
 )

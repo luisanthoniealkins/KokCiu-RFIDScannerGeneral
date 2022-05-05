@@ -13,6 +13,7 @@ import com.example.rfid_scanner.databinding.ActivityMainBinding
 import com.example.rfid_scanner.databinding.BottomSheetStatusBinding
 import com.example.rfid_scanner.module.main.bluetooth.OnDeviceSelected
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_NOT_CONNECTED
+import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_ERROR
 import com.example.rfid_scanner.utils.generic.BaseActivity
 import com.example.rfid_scanner.utils.helper.ToastHelper.Companion.showToast
 import com.example.rfid_scanner.utils.service.BluetoothScannerService
@@ -46,11 +47,13 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnDevic
         ldServerStatus.observeWithOwner {
             binding.tvServerStatus.text = it.status
             binding.tvServerStatus.setTextColor(gColor(it.statusColor))
+            it.toastMessage?.let { msg -> showToast(msg) }
         }
 
         ldBluetoothStatus.observeWithOwner {
             binding.tvBluetoothStatus.text = it.status
             binding.tvBluetoothStatus.setTextColor(gColor(it.statusColor))
+            it.toastMessage?.let { msg -> showToast(msg) }
         }
     }
 
@@ -69,7 +72,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnDevic
 
         val inflater = LayoutInflater.from(this)
         val sBinding = BottomSheetStatusBinding.inflate(inflater)
-
 
         with(sBinding) {
             viewModel.ldNetworkStatus.observeWithOwner {

@@ -31,6 +31,10 @@ class EntryFragment : BaseFragment<FragmentEntryBinding, EntryViewModel>(),
             navigateTo(EntryFragmentDirections.actionEntryFragmentToTagScannerFragment())
         }
 
+        btnTransactionGeneral.setOnClickListener {
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToTransGeneralFragment())
+        }
+
         btnSettingsNetwork.setOnClickListener {
             navigateTo(EntryFragmentDirections.actionEntryFragmentToNetworkSettingFragment())
         }

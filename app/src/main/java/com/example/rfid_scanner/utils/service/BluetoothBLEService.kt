@@ -2,6 +2,7 @@ package com.example.rfid_scanner.utils.service
 
 import android.bluetooth.BluetoothDevice
 import android.os.SystemClock
+import android.util.Log
 import com.example.rfid_scanner.data.model.TagEPC
 import com.example.rfid_scanner.data.model.status.MConnectionStatus
 import com.example.rfid_scanner.data.model.status.ScanStatus

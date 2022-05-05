@@ -6,6 +6,8 @@ data class ServerStatus (
 
     var statusColor: Int,
 
-    var message: String
+    var message: String,
+
+    var toastMessage: String?,
 
 )

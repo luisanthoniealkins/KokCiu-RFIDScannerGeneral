@@ -12,6 +12,8 @@ data class BluetoothStatus (
 
     var batteryLevel: Float,
 
-    var message: String
+    var message: String,
+
+    var toastMessage: String?,
 
 )

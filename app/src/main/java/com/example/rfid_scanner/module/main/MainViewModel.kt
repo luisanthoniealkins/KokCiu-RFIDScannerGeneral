@@ -3,6 +3,7 @@ package com.example.rfid_scanner.module.main
 import android.bluetooth.BluetoothDevice
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.rfid_scanner.R
 import com.example.rfid_scanner.data.model.status.BluetoothStatus
 import com.example.rfid_scanner.data.model.status.MConnectionStatus
@@ -13,7 +14,6 @@ import com.example.rfid_scanner.data.repository.helper.RequestEndPoint
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_ERROR
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_OK
 import com.example.rfid_scanner.utils.generic.BaseViewModel
-import com.example.rfid_scanner.utils.generic.observeOnce
 import com.example.rfid_scanner.utils.service.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +43,7 @@ class MainViewModel : BaseViewModel() {
 
     fun initService() {
         mNetworkService = NetworkService.getInstance()
-        mServerService = VolleyRepository.getInstance()
+        mServerService = VolleyRepository.getI()
         mBluetoothScannerService = BluetoothScannerService.getInstance()
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -51,7 +51,7 @@ class MainViewModel : BaseViewModel() {
             launch { mServerService.sfStatus.collect{ refreshServerStatus(it) } }
             launch { mBluetoothScannerService.sfStatus.collect{ refreshBluetoothStatus(it) } }
         }
-//        checkServer()
+        checkServer()
     }
 
     fun stopService() {
@@ -60,18 +60,11 @@ class MainViewModel : BaseViewModel() {
     }
 
     fun checkServer() {
-        VolleyRepository.getInstance().requestAPI(RequestEndPoint.CHECK_SERVER).let {
-            it.data.observeOnce {
-//                ToastHelper.showToast(context, "aman")
-            }
-            it.error.observeOnce {
-//                ToastHelper.showToast(context, "gagal")
-            }
-        }
+        VolleyRepository.getI().requestAPI(RequestEndPoint.CHECK_SERVER)
     }
 
     private fun refreshNetworkStatus() {
-        val ns = NetworkStatus(SERVICE_STATUS_ERROR, R.color.red_disconnect, "-", 0,"-")
+        val ns = NetworkStatus(SERVICE_STATUS_ERROR, R.color.red_disconnect, "-", 0,"-", null)
 
         if (!mNetworkService.isWifiEnabled) ns.message = "Wifi offline"
         else if (!mNetworkService.isWifiConnected) ns.message = "Wifi belum terhubung"
@@ -102,24 +95,29 @@ class MainViewModel : BaseViewModel() {
         _ldNetworkStatus.postValue(ns)
     }
 
-    private fun refreshServerStatus(isConnected: Boolean) {
-        val ss = ServerStatus(SERVICE_STATUS_ERROR, R.color.red_disconnect, "-")
-        if (isConnected) {
-            ss.status = SERVICE_STATUS_OK
-            ss.statusColor = R.color.green_connect
-        } else {
-            ss.message = "Pastikan koneksi benar (wifi, IP, port) dan server telah dinyalakan "
+    private fun refreshServerStatus(isConnected: Boolean?) {
+        isConnected?.let {
+            val ss = ServerStatus(SERVICE_STATUS_ERROR, R.color.red_disconnect, "-", null)
+            if (it) {
+                ss.status = SERVICE_STATUS_OK
+                ss.statusColor = R.color.green_connect
+            } else {
+                ss.message = "Pastikan koneksi benar (wifi, IP, port) dan server telah dinyalakan"
+                ss.toastMessage = "Koneksi server gagal"
+            }
+            _ldServerStatus.postValue(ss)
         }
-        _ldServerStatus.postValue(ss)
     }
 
     private fun refreshBluetoothStatus(status: MConnectionStatus) {
-        val bs = BluetoothStatus(SERVICE_STATUS_ERROR, R.color.red_disconnect, "-", "-",0f, "-")
+        val bs = BluetoothStatus(SERVICE_STATUS_ERROR, R.color.red_disconnect, "-", "-",0f, "-", null)
 
         if (!mBluetoothScannerService.isBluetoothEnabled) bs.message = "Bluetooth offline"
         else if (!status.isConnected) bs.message = "Bluetooth belum terhubung"
-        else if (status.isFailed) bs.message = "Bluetooth gagal terhubung"
-        else {
+        else if (status.isFailed) {
+            bs.message = "Bluetooth gagal terhubung"
+            bs.toastMessage = "Koneksi bluetooth gagal"
+        } else {
             val device: BluetoothDevice? = mBluetoothScannerService.currentDevice
             bs.status = SERVICE_STATUS_OK
             bs.statusColor = R.color.green_connect

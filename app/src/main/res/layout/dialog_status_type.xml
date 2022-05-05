@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="275dp"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pilih Status"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:padding="8dp"/>
+
+    <Button
+        android:id="@+id/btn_stored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gudang"
+        style="?attr/materialButtonOutlinedStyle"/>
+
+    <Button
+        android:id="@+id/btn_sold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Terjual"
+        style="?attr/materialButtonOutlinedStyle"/>
+
+    <Button
+        android:id="@+id/btn_broken"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rusak"
+        style="?attr/materialButtonOutlinedStyle"/>
+
+    <Button
+        android:id="@+id/btn_lost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hilang"
+        style="?attr/materialButtonOutlinedStyle"/>
+
+    <Button
+        android:id="@+id/btn_unknown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Asing"
+        style="?attr/materialButtonOutlinedStyle"/>
+
+</LinearLayout>
