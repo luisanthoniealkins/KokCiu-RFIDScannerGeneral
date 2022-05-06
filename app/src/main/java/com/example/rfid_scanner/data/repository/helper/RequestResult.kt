@@ -1,6 +1,7 @@
 package com.example.rfid_scanner.data.repository.helper
 
 import com.example.rfid_scanner.data.model.Stock
+import com.example.rfid_scanner.data.model.StockRequirement
 import com.example.rfid_scanner.data.model.Tag
 import com.example.rfid_scanner.data.model.repository.MResponse
 import com.example.rfid_scanner.data.model.repository.MResponse.ResponseData
@@ -20,11 +21,10 @@ class RequestResult {
             null
         )
 
-
         fun getAllStocks(response: JSONObject): ResponseData {
             val result = getGeneralResponse(response)
 
-            val stocks: ArrayList<Stock> = ArrayList<Stock>()
+            val stocks = mutableListOf<StockRequirement>()
             val arr = response.getJSONArray("data")
             for (i in 0 until arr.length()) {
                 val detail = arr[i] as JSONObject
@@ -35,12 +35,15 @@ class RequestResult {
                 val unit = detail.getString("stock_unit")
                 val availableStock = detail.getInt("stock_available_stock")
                 stocks.add(
-                    Stock(
-                        code,
-                        name,
-                        brand,
-                        vehicleType,
-                        unit,
+                    StockRequirement(
+                        Stock(
+                            code,
+                            name,
+                            brand,
+                            vehicleType,
+                            unit,
+                            availableStock
+                        ),
                         availableStock
                     )
                 )
@@ -69,7 +72,7 @@ class RequestResult {
             for (i in 0 until unknown.length()) {
                 val obj = unknown[i] as JSONObject
                 val tagCode = obj.getString("rfid_code")
-                tags.add(Tag(tagCode, Tag.STATUS_UNKNOWN, null, null, null))
+                tags.add(Tag(tagCode, Tag.STATUS_UNKNOWN, null, null, 0))
             }
             result.data = tags
 

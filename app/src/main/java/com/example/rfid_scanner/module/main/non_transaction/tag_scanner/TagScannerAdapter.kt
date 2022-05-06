@@ -35,7 +35,7 @@ class TagScannerAdapter : RecyclerView.Adapter<TagScannerAdapter.TagScannerVH>()
         notifyDataSetChanged()
     }
 
-    class TagScannerVH ( private val binding : ItemTagScannerBinding) : RecyclerView.ViewHolder(binding.root) {
+    class TagScannerVH (private val binding : ItemTagScannerBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(data: TagEPCQty) {
             with(binding) {
                 tvName.text = data.epc

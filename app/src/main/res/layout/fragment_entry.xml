@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Scan RFID"/>
+            android:text="Transaksi Lengkap"/>
 
         <LinearLayout
             android:id="@+id/ll_online"
@@ -113,7 +113,7 @@
                     android:layout_marginEnd="12dp">
 
                     <Button
-                        android:id="@+id/check_stockroom"
+                        android:id="@+id/btn_check_stockroom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Gudang"/>

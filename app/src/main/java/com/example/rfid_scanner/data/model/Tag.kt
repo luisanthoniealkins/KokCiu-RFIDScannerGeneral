@@ -6,10 +6,10 @@ data class TagEPCQty(val epc: String, var quantity: Int)
 
 class Tag(
     val epc: String,
-    val status: String,
-    val stockId: String?,
-    val stockName: String?,
-    val stockUnitCount: Int?
+    val status: String? = null,
+    val stockId: String? = null,
+    val stockName: String? = null,
+    val stockUnitCount: Int = 0
 ) {
 
     companion object {

@@ -15,7 +15,7 @@ import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_STORED
 import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_UNKNOWN
 import com.example.rfid_scanner.databinding.ItemTagDetailBinding
 
-class ErrorAdapter(private val context: Context?) : RecyclerView.Adapter<ErrorAdapter.ErrorTagVH>(){
+class ErrorAdapter() : RecyclerView.Adapter<ErrorAdapter.ErrorTagVH>(){
 
     private val dataList = mutableListOf<Tag>()
 
@@ -76,8 +76,8 @@ class ErrorAdapter(private val context: Context?) : RecyclerView.Adapter<ErrorAd
                     STATUS_LOST -> "barang hilang"
                     else -> "-"
                 }
-                context?.let {
-                    viewIndicator.setBackgroundColor(ContextCompat.getColor(it,
+                binding.root.context?.let {
+                    llViewHolder.setBackgroundColor(ContextCompat.getColor(it,
                         if (data.status == STATUS_UNKNOWN) R.color.yellow_item_unknown
                         else R.color.red_item_error
                     ))

@@ -35,7 +35,7 @@
     <color name="light_yellow_item_transaction_adjust">#ffee58</color>
 
     <color name="green_item_ok">#9AE66E</color>
-    <color name="red_item_error">#FF5959</color>
+    <color name="red_item_error">#ff867c</color>
     <color name="light_gray_item_default">#FAFAFA</color>
     <color name="dark_gray_item_disable">#bdbdbd</color>
     <color name="yellow_item_unknown">#FFE459</color>

@@ -1,10 +1,11 @@
 package com.example.rfid_scanner.module.main.transaction.general
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.rfid_scanner.data.model.Stock
+import com.example.rfid_scanner.data.model.StockId
 import com.example.rfid_scanner.data.model.Tag
 import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_STORED
 import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_UNKNOWN
@@ -12,14 +13,17 @@ import com.example.rfid_scanner.data.model.TagEPC
 import com.example.rfid_scanner.data.model.status.ScanStatus
 import com.example.rfid_scanner.data.repository.VolleyRepository
 import com.example.rfid_scanner.data.repository.helper.RequestEndPoint
+import com.example.rfid_scanner.data.repository.helper.RequestEndPoint.Companion.TRANSACTION_GENERAL
 import com.example.rfid_scanner.data.repository.helper.RequestParam
+import com.example.rfid_scanner.data.repository.helper.RequestParam.transactionGeneral
 import com.example.rfid_scanner.data.repository.helper.RequestResult
+import com.example.rfid_scanner.data.repository.helper.RequestResult.Companion.getGeneralResponse
 import com.example.rfid_scanner.module.main.transaction.general.adapter.ErrorAdapter
 import com.example.rfid_scanner.module.main.transaction.general.adapter.TagAdapter
 import com.example.rfid_scanner.module.main.transaction.general.adapter.TagAdapter.TagData
 import com.example.rfid_scanner.module.main.transaction.general.verify.VerifyInterface
 import com.example.rfid_scanner.utils.generic.BaseViewModel
-import com.example.rfid_scanner.utils.service.BluetoothScannerService
+import com.example.rfid_scanner.service.BluetoothScannerService
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
@@ -32,8 +36,8 @@ class TransGeneralViewModel : BaseViewModel(), VerifyInterface {
     }
 
     val mBluetoothScannerService = BluetoothScannerService.getInstance()
-    lateinit var tagAdapter : TagAdapter
-    lateinit var errorAdapter : ErrorAdapter
+    val tagAdapter = TagAdapter()
+    val errorAdapter = ErrorAdapter()
 
     private var imStatusForm = STATUS_UNKNOWN
 
@@ -54,6 +58,9 @@ class TransGeneralViewModel : BaseViewModel(), VerifyInterface {
 
     private val _isVerified = MutableLiveData<Boolean>().apply { postValue(false) }
     val isVerified : LiveData<Boolean> = _isVerified
+
+    private val _commitState = MutableLiveData<Int>()
+    val commitState : LiveData<Int> = _commitState
 
     val mapOfTags = mutableMapOf<String, Tag>()
     private val mapOfTagsOK = mutableMapOf<String, TagData>()
@@ -154,18 +161,32 @@ class TransGeneralViewModel : BaseViewModel(), VerifyInterface {
         else _statusTo.postValue(status)
     }
 
-    fun setAdapter(context: Context?) {
-        tagAdapter = TagAdapter(context)
-        errorAdapter = ErrorAdapter(context)
-    }
-
     override fun onBottomSheetDismiss(result: Boolean) {
         if (result) _isVerified.postValue(result)
         viewModelScope.launch { mBluetoothScannerService.setChannel(channelTags) }
     }
 
     fun commitTransaction() {
-
+        viewModelScope.launch {
+            VolleyRepository.getI().requestAPI(
+                TRANSACTION_GENERAL,
+                transactionGeneral(
+                    bills = null,
+                    stocks = null,
+                    stockId = StockId(
+                        Stock("12020-42000 HYK"),
+                        "12020-42000 HYK#Q1",
+                        1
+                    ),
+                    tags = mapOfTags.map { it.value },
+                    statusFrom = statusFrom.value!!,
+                    statusTo = statusTo.value!!,
+                ),
+                ::getGeneralResponse
+            ).collect {
+                _commitState.postValue(it.state)
+            }
+        }
     }
 
 

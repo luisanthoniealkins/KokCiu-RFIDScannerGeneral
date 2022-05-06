@@ -1,4 +1,4 @@
-package com.example.rfid_scanner.utils.service
+package com.example.rfid_scanner.service
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice

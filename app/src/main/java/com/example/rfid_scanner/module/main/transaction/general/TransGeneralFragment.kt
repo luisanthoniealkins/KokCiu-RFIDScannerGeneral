@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_BROKEN
 import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_LOST
 import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_SOLD
 import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_STORED
 import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_UNKNOWN
+import com.example.rfid_scanner.data.model.repository.MResponse
 import com.example.rfid_scanner.databinding.DialogStatusTypeBinding
 import com.example.rfid_scanner.databinding.FragmentTransGeneralBinding
 import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.TAB_ERROR
@@ -44,7 +46,6 @@ class TransGeneralFragment : ScanFragment<FragmentTransGeneralBinding, TransGene
         btnStatusFrom.setOnClickListener { showChoiceDialog(true) }
         btnStatusTo.setOnClickListener { showChoiceDialog(false) }
 
-        viewModel.setAdapter(context)
         rvItem.layoutManager = LinearLayoutManager(context)
         rvItem.adapter = viewModel.tagAdapter
         tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
@@ -84,17 +85,40 @@ class TransGeneralFragment : ScanFragment<FragmentTransGeneralBinding, TransGene
                 else "Verif"
 
             binding.btnVerifyAndCommit.setOnClickListener {
-                if (isVerified.value == true) viewModel.commitTransaction()
+                if (isVerified.value == true)  showConfirmationDialog()
                 else verifyTags()
+            }
+        }
+
+        commitState.observeWithOwner {
+            binding.btnVerifyAndCommit.isEnabled = (it != MResponse.LOADING)
+            if (it == MResponse.FINISHED_SUCCESS) {
+                showToast("Transaksi berhasil")
+                navigateBack()
             }
         }
     }
 
+    private fun showConfirmationDialog() {
+        val builder = AlertDialog.Builder(context!!)
+        builder.setTitle("Konfirmasi")
+            .setMessage("Apakah anda yakin untuk menjalankan transaksi?")
+            .setPositiveButton("Ok") { _, _ -> viewModel.commitTransaction()}
+            .setNegativeButton("Batal") { _, _ -> }
+            .create()
+            .show()
+    }
+
     private fun verifyTags() {
+        if (viewModel.statusFrom.value == viewModel.statusTo.value) {
+            showToast("Status tag harus berbeda")
+            return
+        }
+
         val error1 = viewModel.tagAdapter.getError()
         val error2 = viewModel.errorAdapter.getError()
         listOf(error1, error2).map { it?.let {
-            showToast(it);
+            showToast(it)
             return
         }}
         VerifyBottomSheet(viewModel, viewModel.mapOfTags.map { it.value })

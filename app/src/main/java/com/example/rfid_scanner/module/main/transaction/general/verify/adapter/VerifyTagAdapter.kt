@@ -70,7 +70,7 @@ class VerifyTagAdapter(private val context: Context?, private val dataListFull :
 
                 tvTagStatus.text = if (data.isScanned) "OK" else "belum terpindai"
                 context?.let {
-                    viewIndicator.setBackgroundColor(
+                    llViewHolder.setBackgroundColor(
                         ContextCompat.getColor(
                             it,
                             if (data.isScanned) R.color.green_item_ok

@@ -38,6 +38,7 @@ class RequestEndPoint {
         const val ADD_STOCK_ID = "addStockId"
         const val GET_ALL_STOCK_IDS = "getAllStockIds"
         const val REUSE_TAG = "reuseTag"
+        const val TRANSACTION_GENERAL = "transactionGeneral"
     }
 
 }

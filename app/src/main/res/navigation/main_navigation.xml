@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_entryFragment_to_transGeneralFragment"
             app:destination="@id/transGeneralFragment" />
+        <action
+            android:id="@+id/action_entryFragment_to_checkRoomFragment"
+            app:destination="@id/checkRoomFragment" />
     </fragment>
 
     <fragment
@@ -44,5 +47,10 @@
         android:name="com.example.rfid_scanner.module.main.transaction.general.TransGeneralFragment"
         android:label="fragment_trans_general"
         tools:layout="@layout/fragment_trans_general" />
+    <fragment
+        android:id="@+id/checkRoomFragment"
+        android:name="com.example.rfid_scanner.module.main.non_transaction.check_room.CheckRoomFragment"
+        android:label="fragment_check_room"
+        tools:layout="@layout/fragment_check_room" />
 
 </navigation>

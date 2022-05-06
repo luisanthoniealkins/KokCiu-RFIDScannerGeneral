@@ -2,11 +2,11 @@ package com.example.rfid_scanner.data.model
 
 class Stock(
     var code: String,
-    name: String?,
-    var brand: String,
-    var vehicleType: String,
-    var unit: String,
-    val availableStock: Int
+    name: String? = null,
+    var brand: String = "-",
+    var vehicleType: String = "-",
+    var unit: String = "-",
+    val availableStock: Int = 0,
 ) {
     val isNameNull = name == null
     val name = if (isNameNull) code else name
@@ -19,11 +19,14 @@ class Stock(
     val getScanQuantity
         get() = items.size
 
-    fun resetTags() { items.clear() }
+    fun resetItem() {
+        items.clear()
+        itemQuantity = 0
+    }
 
-    fun addTags(item: String, quantity: Int) {
-        if (items.contains(item)) return
-        items.add(item)
+    fun addItem(tags: String, quantity: Int) {
+        if (items.contains(tags)) return
+        items.add(tags)
         itemQuantity += quantity
     }
 
@@ -39,3 +42,9 @@ class StockRequirement(
 
     fun incQuantity(quantity: Int) { reqQuantity += quantity }
 }
+
+data class StockId(
+    val stock: Stock,
+    val id: String,
+    val unitCount: Int,
+)

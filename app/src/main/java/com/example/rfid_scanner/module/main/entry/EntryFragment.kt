@@ -35,6 +35,10 @@ class EntryFragment : BaseFragment<FragmentEntryBinding, EntryViewModel>(),
             navigateTo(EntryFragmentDirections.actionEntryFragmentToTransGeneralFragment())
         }
 
+        btnCheckStockroom.setOnClickListener {
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToCheckRoomFragment())
+        }
+
         btnSettingsNetwork.setOnClickListener {
             navigateTo(EntryFragmentDirections.actionEntryFragmentToNetworkSettingFragment())
         }
@@ -67,6 +71,8 @@ class EntryFragment : BaseFragment<FragmentEntryBinding, EntryViewModel>(),
     override fun reEnableButton() {
         binding.btnAdminMode.isEnabled = true
     }
+
+
 
 }
 

@@ -72,7 +72,6 @@ class VerifyBottomSheet(private val listener: VerifyInterface, private val verif
     }
 
     private fun setUpViews() = with(binding){
-        Log.d("12345-", "enter")
         viewModel.setAdapter(context, verifyTags)
 
         rvItem.layoutManager = LinearLayoutManager(context)

@@ -3,7 +3,6 @@ package com.example.rfid_scanner.module.main
 import android.bluetooth.BluetoothDevice
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.rfid_scanner.R
 import com.example.rfid_scanner.data.model.status.BluetoothStatus
 import com.example.rfid_scanner.data.model.status.MConnectionStatus
@@ -14,7 +13,7 @@ import com.example.rfid_scanner.data.repository.helper.RequestEndPoint
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_ERROR
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_OK
 import com.example.rfid_scanner.utils.generic.BaseViewModel
-import com.example.rfid_scanner.utils.service.*
+import com.example.rfid_scanner.service.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -10,7 +10,7 @@ import com.example.rfid_scanner.R
 import com.example.rfid_scanner.data.model.Tag
 import com.example.rfid_scanner.databinding.ItemTagDetailBinding
 
-class TagAdapter(private val context: Context?) : RecyclerView.Adapter<TagAdapter.TagVH>() {
+class TagAdapter() : RecyclerView.Adapter<TagAdapter.TagVH>() {
 
     private val dataList = mutableListOf<Tag>()
 
@@ -55,8 +55,8 @@ class TagAdapter(private val context: Context?) : RecyclerView.Adapter<TagAdapte
                 tvTagCode.text = data.epc
                 tvStockName.text = data.stockName ?: "<no_name>"
                 tvTagStatus.text = ("OK")
-                context?.let {
-                    viewIndicator.setBackgroundColor(ContextCompat.getColor(it, R.color.green_item_ok))
+                binding.root.context?.let {
+                    llViewHolder.setBackgroundColor(ContextCompat.getColor(it, R.color.green_item_ok))
                 }
             }
         }

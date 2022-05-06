@@ -1,9 +1,11 @@
 package com.example.rfid_scanner.module.main
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -13,12 +15,11 @@ import com.example.rfid_scanner.databinding.ActivityMainBinding
 import com.example.rfid_scanner.databinding.BottomSheetStatusBinding
 import com.example.rfid_scanner.module.main.bluetooth.OnDeviceSelected
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_NOT_CONNECTED
-import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_ERROR
 import com.example.rfid_scanner.utils.generic.BaseActivity
 import com.example.rfid_scanner.utils.helper.ToastHelper.Companion.showToast
-import com.example.rfid_scanner.utils.service.BluetoothScannerService
-import com.example.rfid_scanner.utils.service.NetworkService
-import com.example.rfid_scanner.utils.service.StorageService
+import com.example.rfid_scanner.service.BluetoothScannerService
+import com.example.rfid_scanner.service.NetworkService
+import com.example.rfid_scanner.service.StorageService
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
@@ -140,6 +141,23 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnDevic
         } else {
             showToast(applicationContext, "Error while turning on bluetooth")
         }
+    }
+
+    override fun onBackPressed() {
+        if (navController.currentDestination?.id == R.id.entryFragment) {
+            showConfirmationExitDialog()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    private fun showConfirmationExitDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Konfirmasi")
+            .setMessage("Apakah anda yakin untuk keluar dari aplikasi?")
+            .setPositiveButton("Ok") { _, _ -> super.onBackPressed()}
+            .setNegativeButton("Batal") { _, _ -> }
+            .show()
     }
 }
 

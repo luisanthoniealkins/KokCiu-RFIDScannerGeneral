@@ -1,8 +1,7 @@
-package com.example.rfid_scanner.utils.service
+package com.example.rfid_scanner.service
 
 import android.bluetooth.BluetoothDevice
 import android.os.SystemClock
-import android.util.Log
 import com.example.rfid_scanner.data.model.TagEPC
 import com.example.rfid_scanner.data.model.status.MConnectionStatus
 import com.example.rfid_scanner.data.model.status.ScanStatus
@@ -60,10 +59,8 @@ class BluetoothBLEService(private val coroutineScope: CoroutineScope): Connectio
             updateScanStatus()
             while (isScanning) {
                 val list: List<UHFTAGInfo>? = mUHFService.readTagFromBufferList()
-                if (list.isNullOrEmpty()) {
-                    SystemClock.sleep(1)
-                    continue
-                }
+                if (list.isNullOrEmpty()) continue
+//                SystemClock.sleep(10)
                 channelTags?.send(list.map { TagEPC(it.epc) })
             }
         }

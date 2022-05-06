@@ -1,4 +1,4 @@
-package com.example.rfid_scanner.utils.service
+package com.example.rfid_scanner.service
 
 import android.annotation.SuppressLint
 import android.content.Context
