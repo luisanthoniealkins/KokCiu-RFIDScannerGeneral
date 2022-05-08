@@ -85,7 +85,7 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
                 mConnectedThread = ConnectedThread(mBTSocket)
                 mConnectedThread?.start()
                 currentDevice = device
-                StorageService.getInstance().lastConnectedBluetoothDevice = device.address
+                StorageService.getI().lastConnectedBluetoothDevice = device.address
             }
             updateStatus(isFailed)
         }

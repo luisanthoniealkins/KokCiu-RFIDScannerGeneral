@@ -23,8 +23,11 @@ class MainViewModel : BaseViewModel() {
     companion object {
         val hideStatusDestination = setOf(
             R.id.deviceListFragment,
-            R.id.networkSettingFragment
+            R.id.networkSettingFragment,
+            R.id.transSettingFragment,
+            R.id.exploreStockIdFragment,
         )
+
     }
 
     private lateinit var mNetworkService : NetworkService
@@ -62,14 +65,14 @@ class MainViewModel : BaseViewModel() {
         VolleyRepository.getI().requestAPI(RequestEndPoint.CHECK_SERVER)
     }
 
-    private fun refreshNetworkStatus() {
+    fun refreshNetworkStatus() {
         val ns = NetworkStatus(SERVICE_STATUS_ERROR, R.color.red_disconnect, "-", 0,"-", null)
 
         if (!mNetworkService.isWifiEnabled) ns.message = "Wifi offline"
         else if (!mNetworkService.isWifiConnected) ns.message = "Wifi belum terhubung"
-        else if (!StorageService.getInstance().wifi.equals(mNetworkService.wifiSSID)) {
+        else if (!StorageService.getI().wifi.equals(mNetworkService.wifiSSID)) {
             ns.ssid = mNetworkService.wifiSSID
-            ns.message = "Diharapkan ${StorageService.getInstance().wifi}"
+            ns.message = "Diharapkan ${StorageService.getI().wifi}"
         } else {
             ns.ssid = mNetworkService.wifiSSID
             ns.status = SERVICE_STATUS_OK

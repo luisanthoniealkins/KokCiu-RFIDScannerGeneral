@@ -1,12 +1,12 @@
 package com.example.rfid_scanner.module.main.transaction.general
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.rfid_scanner.data.model.Stock
 import com.example.rfid_scanner.data.model.StockId
 import com.example.rfid_scanner.data.model.Tag
+import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_BROKEN
+import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_SOLD
 import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_STORED
 import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_UNKNOWN
 import com.example.rfid_scanner.data.model.TagEPC
@@ -22,8 +22,9 @@ import com.example.rfid_scanner.module.main.transaction.general.adapter.ErrorAda
 import com.example.rfid_scanner.module.main.transaction.general.adapter.TagAdapter
 import com.example.rfid_scanner.module.main.transaction.general.adapter.TagAdapter.TagData
 import com.example.rfid_scanner.module.main.transaction.general.verify.VerifyInterface
-import com.example.rfid_scanner.utils.generic.BaseViewModel
 import com.example.rfid_scanner.service.BluetoothScannerService
+import com.example.rfid_scanner.service.StorageService
+import com.example.rfid_scanner.utils.generic.BaseViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
@@ -33,19 +34,35 @@ class TransGeneralViewModel : BaseViewModel(), VerifyInterface {
     companion object {
         const val TAB_TAG = 0
         const val TAB_ERROR = 1
+
+        const val GENERAL = "General"
+        const val CHECK_IN = "Masuk Baru"
+        const val RETURN = "Masuk Lama"
+        const val BROKEN = "Keluar Rusak"
+        const val CLEAR = "Hapus Tag"
+        const val REUSE = "Pakai Ulang"
+        val mapOfTransType = mapOf(
+            GENERAL to Pair(STATUS_UNKNOWN, STATUS_STORED),
+            CHECK_IN to Pair(STATUS_UNKNOWN, STATUS_STORED),
+            RETURN to Pair(STATUS_SOLD, STATUS_STORED),
+            BROKEN to Pair(STATUS_STORED, STATUS_BROKEN),
+            CLEAR to Pair(STATUS_STORED, STATUS_UNKNOWN),
+            REUSE to Pair(STATUS_SOLD, STATUS_UNKNOWN),
+        )
     }
 
     val mBluetoothScannerService = BluetoothScannerService.getInstance()
     val tagAdapter = TagAdapter()
     val errorAdapter = ErrorAdapter()
 
-    private var imStatusForm = STATUS_UNKNOWN
-
-    private val _statusFrom = MutableLiveData<String>().apply { postValue(imStatusForm) }
+    private val _statusFrom = MutableLiveData<String>().apply { value = STATUS_UNKNOWN }
     val statusFrom : LiveData<String> = _statusFrom
 
-    private val _statusTo = MutableLiveData<String>().apply { postValue(STATUS_STORED) }
+    private val _statusTo = MutableLiveData<String>().apply { value = STATUS_STORED }
     val statusTo : LiveData<String> = _statusTo
+
+    private val _allowTrans = MutableLiveData<Boolean>().apply { value = true }
+    val allowTrans : LiveData<Boolean> = _allowTrans
 
     private val _tagCountOK = MutableLiveData<Int>()
     val tagCountOK : LiveData<Int> = _tagCountOK
@@ -67,6 +84,9 @@ class TransGeneralViewModel : BaseViewModel(), VerifyInterface {
     private val mapOfTagsError = mutableMapOf<String, TagData>()
 
     private var channelTags = Channel<List<TagEPC>>()
+
+    var stockId : StockId? = null
+        private set
 
     init {
         viewModelScope.launch {
@@ -114,7 +134,7 @@ class TransGeneralViewModel : BaseViewModel(), VerifyInterface {
     private fun splitNewTags(tags: List<Tag>) {
         _isVerified.postValue(false)
         tags.map {
-            if (it.status == imStatusForm) {
+            if (it.status == _statusFrom.value) {
                 mapOfTagsOK[it.epc] = TagData(mapOfTagsOK.size, it)
                 mapOfTagsOK.getOrDefault(it.epc, null)?.let { adapterItem ->
                     tagAdapter.updateData(true, adapterItem.position, adapterItem.data)
@@ -152,13 +172,12 @@ class TransGeneralViewModel : BaseViewModel(), VerifyInterface {
 
     fun setStatusButton(isSource: Boolean, status: String) {
         if (isSource) {
-            _statusFrom.postValue(status)
-            if (imStatusForm != status) {
-                imStatusForm = status
-                refreshNewTagsStatus()
-            }
+            val statusFrom = _statusFrom.value!!
+            _statusFrom.value = status
+            if (statusFrom != status) { refreshNewTagsStatus() }
         }
-        else _statusTo.postValue(status)
+        else _statusTo.value = status
+        _allowTrans.value = StorageService.getI().isStatusChecked(_statusFrom.value!!, _statusTo.value!!)
     }
 
     override fun onBottomSheetDismiss(result: Boolean) {
@@ -171,13 +190,7 @@ class TransGeneralViewModel : BaseViewModel(), VerifyInterface {
             VolleyRepository.getI().requestAPI(
                 TRANSACTION_GENERAL,
                 transactionGeneral(
-                    bills = null,
-                    stocks = null,
-                    stockId = StockId(
-                        Stock("12020-42000 HYK"),
-                        "12020-42000 HYK#Q1",
-                        1
-                    ),
+                    stockId = stockId,
                     tags = mapOfTags.map { it.value },
                     statusFrom = statusFrom.value!!,
                     statusTo = statusTo.value!!,
@@ -187,6 +200,16 @@ class TransGeneralViewModel : BaseViewModel(), VerifyInterface {
                 _commitState.postValue(it.state)
             }
         }
+    }
+
+    fun selectStockId(stockId: StockId) {
+        this.stockId = stockId
+    }
+
+    fun setTransaction(transactionType: String) {
+        val pair = mapOfTransType[transactionType]
+        _statusFrom.value = pair?.first
+        _statusTo.value = pair?.second
     }
 
 

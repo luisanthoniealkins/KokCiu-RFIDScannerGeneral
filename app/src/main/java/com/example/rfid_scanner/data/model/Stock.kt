@@ -29,7 +29,6 @@ class Stock(
         items.add(tags)
         itemQuantity += quantity
     }
-
 }
 
 class StockRequirement(
@@ -47,4 +46,15 @@ data class StockId(
     val stock: Stock,
     val id: String,
     val unitCount: Int,
-)
+) {
+    companion object {
+        fun getStockIdFromId(id: String): StockId {
+            val arrs = id.split("#Q")
+            return StockId(
+                stock = Stock(code = arrs[0]),
+                id = id,
+                unitCount = arrs[1].toInt(),
+            )
+        }
+    }
+}

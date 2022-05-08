@@ -46,24 +46,20 @@ class CheckRoomViewModel : BaseViewModel() {
 
     init {
         viewModelScope.launch {
-            getAllStocks()
+            launch { getAllStocks() }
             mBluetoothScannerService.setChannel(channelTags)
             launch { channelTags.consumeEach { queryTags(it) } }
             launch { mBluetoothScannerService.sfScanStatus.collect{ _scanStatus.postValue(it) } }
         }
     }
 
-    private fun getAllStocks() {
-        viewModelScope.launch {
-            VolleyRepository.getI().requestAPI(
-                RequestEndPoint.GET_ALL_STOCKS,
-                null,
-                RequestResult::getAllStocks
-            ).collect { res ->
-                res.response?.data?.let { stock ->
-                    stockAdapter.addStocks(stock as List<StockRequirement>)
-                }
-            }
+    private suspend fun getAllStocks() {
+        VolleyRepository.getI().requestAPI(
+            RequestEndPoint.GET_ALL_STOCKS,
+            null,
+            RequestResult::getAllStocks
+        ).collect { res ->
+            res.response?.data?.let { stockAdapter.addStocks(it as List<StockRequirement>) }
         }
     }
 
@@ -132,11 +128,6 @@ class CheckRoomViewModel : BaseViewModel() {
         _stockCount.postValue(stockAdapter.itemCount)
         _tagCountError.postValue(errorAdapter.itemCount)
     }
-
-//    fun setAdapter(context: Context?) {
-//        stockAdapter = StockAdapter(context)
-//        errorAdapter = ErrorAdapter(context)
-//    }
 
 }
 

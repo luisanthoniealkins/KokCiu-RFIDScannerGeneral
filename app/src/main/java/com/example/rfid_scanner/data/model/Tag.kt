@@ -18,6 +18,7 @@ class Tag(
         const val STATUS_BROKEN = "Rusak"
         const val STATUS_LOST = "Hilang"
         const val STATUS_UNKNOWN = "Asing"
+        val statusList = listOf(STATUS_STORED, STATUS_SOLD, STATUS_BROKEN, STATUS_LOST, STATUS_UNKNOWN)
     }
 
     val stockCode

@@ -9,6 +9,7 @@
     tools:context=".module.main.transaction.general.TransGeneralFragment">
 
     <LinearLayout
+        android:id="@+id/ll_transition"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -27,6 +28,7 @@
             style="?attr/materialButtonOutlinedStyle"/>
 
         <ImageView
+            android:id="@+id/imv_allow_trans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_arrow_forward_ios_24"
@@ -44,6 +46,118 @@
             android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
             android:drawablePadding="0dp"
             style="?attr/materialButtonOutlinedStyle"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_trans_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        tools:text="Masuk Baru"/>
+
+    <LinearLayout
+        android:id="@+id/ll_check_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dividerInsetStart="8dp"
+            app:dividerInsetEnd="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/imv_insert_last"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_baseline_input_24"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="?android:attr/dividerVertical"
+                android:layout_marginHorizontal="8dp"/>
+
+            <TableLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Id"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"/>
+
+                    <TextView
+                        android:id="@+id/tv_id"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        tools:text="420120210 HYK"/>
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nama"
+                        android:textColor="@color/black"
+                        android:layout_marginEnd="4dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:layout_marginEnd="4dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        tools:text="BAUT RODA BELAKANG SEJIWA LH (4/16 PCS)"/>
+
+                </TableRow>
+
+            </TableLayout>
+
+            <Button
+                android:id="@+id/btn_select_stock"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="Cari"
+                android:layout_marginStart="8dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -119,7 +233,7 @@
             android:layout_weight="1"
             android:text="@string/ulang"
             android:layout_marginStart="4dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="4dp"/>
 
         <Button
             android:id="@+id/btn_verify_and_commit"

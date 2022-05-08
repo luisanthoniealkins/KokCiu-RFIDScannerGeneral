@@ -114,7 +114,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnDevic
                 }
             }
 
-            imvRefresh.setOnClickListener { viewModel.checkServer() }
+            imvRefreshWifi.setOnClickListener { viewModel.refreshNetworkStatus() }
+            imvRefreshServer.setOnClickListener { viewModel.checkServer() }
 
             dialog.setContentView(root)
         }

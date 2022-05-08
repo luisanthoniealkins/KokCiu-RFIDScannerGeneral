@@ -3,9 +3,14 @@ package com.example.rfid_scanner.module.main.transaction.general
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.rfid_scanner.R
+import com.example.rfid_scanner.data.model.StockId
 import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_BROKEN
 import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_LOST
 import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_SOLD
@@ -14,9 +19,12 @@ import com.example.rfid_scanner.data.model.Tag.Companion.STATUS_UNKNOWN
 import com.example.rfid_scanner.data.model.repository.MResponse
 import com.example.rfid_scanner.databinding.DialogStatusTypeBinding
 import com.example.rfid_scanner.databinding.FragmentTransGeneralBinding
+import com.example.rfid_scanner.module.main.explore.stockId.ExploreStockIdViewModel
 import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.TAB_ERROR
 import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.TAB_TAG
+import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.GENERAL
 import com.example.rfid_scanner.module.main.transaction.general.verify.VerifyBottomSheet
+import com.example.rfid_scanner.service.StorageService
 import com.example.rfid_scanner.utils.generic.fragment.ScanFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -43,6 +51,25 @@ class TransGeneralFragment : ScanFragment<FragmentTransGeneralBinding, TransGene
     override fun getOtherButton() = listOf(binding.btnReset, binding.btnVerifyAndCommit)
 
     override fun setUpViews() = with(binding) {
+        getNavController()?.currentBackStackEntry?.savedStateHandle?.getLiveData<List<String>>(
+            ExploreStockIdViewModel.KEY_STOCK_ID)?.observeWithOwner {
+            viewModel.selectStockId(StockId.getStockIdFromId(it[0]))
+            tvId.text = it[0]
+            tvName.text = it[1]
+            StorageService.getI().lastUsedStockId = it[0]
+            StorageService.getI().lastUsedStockName = it[1]
+        }
+
+        imvInsertLast.setOnClickListener {
+            viewModel.selectStockId(StockId.getStockIdFromId(StorageService.getI().lastUsedStockId!!))
+            tvId.text = StorageService.getI().lastUsedStockId
+            tvName.text = StorageService.getI().lastUsedStockName
+        }
+
+        btnSelectStock.setOnClickListener {
+            navigateTo(TransGeneralFragmentDirections.actionTransGeneralFragmentToExploreStockIdFragment(true))
+        }
+
         btnStatusFrom.setOnClickListener { showChoiceDialog(true) }
         btnStatusTo.setOnClickListener { showChoiceDialog(false) }
 
@@ -67,12 +94,22 @@ class TransGeneralFragment : ScanFragment<FragmentTransGeneralBinding, TransGene
     }
 
     override fun observeData() = with(viewModel) {
-        statusFrom.observeWithOwner { binding.btnStatusFrom.text = it }
+        statusFrom.observeWithOwner {
+            binding.btnStatusFrom.text = it
+            binding.llCheckIn.isVisible = (statusFrom.value == STATUS_UNKNOWN && statusTo.value == STATUS_STORED)
+        }
         statusTo.observeWithOwner {
             binding.btnStatusTo.text = it
             binding.btnVerifyAndCommit.text =
                 if (isVerified.value == true) mapOfCommitButton[it]
                 else "Verif"
+            binding.llCheckIn.isVisible = (statusFrom.value == STATUS_UNKNOWN && statusTo.value == STATUS_STORED)
+        }
+        allowTrans.observeWithOwner {
+            binding.imvAllowTrans.setImageResource(
+                if (it) R.drawable.ic_baseline_arrow_forward_ios_24
+                else R.drawable.ic_baseline_do_not_disturb_24
+            )
         }
 
         tagCountOK.observeWithOwner { binding.tabLayout.getTabAt(TAB_TAG)?.text = "Tag (${it})" }
@@ -99,6 +136,21 @@ class TransGeneralFragment : ScanFragment<FragmentTransGeneralBinding, TransGene
         }
     }
 
+    override fun initEvent() {
+        retrieveArgs()
+    }
+
+    private fun retrieveArgs() {
+        val args : TransGeneralFragmentArgs by navArgs()
+        if (args.transactionType != GENERAL) {
+            binding.llTransition.visibility = View.GONE
+            binding.tvTransType.text = args.transactionType
+        } else {
+            binding.tvTransType.visibility = View.GONE
+        }
+        viewModel.setTransaction(args.transactionType)
+    }
+
     private fun showConfirmationDialog() {
         val builder = AlertDialog.Builder(context!!)
         builder.setTitle("Konfirmasi")
@@ -110,9 +162,16 @@ class TransGeneralFragment : ScanFragment<FragmentTransGeneralBinding, TransGene
     }
 
     private fun verifyTags() {
-        if (viewModel.statusFrom.value == viewModel.statusTo.value) {
-            showToast("Status tag harus berbeda")
+        if (viewModel.allowTrans.value != true) {
+            showToast("Transisi status tidak diperbolehkan")
             return
+        }
+
+        if (viewModel.statusFrom.value == STATUS_UNKNOWN && viewModel.statusTo.value == STATUS_STORED) {
+            if (viewModel.stockId == null) {
+                showToast("Barang harus dipilih")
+                return
+            }
         }
 
         val error1 = viewModel.tagAdapter.getError()

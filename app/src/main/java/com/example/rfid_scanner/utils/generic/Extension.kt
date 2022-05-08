@@ -8,10 +8,15 @@ import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.launch
 
-class Extension {
+object Extension {
 
-    companion object {
-
+    fun String.hasLowerCaseSubsequence(pattern: String): Boolean {
+        var p = 0
+        this.lowercase().map { if (p < pattern.length && pattern[p] == it) p++ }
+        return p == pattern.length
     }
+
+
+
 
 }

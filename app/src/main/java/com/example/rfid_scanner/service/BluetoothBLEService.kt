@@ -59,8 +59,10 @@ class BluetoothBLEService(private val coroutineScope: CoroutineScope): Connectio
             updateScanStatus()
             while (isScanning) {
                 val list: List<UHFTAGInfo>? = mUHFService.readTagFromBufferList()
-                if (list.isNullOrEmpty()) continue
-//                SystemClock.sleep(10)
+                if (list.isNullOrEmpty()) {
+                    SystemClock.sleep(1)
+                    continue
+                }
                 channelTags?.send(list.map { TagEPC(it.epc) })
             }
         }
@@ -68,9 +70,11 @@ class BluetoothBLEService(private val coroutineScope: CoroutineScope): Connectio
     }
 
     fun stopScan() {
-        mUHFService.stopInventory()
-        isScanning = false
-        updateScanStatus()
+        coroutineScope.launch {
+            isScanning = false
+            updateScanStatus()
+            mUHFService.stopInventory()
+        }
     }
 
     fun setChannel(channelTags: Channel<List<TagEPC>>) {

@@ -1,35 +1,30 @@
-package com.example.rfid_scanner.module.main.setting.network
+package com.example.rfid_scanner.module.main.settings.network
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.navigation.findNavController
-import com.example.rfid_scanner.databinding.FragmentNetworkSettingBinding
+import com.example.rfid_scanner.databinding.FragmentNetworkSettingsBinding
 import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
-class NetworkSettingFragment : BaseFragment<FragmentNetworkSettingBinding, NetworkSettingViewModel>(){
+class NetworkSettingsFragment : BaseFragment<FragmentNetworkSettingsBinding, NetworkSettingsViewModel>(){
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentNetworkSettingBinding.inflate(inflater, container, false)
+        FragmentNetworkSettingsBinding.inflate(inflater, container, false)
 
-    override fun getViewModelClass() = NetworkSettingViewModel::class.java
+    override fun getViewModelClass() = NetworkSettingsViewModel::class.java
 
-    override fun setUpViews() {
-        with(binding) {
-            imvBack.setOnClickListener { view?.findNavController()?.popBackStack() }
-            btnConfirm.setOnClickListener { validateAndConfirmInput() }
-        }
+    override fun setUpViews() = with(binding) {
+        imvBack.setOnClickListener { navigateBack() }
+        btnConfirm.setOnClickListener { validateAndConfirmInput() }
     }
 
-    override fun observeData() {
-        Log.d("12345-", viewModel.ipAddress.value.toString())
-        with(viewModel) {
-            ipAddress.observe(viewLifecycleOwner, {binding.edtIpAddress.setText(it)})
-            port.observe(viewLifecycleOwner, {binding.edtPort.setText(it)})
-            wifi.observe(viewLifecycleOwner, {binding.edtWifiName.setText(it)})
-        }
+
+    override fun observeData() = with(viewModel) {
+        ipAddress.observeWithOwner { binding.edtIpAddress.setText(it) }
+        port.observeWithOwner { binding.edtPort.setText(it) }
+        wifi.observeWithOwner { binding.edtWifiName.setText(it) }
     }
+
 
     private fun validateAndConfirmInput() {
         val ipAddress = binding.edtIpAddress.text.toString().trim()

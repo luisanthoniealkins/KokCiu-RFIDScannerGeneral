@@ -6,6 +6,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.example.rfid_scanner.databinding.FragmentEntryBinding
 import com.example.rfid_scanner.module.main.MainViewModel
+import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel
+import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.BROKEN
+import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.CHECK_IN
+import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.CLEAR
+import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.GENERAL
+import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.RETURN
+import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.REUSE
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_OK
 import com.example.rfid_scanner.utils.custom_view.dialog.PasswordDialog
 import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
@@ -32,16 +39,46 @@ class EntryFragment : BaseFragment<FragmentEntryBinding, EntryViewModel>(),
         }
 
         btnTransactionGeneral.setOnClickListener {
-            navigateTo(EntryFragmentDirections.actionEntryFragmentToTransGeneralFragment())
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToTransGeneralFragment(GENERAL))
+        }
+
+        btnCheckIn.setOnClickListener {
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToTransGeneralFragment(CHECK_IN))
+        }
+
+        btnReturn.setOnClickListener {
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToTransGeneralFragment(RETURN))
+        }
+
+        btnBroken.setOnClickListener {
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToTransGeneralFragment(BROKEN))
+        }
+
+        btnClearTag.setOnClickListener {
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToTransGeneralFragment(CLEAR))
+        }
+
+        btnReuseTag.setOnClickListener {
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToTransGeneralFragment(REUSE))
         }
 
         btnCheckStockroom.setOnClickListener {
             navigateTo(EntryFragmentDirections.actionEntryFragmentToCheckRoomFragment())
         }
 
+        btnAddEditStockId.setOnClickListener {
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToExploreStockIdFragment(false))
+        }
+
         btnSettingsNetwork.setOnClickListener {
             navigateTo(EntryFragmentDirections.actionEntryFragmentToNetworkSettingFragment())
         }
+
+        btnSettingsTrans.setOnClickListener {
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToTransSettingFragment())
+        }
+
+
     }
 
     override fun observeData() = with(viewModel) {

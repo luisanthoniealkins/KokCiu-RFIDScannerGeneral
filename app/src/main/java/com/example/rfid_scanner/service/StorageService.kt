@@ -12,12 +12,14 @@ class StorageService(private val context: Context) {
         private const val SP_IP = "sp_ip"
         private const val SP_PORT = "sp_port"
         private const val SP_WIFI = "sp_wifi"
+        private const val SP_LAST_STOCK_ID = "sp_last_stock_id"
+        private const val SP_LAST_STOCK_NAME = "sp_last_stock_name"
 
         @SuppressLint("StaticFieldLeak")
         var mInstance: StorageService? = null
             private set
 
-        fun getInstance() = mInstance!!
+        fun getI() = mInstance!!
 
         fun init(context: Context) { mInstance = StorageService(context) }
     }
@@ -41,5 +43,28 @@ class StorageService(private val context: Context) {
     var wifi
         set(value) { getPref().edit().putString(SP_WIFI, value).apply() }
         get() = getPref().getString(SP_WIFI, "HUAWE-Mj")
+
+    var lastUsedStockId
+        set(value) { put(SP_LAST_STOCK_ID, value)}
+        get() = get(SP_LAST_STOCK_ID, "12020-42000 HYK#Q1")
+
+    var lastUsedStockName
+        set(value) { put(SP_LAST_STOCK_NAME, value) }
+        get() = get(SP_LAST_STOCK_NAME, "PION PIRING BELAKANG 6X40")
+
+    fun setStatusChecked(from: String, to: String, isChecked: Boolean) {
+        val st = "${from}>${to}"
+        getPref().edit().putBoolean(st, isChecked).apply()
+    }
+
+    fun isStatusChecked(from: String, to: String): Boolean {
+        val st = "${from}>${to}"
+        return getPref().getBoolean(st, false)
+    }
+
+    private fun put(key: String, value: String?) = getPref().edit().putString(key, value).apply()
+    private fun get(key: String, default: String) = getPref().getString(key, default)
+
+
 
 }

@@ -72,16 +72,18 @@ abstract class BaseFragment<VBinding : ViewBinding, ViewModel : BaseViewModel> :
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
+    fun getNavController() = view?.findNavController()
+
     fun navigateTo(direction: NavDirections) {
-        view?.findNavController()?.navigate(direction)
+        getNavController()?.navigate(direction)
+    }
+
+    fun navigateBack() {
+        getNavController()?.popBackStack()
     }
 
     fun gColor(resColorId: Int) : Int{
         return ContextCompat.getColor(context!!, resColorId)
-    }
-
-    fun navigateBack() {
-        view?.findNavController()?.popBackStack()
     }
 
     fun <T> LiveData<T>.observeWithOwner(function: (T) -> Unit) {

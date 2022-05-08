@@ -3,24 +3,8 @@ plugins {
     id 'kotlin-android'
     id 'androidx.navigation.safeargs'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 }
-
-//android {
-//    ***
-//    defaultConfig{
-//        ****
-//        //Set the supported SO library architecture, armeabi is a universally supported architecture for mobile phones, you can also add other architectures yourself
-//
-//    }
-//    sourceSets {
-//        main {
-//            jniLibs.srcDirs = ['libs']
-//            //If yours is also jnilibs, it is best to copy (jniLibs/armeabi's armeabi directory contains files to the libs directory)
-//            //jniLibs.srcDirs = ['jnilibs']//I did not compile successfully using this
-//        }
-//    }
-//    ***
-//}
 
 android {
     compileSdk 31

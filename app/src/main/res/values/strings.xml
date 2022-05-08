@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RFID-Scanner</string>
+    <string name="app_name">Scanner 2</string>
 
     <string name="discover_new_devices">Discover new devices</string>
     <string name="show_paired_devices">Show paired devices</string>

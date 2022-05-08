@@ -1,18 +1,19 @@
 package com.example.rfid_scanner.data.repository.helper
 
 import com.example.rfid_scanner.data.model.Stock
+import com.example.rfid_scanner.data.model.StockId
 import com.example.rfid_scanner.data.model.StockRequirement
 import com.example.rfid_scanner.data.model.Tag
 import com.example.rfid_scanner.data.model.repository.MResponse
 import com.example.rfid_scanner.data.model.repository.MResponse.ResponseData
+import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import java.util.ArrayList
 import java.util.HashMap
 
 class RequestResult {
-
-
-
+    
     companion object {
 
         fun getGeneralResponse(response: JSONObject) = ResponseData(
@@ -28,27 +29,48 @@ class RequestResult {
             val arr = response.getJSONArray("data")
             for (i in 0 until arr.length()) {
                 val detail = arr[i] as JSONObject
-                val code = detail.getString("stock_code")
-                val name = detail.getString("stock_name")
-                val brand = detail.getString("stock_brand")
-                val vehicleType = detail.getString("stock_vehicle_type")
-                val unit = detail.getString("stock_unit")
-                val availableStock = detail.getInt("stock_available_stock")
                 stocks.add(
                     StockRequirement(
-                        Stock(
-                            code,
-                            name,
-                            brand,
-                            vehicleType,
-                            unit,
-                            availableStock
+                        stock = Stock(
+                            code = detail.getString("stock_code"),
+                            name = detail.getString("stock_name"),
+                            brand = detail.getString("stock_brand"),
+                            vehicleType = detail.getString("stock_vehicle_type"),
+                            unit = detail.getString("stock_unit"),
+                            availableStock = detail.getInt("stock_available_stock")
                         ),
-                        availableStock
+                        reqQuantity = detail.getInt("stock_available_stock")
                     )
                 )
             }
             result.data = stocks
+
+            return result
+        }
+
+        fun getAllStockIds(response: JSONObject) : ResponseData {
+            val result = getGeneralResponse(response)
+
+            val stockIds = mutableListOf<StockId>()
+            val arr = response.getJSONArray("data")
+            for (i in 0 until arr.length()) {
+                val detail = arr[i] as JSONObject
+                stockIds.add(
+                    StockId(
+                        stock = Stock(
+                            code = detail.getString("stock_code"),
+                            name = detail.getString("stock_name"),
+                            brand = detail.getString("stock_brand"),
+                            vehicleType = detail.getString("stock_vehicle_type"),
+                            unit = detail.getString("stock_unit"),
+                            availableStock = detail.getInt("stock_available_stock")
+                        ),
+                        id = detail.getString("stock_id"),
+                        unitCount = detail.getInt("stock_unit_count")
+                    )
+                )
+            }
+            result.data = stockIds
 
             return result
         }

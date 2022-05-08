@@ -53,7 +53,7 @@ class VolleyRepository(private val context: Context) {
         if (obj != null && IS_DEBUG) Log.d("12345", "$endpoint $obj")
 
         val sfResponse = MutableStateFlow(MResponse(LOADING, null))
-        val baseUrl = "http://${StorageService.getInstance().ipAddress}:${StorageService.getInstance().port}/app/"
+        val baseUrl = "http://${StorageService.getI().ipAddress}:${StorageService.getI().port}/app/"
         val url = "$baseUrl$endpoint.php"
         val request =
             JsonObjectRequest(

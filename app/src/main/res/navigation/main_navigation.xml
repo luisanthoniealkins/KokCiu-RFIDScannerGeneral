@@ -25,6 +25,12 @@
         <action
             android:id="@+id/action_entryFragment_to_checkRoomFragment"
             app:destination="@id/checkRoomFragment" />
+        <action
+            android:id="@+id/action_entryFragment_to_exploreStockIdFragment"
+            app:destination="@id/exploreStockIdFragment" />
+        <action
+            android:id="@+id/action_entryFragment_to_transSettingFragment"
+            app:destination="@id/transSettingFragment" />
     </fragment>
 
     <fragment
@@ -34,9 +40,9 @@
         tools:layout="@layout/fragment_device_list" />
     <fragment
         android:id="@+id/networkSettingFragment"
-        android:name="com.example.rfid_scanner.module.main.setting.network.NetworkSettingFragment"
+        android:name="com.example.rfid_scanner.module.main.settings.network.NetworkSettingsFragment"
         android:label="fragment_network_setting"
-        tools:layout="@layout/fragment_network_setting" />
+        tools:layout="@layout/fragment_network_settings" />
     <fragment
         android:id="@+id/tagScannerFragment"
         android:name="com.example.rfid_scanner.module.main.non_transaction.tag_scanner.TagScannerFragment"
@@ -46,11 +52,32 @@
         android:id="@+id/transGeneralFragment"
         android:name="com.example.rfid_scanner.module.main.transaction.general.TransGeneralFragment"
         android:label="fragment_trans_general"
-        tools:layout="@layout/fragment_trans_general" />
+        tools:layout="@layout/fragment_trans_general" >
+        <action
+            android:id="@+id/action_transGeneralFragment_to_exploreStockIdFragment"
+            app:destination="@id/exploreStockIdFragment" />
+        <argument
+            android:name="transactionType"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/checkRoomFragment"
         android:name="com.example.rfid_scanner.module.main.non_transaction.check_room.CheckRoomFragment"
         android:label="fragment_check_room"
         tools:layout="@layout/fragment_check_room" />
+    <fragment
+        android:id="@+id/exploreStockIdFragment"
+        android:name="com.example.rfid_scanner.module.main.explore.stockId.ExploreStockIdFragment"
+        android:label="ExploreStockIdFragment"
+        tools:layout="@layout/fragment_explore">
+        <argument
+            android:name="isSearching"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/transSettingFragment"
+        android:name="com.example.rfid_scanner.module.main.settings.transaction.TransSettingsFragment"
+        android:label="fragment_trans_setting"
+        tools:layout="@layout/fragment_trans_settings" />
 
 </navigation>
