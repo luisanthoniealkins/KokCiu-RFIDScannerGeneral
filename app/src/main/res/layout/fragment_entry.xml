@@ -62,7 +62,8 @@
                         android:id="@+id/btn_check_out"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Keluar"/>
+                        android:text="Keluar"
+                        android:enabled="false"/>
 
 
                 </LinearLayout>
@@ -264,7 +265,8 @@
                         android:id="@+id/btn_adjustment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Penyesuaian"/>
+                        android:text="Penyesuaian"
+                        android:enabled="false"/>
 
                     <Button
                         android:id="@+id/btn_transaction_general"
@@ -310,15 +312,13 @@
                         android:id="@+id/btn_add_edit_brand"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Merek"
-                        android:enabled="false"/>
+                        android:text="Merek"/>
 
                     <Button
                         android:id="@+id/btn_add_edit_unit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Satuan"
-                        android:enabled="false"/>
+                        android:text="Satuan"/>
 
                 </LinearLayout>
 
@@ -338,15 +338,13 @@
                         android:id="@+id/btn_add_edit_customer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Customer"
-                        android:enabled="false"/>
+                        android:text="Customer"/>
 
                     <Button
                         android:id="@+id/btn_add_edit_vehicle_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tipe Kendaraan"
-                        android:enabled="false"/>
+                        android:text="Tipe Kendaraan"/>
 
                 </LinearLayout>
 

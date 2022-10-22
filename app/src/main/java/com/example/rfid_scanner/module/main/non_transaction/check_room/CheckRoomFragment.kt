@@ -2,6 +2,9 @@ package com.example.rfid_scanner.module.main.non_transaction.check_room
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rfid_scanner.databinding.FragmentCheckRoomBinding
 import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel
@@ -32,6 +35,21 @@ class CheckRoomFragment : ScanFragment<FragmentCheckRoomBinding, CheckRoomViewMo
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
+
+        edtFilter.doOnTextChanged { text, _, _, _ ->
+            viewModel.stockAdapter.changeTextFilter(text.toString())
+            btnClearFilter.isVisible = text?.isNotEmpty() ?: false
+            viewModel.refreshCount()
+        }
+
+
+//        debug mode print tag in edittext
+//        viewModel.stockAdapter.setTempEDT(edtTags)
+//        edtTags.doOnTextChanged { text, _, _, _ ->
+//            edtTags.isVisible = text?.isNotEmpty() ?: false
+//        }
+
+        btnClearFilter.setOnClickListener { edtFilter.setText("") }
 
         cbShowOk.setOnCheckedChangeListener { _, b ->
             viewModel.stockAdapter.setShowOK(b)

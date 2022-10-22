@@ -40,10 +40,13 @@ abstract class BaseFragment<VBinding : ViewBinding, ViewModel : BaseViewModel> :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        retrieveArgs()
         setUpViews()
         observeData()
         initEvent()
     }
+
+    open fun retrieveArgs() {}
 
     open fun setUpViews() {}
 
@@ -89,5 +92,7 @@ abstract class BaseFragment<VBinding : ViewBinding, ViewModel : BaseViewModel> :
     fun <T> LiveData<T>.observeWithOwner(function: (T) -> Unit) {
         this.observe(viewLifecycleOwner, function)
     }
+
+
 
 }

@@ -3,9 +3,7 @@ package com.example.rfid_scanner.module.main.explore.stockId
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.rfid_scanner.data.model.Stock
 import com.example.rfid_scanner.data.model.StockId
-import com.example.rfid_scanner.data.model.StockRequirement
 import com.example.rfid_scanner.data.repository.VolleyRepository
 import com.example.rfid_scanner.data.repository.helper.RequestEndPoint
 import com.example.rfid_scanner.data.repository.helper.RequestResult

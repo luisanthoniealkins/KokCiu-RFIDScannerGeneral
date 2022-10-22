@@ -26,6 +26,8 @@ class MainViewModel : BaseViewModel() {
             R.id.networkSettingFragment,
             R.id.transSettingFragment,
             R.id.exploreStockIdFragment,
+            R.id.explorePropertyFragment,
+            R.id.alterPropertyFragment,
         )
 
     }

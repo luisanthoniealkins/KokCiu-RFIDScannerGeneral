@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_entryFragment_to_transSettingFragment"
             app:destination="@id/transSettingFragment" />
+        <action
+            android:id="@+id/action_entryFragment_to_explorePropertyFragment"
+            app:destination="@id/explorePropertyFragment" />
     </fragment>
 
     <fragment
@@ -79,5 +82,32 @@
         android:name="com.example.rfid_scanner.module.main.settings.transaction.TransSettingsFragment"
         android:label="fragment_trans_setting"
         tools:layout="@layout/fragment_trans_settings" />
+    <fragment
+        android:id="@+id/explorePropertyFragment"
+        android:name="com.example.rfid_scanner.module.main.explore.property.ExplorePropertyFragment"
+        android:label="ExplorePropertyFragment"
+        tools:layout="@layout/fragment_explore">
+        <argument android:name="isSearching"
+            app:argType="boolean" />
+        <argument
+            android:name="type"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_explorePropertyFragment_to_alterPropertyFragment"
+            app:destination="@id/alterPropertyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/alterPropertyFragment"
+        android:name="com.example.rfid_scanner.module.main.alter.property.AlterPropertyFragment"
+        android:label="fragment_alter_property"
+        tools:layout="@layout/fragment_alter_property" >
+        <argument
+            android:name="type"
+            app:argType="integer" />
+        <argument
+            android:name="property"
+            app:argType="com.example.rfid_scanner.data.model.GeneralProperty"
+            app:nullable="true" />
+    </fragment>
 
 </navigation>

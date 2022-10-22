@@ -24,8 +24,6 @@ import kotlinx.coroutines.launch
 class CheckRoomViewModel : BaseViewModel() {
 
     val mBluetoothScannerService = BluetoothScannerService.getInstance()
-//    lateinit var stockAdapter: StockAdapter
-//    lateinit var errorAdapter: ErrorAdapter
 
     val stockAdapter = StockAdapter()
     val errorAdapter = ErrorAdapter()

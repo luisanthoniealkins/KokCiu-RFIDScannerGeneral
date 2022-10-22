@@ -43,6 +43,7 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    namespace 'com.example.rfid_scanner'
 }
 
 dependencies {

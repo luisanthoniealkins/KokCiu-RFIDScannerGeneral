@@ -58,6 +58,7 @@ class ErrorAdapter() : RecyclerView.Adapter<ErrorAdapter.ErrorTagVH>(){
                 STATUS_BROKEN -> return "Beberapa barang rusak sudah keluar"
                 STATUS_LOST -> return "Beberapa barang rusak sudah disesuaikan (hilang)"
             }
+            if (tag.epc.isEmpty()) return "Tag tidak ada kode"
         }
         return null
     }
@@ -74,7 +75,11 @@ class ErrorAdapter() : RecyclerView.Adapter<ErrorAdapter.ErrorTagVH>(){
                     STATUS_BROKEN -> "barang rusak\nsudah keluar"
                     STATUS_STORED -> "barang sudah\ndi gudang"
                     STATUS_LOST -> "barang hilang"
-                    else -> "-"
+                    else -> if (data.epc.isEmpty()) {
+                        "tag tidak\nada kode"
+                    } else {
+                        "-"
+                    }
                 }
                 binding.root.context?.let {
                     llViewHolder.setBackgroundColor(ContextCompat.getColor(it,

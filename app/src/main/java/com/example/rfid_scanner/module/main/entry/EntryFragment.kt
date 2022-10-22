@@ -6,6 +6,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.example.rfid_scanner.databinding.FragmentEntryBinding
 import com.example.rfid_scanner.module.main.MainViewModel
+import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel
+import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_BRAND
+import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_CUSTOMER
+import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_UNIT
+import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_VEHICLE_TYPE
 import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel
 import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.BROKEN
 import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.CHECK_IN
@@ -70,6 +75,22 @@ class EntryFragment : BaseFragment<FragmentEntryBinding, EntryViewModel>(),
             navigateTo(EntryFragmentDirections.actionEntryFragmentToExploreStockIdFragment(false))
         }
 
+        btnAddEditCustomer.setOnClickListener {
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToExplorePropertyFragment(false, TYPE_CUSTOMER))
+        }
+
+        btnAddEditBrand.setOnClickListener {
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToExplorePropertyFragment(false, TYPE_BRAND))
+        }
+
+        btnAddEditUnit.setOnClickListener {
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToExplorePropertyFragment(false, TYPE_UNIT))
+        }
+
+        btnAddEditVehicleType.setOnClickListener {
+            navigateTo(EntryFragmentDirections.actionEntryFragmentToExplorePropertyFragment(false, TYPE_VEHICLE_TYPE))
+        }
+
         btnSettingsNetwork.setOnClickListener {
             navigateTo(EntryFragmentDirections.actionEntryFragmentToNetworkSettingFragment())
         }
@@ -77,8 +98,6 @@ class EntryFragment : BaseFragment<FragmentEntryBinding, EntryViewModel>(),
         btnSettingsTrans.setOnClickListener {
             navigateTo(EntryFragmentDirections.actionEntryFragmentToTransSettingFragment())
         }
-
-
     }
 
     override fun observeData() = with(viewModel) {
@@ -108,9 +127,6 @@ class EntryFragment : BaseFragment<FragmentEntryBinding, EntryViewModel>(),
     override fun reEnableButton() {
         binding.btnAdminMode.isEnabled = true
     }
-
-
-
 }
 
 

@@ -136,11 +136,7 @@ class TransGeneralFragment : ScanFragment<FragmentTransGeneralBinding, TransGene
         }
     }
 
-    override fun initEvent() {
-        retrieveArgs()
-    }
-
-    private fun retrieveArgs() {
+    override fun retrieveArgs() {
         val args : TransGeneralFragmentArgs by navArgs()
         if (args.transactionType != GENERAL) {
             binding.llTransition.visibility = View.GONE
@@ -186,10 +182,10 @@ class TransGeneralFragment : ScanFragment<FragmentTransGeneralBinding, TransGene
 
     @SuppressLint("InflateParams")
     private fun showChoiceDialog(isSource: Boolean) {
-        val dialog = Dialog(context!!)
+            val dialog = Dialog(context!!)
 
-        val inflater = LayoutInflater.from(context)
-        val sBinding = DialogStatusTypeBinding.inflate(inflater)
+            val inflater = LayoutInflater.from(context)
+            val sBinding = DialogStatusTypeBinding.inflate(inflater)
 
         with(sBinding) {
             btnStored.setOnClickListener {

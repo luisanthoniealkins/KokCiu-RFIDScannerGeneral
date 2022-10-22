@@ -9,7 +9,7 @@ import com.example.rfid_scanner.data.model.Stock
 import com.example.rfid_scanner.data.model.StockId
 import com.example.rfid_scanner.databinding.ItemExploreStockBinding
 import com.example.rfid_scanner.module.main.explore.stockId.child.QuantityAdapter
-import com.example.rfid_scanner.utils.generic.Extension.hasLowerCaseSubsequence
+import com.example.rfid_scanner.utils.generic.Extension.hasPattern
 import com.example.rfid_scanner.utils.generic.ItemClickListener
 import com.example.rfid_scanner.utils.helper.TextHelper.emptyString
 import java.util.*
@@ -46,13 +46,8 @@ class ExploreStockIdAdapter(private val listener: ItemClickListener) :
 
         val filteredList = mutableListOf<StockIdData>()
         dataListFull.map { data ->
-            for(it in data.stockIds) {
-                val pattern = "${it.unitCount}${data.stock.name}${data.stock.code} ${data.stock.vehicleType}${it.stock.availableStock} ${it.stock.unit}${it.unitCount}"
-                if (pattern.hasLowerCaseSubsequence(textFilter)) {
-                    filteredList.add(data)
-                    break
-                }
-            }
+            val str = "${data.stock.name} ${data.stock.code} ${data.stock.vehicleType}"
+            if (str.hasPattern(textFilter)) filteredList.add(data)
         }
         dataList = filteredList
         notifyDataSetChanged()

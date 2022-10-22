@@ -1,14 +1,8 @@
 package com.example.rfid_scanner.module.main.explore.stockId
 
-import android.content.Context
-import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -25,6 +19,13 @@ class ExploreStockIdFragment : BaseFragment<FragmentExploreBinding, ExploreStock
         FragmentExploreBinding.inflate(inflater, container, false)
 
     override fun getViewModelClass() = ExploreStockIdViewModel::class.java
+
+    override fun retrieveArgs() {
+        val args: ExploreStockIdFragmentArgs by navArgs()
+
+        viewModel.searching = args.isSearching
+        binding.fabAdd.isVisible = !args.isSearching
+    }
 
     override fun setUpViews() = with(binding) {
         toolbar.inflateMenu(R.menu.menu_search)
@@ -47,24 +48,12 @@ class ExploreStockIdFragment : BaseFragment<FragmentExploreBinding, ExploreStock
     override fun observeData() = with(viewModel) {
         selectedItem.observeWithOwner {
             if (searching) {
-                val navController = findNavController()
-                navController.previousBackStackEntry?.savedStateHandle?.set(KEY_STOCK_ID, listOf(it.id, it.stock.name))
-                navController.popBackStack()
+                getNavController()?.previousBackStackEntry?.savedStateHandle?.set(KEY_STOCK_ID, listOf(it.id, it.stock.name))
+                navigateBack()
             } else {
 
             }
         }
-    }
-
-    override fun initEvent() {
-        retrieveArgs()
-    }
-
-    private fun retrieveArgs() {
-        val args: ExploreStockIdFragmentArgs by navArgs()
-
-        viewModel.searching = args.isSearching
-        binding.fabAdd.isVisible = !args.isSearching
     }
 
 }

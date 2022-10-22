@@ -17,7 +17,7 @@ import com.example.rfid_scanner.data.repository.helper.RequestEndPoint.Companion
 import com.example.rfid_scanner.data.repository.helper.RequestParam
 import com.example.rfid_scanner.data.repository.helper.RequestParam.transactionGeneral
 import com.example.rfid_scanner.data.repository.helper.RequestResult
-import com.example.rfid_scanner.data.repository.helper.RequestResult.Companion.getGeneralResponse
+import com.example.rfid_scanner.data.repository.helper.RequestResult.getGeneralResponse
 import com.example.rfid_scanner.module.main.transaction.general.adapter.ErrorAdapter
 import com.example.rfid_scanner.module.main.transaction.general.adapter.TagAdapter
 import com.example.rfid_scanner.module.main.transaction.general.adapter.TagAdapter.TagData
@@ -134,7 +134,7 @@ class TransGeneralViewModel : BaseViewModel(), VerifyInterface {
     private fun splitNewTags(tags: List<Tag>) {
         _isVerified.postValue(false)
         tags.map {
-            if (it.status == _statusFrom.value) {
+            if (it.status == _statusFrom.value && it.epc.isNotEmpty()) {
                 mapOfTagsOK[it.epc] = TagData(mapOfTagsOK.size, it)
                 mapOfTagsOK.getOrDefault(it.epc, null)?.let { adapterItem ->
                     tagAdapter.updateData(true, adapterItem.position, adapterItem.data)
