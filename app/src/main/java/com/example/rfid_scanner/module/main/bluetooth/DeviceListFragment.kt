@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rfid_scanner.databinding.FragmentDeviceListBinding
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BLE
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BTE
-import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
 class DeviceListFragment : BaseFragment<FragmentDeviceListBinding, DeviceListViewModel>() {
 
@@ -27,22 +26,22 @@ class DeviceListFragment : BaseFragment<FragmentDeviceListBinding, DeviceListVie
 
 
     override fun observeData() = with(viewModel) {
-        isScanning.observe(viewLifecycleOwner, { isScanning ->
+        isScanning.observe(viewLifecycleOwner) { isScanning ->
             binding.btnScan.text = if (isScanning) "Cancel" else "Scan"
             binding.btnScan.setOnClickListener {
                 if (isScanning) navigateBack()
                 else viewModel.scanLeDevice(true)
             }
-        })
+        }
 
-        selectedDevice.observe(viewLifecycleOwner, {
+        selectedDevice.observe(viewLifecycleOwner) {
             deviceSelectedListener.onDeviceSelected(
                 it.address,
                 if (DeviceListViewModel.bleDeviceAddressList.contains(it.address)) DEVICE_TYPE_BLE
                 else DEVICE_TYPE_BTE
             )
             navigateBack()
-        })
+        }
     }
 
 

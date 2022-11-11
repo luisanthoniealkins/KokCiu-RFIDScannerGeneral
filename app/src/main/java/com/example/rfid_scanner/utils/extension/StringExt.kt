@@ -1,6 +1,6 @@
-package com.example.rfid_scanner.utils.generic
+package com.example.rfid_scanner.utils.extension
 
-object Extension {
+object StringExt {
 
     fun String.hasLowerCaseSubsequence(pattern: String): Boolean {
         var p = 0
@@ -20,6 +20,4 @@ object Extension {
         }
         return true
     }
-
-
 }

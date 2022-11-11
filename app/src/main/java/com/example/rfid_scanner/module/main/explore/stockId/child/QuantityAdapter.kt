@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rfid_scanner.data.model.StockId
 import com.example.rfid_scanner.databinding.ItemButtonQuantityBinding
-import com.example.rfid_scanner.utils.generic.ItemClickListener
+import com.example.rfid_scanner.utils.listener.ItemClickListener
 
 class QuantityAdapter(
     private val listener: ItemClickListener,

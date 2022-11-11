@@ -7,9 +7,8 @@ import com.example.rfid_scanner.data.model.GeneralProperty
 import com.example.rfid_scanner.data.repository.VolleyRepository
 import com.example.rfid_scanner.data.repository.helper.RequestEndPoint
 import com.example.rfid_scanner.data.repository.helper.RequestResult
-import com.example.rfid_scanner.utils.generic.BaseViewModel
-import com.example.rfid_scanner.utils.generic.HandledEvent
-import com.example.rfid_scanner.utils.generic.ItemClickListener
+import com.example.rfid_scanner.utils.custom.kclass.HandledEvent
+import com.example.rfid_scanner.utils.listener.ItemClickListener
 import kotlinx.coroutines.launch
 
 class ExplorePropertyViewModel : BaseViewModel(), ItemClickListener {

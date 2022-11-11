@@ -15,7 +15,6 @@ import com.example.rfid_scanner.module.main.transaction.general.adapter.ErrorAda
 import com.example.rfid_scanner.module.main.transaction.general.adapter.TagAdapter.TagData
 import com.example.rfid_scanner.module.main.transaction.general.verify.adapter.VerifyTagAdapter
 import com.example.rfid_scanner.module.main.transaction.general.verify.adapter.VerifyTagAdapter.VerifyTagData
-import com.example.rfid_scanner.utils.generic.BaseViewModel
 import com.example.rfid_scanner.service.BluetoothScannerService
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach

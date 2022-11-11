@@ -1,6 +1,5 @@
 package com.example.rfid_scanner.module.main.non_transaction.check_room
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -15,7 +14,6 @@ import com.example.rfid_scanner.data.repository.helper.RequestParam
 import com.example.rfid_scanner.data.repository.helper.RequestResult
 import com.example.rfid_scanner.module.main.transaction.general.adapter.ErrorAdapter
 import com.example.rfid_scanner.module.main.transaction.general.adapter.TagAdapter
-import com.example.rfid_scanner.utils.generic.BaseViewModel
 import com.example.rfid_scanner.service.BluetoothScannerService
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach

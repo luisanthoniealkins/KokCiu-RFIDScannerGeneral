@@ -10,7 +10,7 @@ import com.example.rfid_scanner.data.model.StockId
 import com.example.rfid_scanner.databinding.ItemExploreStockBinding
 import com.example.rfid_scanner.module.main.explore.stockId.child.QuantityAdapter
 import com.example.rfid_scanner.utils.generic.Extension.hasPattern
-import com.example.rfid_scanner.utils.generic.ItemClickListener
+import com.example.rfid_scanner.utils.listener.ItemClickListener
 import com.example.rfid_scanner.utils.helper.TextHelper.emptyString
 import java.util.*
 

@@ -6,12 +6,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.example.rfid_scanner.databinding.FragmentEntryBinding
 import com.example.rfid_scanner.module.main.MainViewModel
-import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel
 import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_BRAND
 import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_CUSTOMER
 import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_UNIT
 import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_VEHICLE_TYPE
-import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel
 import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.BROKEN
 import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.CHECK_IN
 import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.CLEAR
@@ -19,8 +17,7 @@ import com.example.rfid_scanner.module.main.transaction.general.TransGeneralView
 import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.RETURN
 import com.example.rfid_scanner.module.main.transaction.general.TransGeneralViewModel.Companion.REUSE
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_OK
-import com.example.rfid_scanner.utils.custom_view.dialog.PasswordDialog
-import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
+import com.example.rfid_scanner.utils.custom.view.PasswordDialog
 
 class EntryFragment : BaseFragment<FragmentEntryBinding, EntryViewModel>(),
     PasswordDialog.PasswordDialogListener {

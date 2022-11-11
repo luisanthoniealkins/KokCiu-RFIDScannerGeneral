@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rfid_scanner.databinding.ItemBluetoothDeviceBinding
-import com.example.rfid_scanner.utils.generic.ItemClickListener
+import com.example.rfid_scanner.utils.listener.ItemClickListener
 
 class DeviceListAdapter(private val listener: ItemClickListener) : RecyclerView.Adapter<DeviceListAdapter.DeviceVH>() {
 

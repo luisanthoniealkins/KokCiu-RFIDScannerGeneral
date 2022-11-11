@@ -1,4 +1,4 @@
-package com.example.rfid_scanner.utils.custom_view.dialog
+package com.example.rfid_scanner.utils.custom.view
 
 import android.app.AlertDialog
 import android.app.Dialog

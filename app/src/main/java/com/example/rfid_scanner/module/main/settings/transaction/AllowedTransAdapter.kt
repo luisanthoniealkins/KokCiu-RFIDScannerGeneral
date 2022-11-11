@@ -10,14 +10,20 @@ class AllowedTransAdapter : RecyclerView.Adapter<AllowedTransAdapter.QuantityBut
     private var dataList: List<AllowedTransData> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        QuantityButtonVH(ItemTransSettingsBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        QuantityButtonVH(
+            ItemTransSettingsBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
 
     override fun onBindViewHolder(VH: QuantityButtonVH, position: Int) =
         VH.bind(dataList[position])
 
     override fun getItemCount() = dataList.size
 
-    fun setData(data : List<AllowedTransData>) {
+    fun setData(data: List<AllowedTransData>) {
         dataList = data
     }
 
@@ -26,7 +32,7 @@ class AllowedTransAdapter : RecyclerView.Adapter<AllowedTransAdapter.QuantityBut
     inner class QuantityButtonVH(private val binding: ItemTransSettingsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(data: AllowedTransData) = with(binding){
+        fun bind(data: AllowedTransData) = with(binding) {
             cbText.text = ("${data.from} -> ${data.to}")
             cbText.isChecked = data.isChecked
             cbText.setOnCheckedChangeListener { _, b ->

@@ -3,7 +3,6 @@ package com.example.rfid_scanner.utils.generic.fragment
 import android.widget.Button
 import androidx.viewbinding.ViewBinding
 import com.example.rfid_scanner.data.model.status.ScanStatus
-import com.example.rfid_scanner.utils.generic.BaseViewModel
 
 abstract class ScanFragment<VBinding : ViewBinding, ViewModel : BaseViewModel> : BaseFragment<VBinding, ViewModel>() {
 

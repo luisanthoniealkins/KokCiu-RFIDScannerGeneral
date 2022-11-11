@@ -12,7 +12,6 @@ import com.example.rfid_scanner.data.repository.VolleyRepository
 import com.example.rfid_scanner.data.repository.helper.RequestEndPoint
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_ERROR
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_OK
-import com.example.rfid_scanner.utils.generic.BaseViewModel
 import com.example.rfid_scanner.service.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

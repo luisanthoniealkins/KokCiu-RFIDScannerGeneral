@@ -1,32 +1,33 @@
-package com.example.rfid_scanner.utils.generic.fragment
+package com.example.rfid_scanner.utils.generic.dialog
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
 import androidx.viewbinding.ViewBinding
-import com.laalkins.bluetoothgeneralcontroller.utils.generic.viewmodel.BaseViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-abstract class BaseFragment<VBinding : ViewBinding, ViewModel : BaseViewModel> : Fragment() {
+abstract class BaseDialog<VBinding : ViewBinding> : DialogFragment() {
 
     private var _binding: VBinding? = null
     protected val binding get() = _binding!!
     protected abstract fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?): VBinding
 
-    private var _viewModel: ViewModel? = null
-    protected val viewModel get() = _viewModel!!
-    protected abstract fun getViewModelClass(): Class<ViewModel>
-
     private val disposableContainer = CompositeDisposable()
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) { // if granted
+        } else { // if not granted, provide popup message to explain
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,29 +35,20 @@ abstract class BaseFragment<VBinding : ViewBinding, ViewModel : BaseViewModel> :
         savedInstanceState: Bundle?
     ): View? {
         _binding = getViewBinding(inflater, container)
-        _viewModel = ViewModelProvider(this)[getViewModelClass()]
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupNewViewModels()
         retrieveArgs()
         setUpViews()
-        observeDataGlobal()
+        observeData()
         initEvent()
     }
-
-    open fun setupNewViewModels() {}
 
     open fun retrieveArgs() {}
 
     open fun setUpViews() {}
-
-    private fun observeDataGlobal() {
-        observeDataBase()
-        observeData()
-    }
 
     open fun observeData() {}
 
@@ -68,18 +60,11 @@ abstract class BaseFragment<VBinding : ViewBinding, ViewModel : BaseViewModel> :
         disposableContainer.clear()
         super.onDestroyView()
         _binding = null
-        _viewModel = null
     }
 
     /**
      * Customization start here
      * */
-
-    private fun observeDataBase() {
-        viewModel.lvToastMessage.observeWithOwner {
-            it.getContentIfNotHandled()?.let { msg -> showToast(msg) }
-        }
-    }
 
     fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -87,16 +72,6 @@ abstract class BaseFragment<VBinding : ViewBinding, ViewModel : BaseViewModel> :
 
     fun showToastLong(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-    }
-
-    fun getNavController() = view?.findNavController()
-
-    fun navigateTo(direction: NavDirections) {
-        getNavController()?.navigate(direction)
-    }
-
-    fun navigateBack() {
-        getNavController()?.popBackStack()
     }
 
     fun gColor(resColorId: Int) : Int{
@@ -107,6 +82,13 @@ abstract class BaseFragment<VBinding : ViewBinding, ViewModel : BaseViewModel> :
         this.observe(viewLifecycleOwner, function)
     }
 
-
+    fun requestPermissionIfNotGranted(permission: String) = when {
+        ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED -> true
+        shouldShowRequestPermissionRationale(permission) -> false
+        else -> {
+            requestPermissionLauncher.launch(permission)
+            false
+        }
+    }
 
 }

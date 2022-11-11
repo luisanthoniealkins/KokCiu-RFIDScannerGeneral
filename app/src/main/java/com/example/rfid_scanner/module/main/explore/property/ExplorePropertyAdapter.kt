@@ -6,9 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rfid_scanner.data.model.GeneralProperty
 import com.example.rfid_scanner.databinding.ItemExplorePropertyBinding
-import com.example.rfid_scanner.utils.generic.Extension.hasLowerCaseSubsequence
 import com.example.rfid_scanner.utils.generic.Extension.hasPattern
-import com.example.rfid_scanner.utils.generic.ItemClickListener
+import com.example.rfid_scanner.utils.listener.ItemClickListener
 import java.util.*
 
 class ExplorePropertyAdapter(private val listener: ItemClickListener) :

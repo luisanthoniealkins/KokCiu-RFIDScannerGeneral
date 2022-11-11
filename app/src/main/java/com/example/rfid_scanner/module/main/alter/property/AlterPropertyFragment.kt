@@ -6,12 +6,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
 import com.example.rfid_scanner.databinding.FragmentAlterPropertyBinding
-import com.example.rfid_scanner.databinding.FragmentTemplateBinding
-import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel
 import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_BRAND
 import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_CUSTOMER
 import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_VEHICLE_TYPE
-import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 import java.util.*
 
 class AlterPropertyFragment : BaseFragment<FragmentAlterPropertyBinding, AlterPropertyViewModel>() {

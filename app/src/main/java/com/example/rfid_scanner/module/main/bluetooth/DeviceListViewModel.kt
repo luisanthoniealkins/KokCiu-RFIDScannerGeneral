@@ -5,11 +5,8 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.rfid_scanner.data.model.TagEPCQty
 import com.example.rfid_scanner.module.main.bluetooth.DeviceListAdapter.DeviceListData
-import com.example.rfid_scanner.module.main.non_transaction.tag_scanner.TagScannerAdapter
-import com.example.rfid_scanner.utils.generic.BaseViewModel
-import com.example.rfid_scanner.utils.generic.ItemClickListener
+import com.example.rfid_scanner.utils.listener.ItemClickListener
 import com.rscja.deviceapi.RFIDWithUHFBLE
 
 class DeviceListViewModel : BaseViewModel(), ItemClickListener {

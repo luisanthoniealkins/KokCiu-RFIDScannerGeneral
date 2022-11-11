@@ -1,4 +1,4 @@
-package com.example.rfid_scanner.utils.generic
+package com.example.rfid_scanner.utils.custom.kclass
 
 open class HandledEvent<out T>(private val content: T) {
 

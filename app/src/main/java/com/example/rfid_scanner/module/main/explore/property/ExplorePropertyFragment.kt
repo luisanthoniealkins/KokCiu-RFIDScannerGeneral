@@ -8,8 +8,6 @@ import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rfid_scanner.R
-import com.example.rfid_scanner.data.model.GeneralProperty
-import com.example.rfid_scanner.data.repository.helper.RequestEndPoint
 import com.example.rfid_scanner.databinding.FragmentExploreBinding
 import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.KEY_PROPERTY_BRAND
 import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.KEY_PROPERTY_CUSTOMER
@@ -17,9 +15,7 @@ import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyView
 import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.KEY_PROPERTY_VEHICLE_TYPE
 import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_BRAND
 import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_CUSTOMER
-import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_UNIT
 import com.example.rfid_scanner.module.main.explore.property.ExplorePropertyViewModel.Companion.TYPE_VEHICLE_TYPE
-import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
 class ExplorePropertyFragment : BaseFragment<FragmentExploreBinding, ExplorePropertyViewModel>() {
 

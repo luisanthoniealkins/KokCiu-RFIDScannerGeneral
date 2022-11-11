@@ -7,7 +7,6 @@ import com.example.rfid_scanner.data.model.TagEPC
 import com.example.rfid_scanner.data.model.TagEPCQty
 import com.example.rfid_scanner.data.model.status.ScanStatus
 import com.example.rfid_scanner.module.main.non_transaction.tag_scanner.TagScannerAdapter.TagScannerData
-import com.example.rfid_scanner.utils.generic.BaseViewModel
 import com.example.rfid_scanner.service.BluetoothScannerService
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach

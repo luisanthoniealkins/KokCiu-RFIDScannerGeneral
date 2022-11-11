@@ -5,13 +5,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rfid_scanner.R
 import com.example.rfid_scanner.databinding.FragmentExploreBinding
 import com.example.rfid_scanner.module.main.explore.stockId.ExploreStockIdViewModel.Companion.KEY_STOCK_ID
-import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
 class ExploreStockIdFragment : BaseFragment<FragmentExploreBinding, ExploreStockIdViewModel>() {
 

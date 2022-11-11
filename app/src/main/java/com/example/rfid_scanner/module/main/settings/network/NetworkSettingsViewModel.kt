@@ -2,7 +2,6 @@ package com.example.rfid_scanner.module.main.settings.network
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.rfid_scanner.utils.generic.BaseViewModel
 import com.example.rfid_scanner.service.StorageService
 
 class NetworkSettingsViewModel : BaseViewModel() {

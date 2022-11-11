@@ -24,7 +24,6 @@ import com.example.rfid_scanner.module.main.transaction.general.adapter.TagAdapt
 import com.example.rfid_scanner.module.main.transaction.general.verify.VerifyInterface
 import com.example.rfid_scanner.service.BluetoothScannerService
 import com.example.rfid_scanner.service.StorageService
-import com.example.rfid_scanner.utils.generic.BaseViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch

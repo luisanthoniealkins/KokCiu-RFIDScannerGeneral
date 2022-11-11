@@ -8,8 +8,7 @@ import com.example.rfid_scanner.data.repository.VolleyRepository
 import com.example.rfid_scanner.data.repository.helper.RequestEndPoint
 import com.example.rfid_scanner.data.repository.helper.RequestResult
 import com.example.rfid_scanner.module.main.explore.stockId.ExploreStockIdAdapter.StockIdData
-import com.example.rfid_scanner.utils.generic.BaseViewModel
-import com.example.rfid_scanner.utils.generic.ItemClickListener
+import com.example.rfid_scanner.utils.listener.ItemClickListener
 import kotlinx.coroutines.launch
 
 class ExploreStockIdViewModel : BaseViewModel(), ItemClickListener {
