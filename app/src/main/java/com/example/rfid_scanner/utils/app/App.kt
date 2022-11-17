@@ -1,4 +1,4 @@
-package com.laalkins.bluetoothgeneralcontroller.utils.app
+package com.example.rfid_scanner.utils.app
 
 import android.app.Application
 import android.content.res.Resources

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import com.example.rfid_scanner.databinding.FragmentNetworkSettingsBinding
+import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
 class NetworkSettingsFragment : BaseFragment<FragmentNetworkSettingsBinding, NetworkSettingsViewModel>(){
 

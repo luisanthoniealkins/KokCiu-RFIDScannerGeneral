@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".module.main.transaction.general.TransGeneralFragment">
+    tools:context=".module.main.scan.transaction.general.TransGeneralFragment">
 
     <LinearLayout
         android:id="@+id/ll_transition"
@@ -102,9 +102,9 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Id"
-                        android:textColor="@color/black"/>
+                        android:layout_height="match_parent"
+                        android:text="ID"
+                        android:textColor="@color/black" />
 
                     <TextView
                         android:layout_width="wrap_content"

@@ -3,6 +3,7 @@ package com.example.rfid_scanner.module.main.settings.transaction
 import com.example.rfid_scanner.data.model.Tag.Companion.statusList
 import com.example.rfid_scanner.module.main.settings.transaction.AllowedTransAdapter.AllowedTransData
 import com.example.rfid_scanner.service.StorageService
+import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 
 class TransSettingsViewModel : BaseViewModel() {
 

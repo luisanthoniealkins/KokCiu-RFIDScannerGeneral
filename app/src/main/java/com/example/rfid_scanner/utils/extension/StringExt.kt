@@ -20,4 +20,8 @@ object StringExt {
         }
         return true
     }
+
+    fun String.isLengthBetween(min: Int, max: Int): Boolean {
+        return this.length in min..max
+    }
 }

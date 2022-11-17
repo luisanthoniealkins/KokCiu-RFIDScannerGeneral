@@ -40,10 +40,14 @@
     <color name="dark_gray_item_disable">#bdbdbd</color>
     <color name="yellow_item_unknown">#FFE459</color>
 
+    <color name="tab_item_error">#b00020</color>
+    <color name="tab_item_normal">#FF6200EE</color>
 
     <color name="dark_gray_item_text_disable">#8d8d8d</color>
     <color name="white_item_text_default">#FFFFFF</color>
     <color name="black_item_text_default">#000000</color>
+
+    <color name="gray_default_text_color">#808080</color>
 
     <color name="dark_gray_bluetooth_device_item_non_main">#eeeeee</color>
 </resources>

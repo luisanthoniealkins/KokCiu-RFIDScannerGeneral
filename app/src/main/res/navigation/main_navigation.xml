@@ -7,33 +7,36 @@
 
     <fragment
         android:id="@+id/entryFragment"
-        android:name="com.example.rfid_scanner.module.main.entry.EntryFragment"
+        android:name="com.example.rfid_scanner.module.main.menu.MenuFragment"
         android:label="fragment_entry"
-        tools:layout="@layout/fragment_entry" >
+        tools:layout="@layout/fragment_menu" >
         <action
-            android:id="@+id/action_entryFragment_to_BLEDeviceListFragment"
+            android:id="@+id/to_BLEDeviceListFragment"
             app:destination="@id/deviceListFragment" />
         <action
-            android:id="@+id/action_entryFragment_to_networkSettingFragment"
+            android:id="@+id/to_networkSettingFragment"
             app:destination="@id/networkSettingFragment" />
         <action
-            android:id="@+id/action_entryFragment_to_tagScannerFragment"
+            android:id="@+id/to_tagScannerFragment"
             app:destination="@id/tagScannerFragment" />
         <action
-            android:id="@+id/action_entryFragment_to_transGeneralFragment"
+            android:id="@+id/to_transGeneralFragment"
             app:destination="@id/transGeneralFragment" />
         <action
-            android:id="@+id/action_entryFragment_to_checkRoomFragment"
+            android:id="@+id/to_checkRoomFragment"
             app:destination="@id/checkRoomFragment" />
         <action
-            android:id="@+id/action_entryFragment_to_exploreStockIdFragment"
+            android:id="@+id/to_exploreStockIdFragment"
             app:destination="@id/exploreStockIdFragment" />
         <action
-            android:id="@+id/action_entryFragment_to_transSettingFragment"
+            android:id="@+id/to_transSettingFragment"
             app:destination="@id/transSettingFragment" />
         <action
-            android:id="@+id/action_entryFragment_to_explorePropertyFragment"
+            android:id="@+id/to_explorePropertyFragment"
             app:destination="@id/explorePropertyFragment" />
+        <action
+            android:id="@+id/to_transCheckoutFragment"
+            app:destination="@id/transCheckoutFragment" />
     </fragment>
 
     <fragment
@@ -48,16 +51,16 @@
         tools:layout="@layout/fragment_network_settings" />
     <fragment
         android:id="@+id/tagScannerFragment"
-        android:name="com.example.rfid_scanner.module.main.non_transaction.tag_scanner.TagScannerFragment"
+        android:name="com.example.rfid_scanner.module.main.scan.non_transaction.tag_scanner.TagScannerFragment"
         android:label="fragment_tag_scanner"
         tools:layout="@layout/fragment_tag_scanner" />
     <fragment
         android:id="@+id/transGeneralFragment"
-        android:name="com.example.rfid_scanner.module.main.transaction.general.TransGeneralFragment"
+        android:name="com.example.rfid_scanner.module.main.scan.transaction.general.TransGeneralFragment"
         android:label="fragment_trans_general"
         tools:layout="@layout/fragment_trans_general" >
         <action
-            android:id="@+id/action_transGeneralFragment_to_exploreStockIdFragment"
+            android:id="@+id/to_exploreStockIdFragment2"
             app:destination="@id/exploreStockIdFragment" />
         <argument
             android:name="transactionType"
@@ -65,12 +68,12 @@
     </fragment>
     <fragment
         android:id="@+id/checkRoomFragment"
-        android:name="com.example.rfid_scanner.module.main.non_transaction.check_room.CheckRoomFragment"
+        android:name="com.example.rfid_scanner.module.main.scan.non_transaction.check_room.CheckRoomFragment"
         android:label="fragment_check_room"
         tools:layout="@layout/fragment_check_room" />
     <fragment
         android:id="@+id/exploreStockIdFragment"
-        android:name="com.example.rfid_scanner.module.main.explore.stockId.ExploreStockIdFragment"
+        android:name="com.example.rfid_scanner.module.main.data.explore.stockId.ExploreStockIdFragment"
         android:label="ExploreStockIdFragment"
         tools:layout="@layout/fragment_explore">
         <argument
@@ -84,7 +87,7 @@
         tools:layout="@layout/fragment_trans_settings" />
     <fragment
         android:id="@+id/explorePropertyFragment"
-        android:name="com.example.rfid_scanner.module.main.explore.property.ExplorePropertyFragment"
+        android:name="com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyFragment"
         android:label="ExplorePropertyFragment"
         tools:layout="@layout/fragment_explore">
         <argument android:name="isSearching"
@@ -93,12 +96,12 @@
             android:name="type"
             app:argType="integer" />
         <action
-            android:id="@+id/action_explorePropertyFragment_to_alterPropertyFragment"
+            android:id="@+id/to_alterPropertyFragment"
             app:destination="@id/alterPropertyFragment" />
     </fragment>
     <fragment
         android:id="@+id/alterPropertyFragment"
-        android:name="com.example.rfid_scanner.module.main.alter.property.AlterPropertyFragment"
+        android:name="com.example.rfid_scanner.module.main.data.alter.property.AlterPropertyFragment"
         android:label="fragment_alter_property"
         tools:layout="@layout/fragment_alter_property" >
         <argument
@@ -108,6 +111,27 @@
             android:name="property"
             app:argType="com.example.rfid_scanner.data.model.GeneralProperty"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/transCheckoutFragment"
+        android:name="com.example.rfid_scanner.module.main.scan.transaction.checkout.TransCheckoutFragment"
+        android:label="fragment_trans_checkout"
+        tools:layout="@layout/fragment_trans_checkout" >
+        <action
+            android:id="@+id/to_QRReaderFragment"
+            app:destination="@id/qrReaderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/qrReaderFragment"
+        android:name="com.example.rfid_scanner.module.main.scan.transaction.checkout.qr_reader.QRReaderFragment"
+        android:label="fragment_qr_reader"
+        tools:layout="@layout/fragment_qr_reader" >
+        <argument
+            android:name="scannedBills"
+            app:argType="string[]" />
+        <argument
+            android:name="customerCode"
+            app:argType="string" />
     </fragment>
 
 </navigation>

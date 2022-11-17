@@ -29,17 +29,20 @@ class Stock(
         items.add(tags)
         itemQuantity += quantity
     }
+
+    fun copy() = Stock(code, name, brand, vehicleType, unit, availableStock)
 }
 
 class StockRequirement(
     val stock: Stock,
     reqQuantity: Int
 ) {
-
     var reqQuantity = reqQuantity
         private set
 
     fun incQuantity(quantity: Int) { reqQuantity += quantity }
+
+    fun copy() = StockRequirement(stock.copy(), reqQuantity)
 }
 
 data class StockId(

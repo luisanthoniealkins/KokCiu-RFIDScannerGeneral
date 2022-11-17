@@ -6,6 +6,7 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.rfid_scanner.module.main.bluetooth.DeviceListAdapter.DeviceListData
+import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import com.example.rfid_scanner.utils.listener.ItemClickListener
 import com.rscja.deviceapi.RFIDWithUHFBLE
 
@@ -22,7 +23,6 @@ class DeviceListViewModel : BaseViewModel(), ItemClickListener {
         val bleDeviceAddressList = setOf(
             "FE:88:A5:83:64:98"
         )
-
     }
 
     val adapter = DeviceListAdapter(this)

@@ -12,6 +12,9 @@ object Constant {
     const val BTE_START_SCAN_COMMAND = "!O"
     const val BTE_STOP_SCAN_COMMAND = "!C"
 
+    const val BUTTON_SCAN_TEXT = "Scan"
+    const val BUTTON_STOP_TEXT = "Stop"
+
     const val PASSWORD_ADMIN = "admin22"
     const val PASSWORD_SUPER_ADMIN = "s22"
 

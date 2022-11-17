@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".module.main.alter.property.AlterPropertyFragment">
+    tools:context=".module.main.data.alter.property.AlterPropertyFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

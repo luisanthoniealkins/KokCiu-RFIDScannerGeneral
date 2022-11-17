@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".module.main.non_transaction.tag_scanner.TagScannerFragment">
+    tools:context=".module.main.scan.non_transaction.tag_scanner.TagScannerFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

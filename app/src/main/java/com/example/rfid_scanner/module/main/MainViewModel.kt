@@ -1,6 +1,10 @@
 package com.example.rfid_scanner.module.main
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.rfid_scanner.R
@@ -9,10 +13,11 @@ import com.example.rfid_scanner.data.model.status.MConnectionStatus
 import com.example.rfid_scanner.data.model.status.NetworkStatus
 import com.example.rfid_scanner.data.model.status.ServerStatus
 import com.example.rfid_scanner.data.repository.VolleyRepository
-import com.example.rfid_scanner.data.repository.helper.RequestEndPoint
+import com.example.rfid_scanner.data.repository.component.RequestEndPoint
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_ERROR
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_OK
 import com.example.rfid_scanner.service.*
+import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,8 +32,35 @@ class MainViewModel : BaseViewModel() {
             R.id.exploreStockIdFragment,
             R.id.explorePropertyFragment,
             R.id.alterPropertyFragment,
+            R.id.qrReaderFragment,
         )
 
+        @RequiresApi(Build.VERSION_CODES.S)
+        val higherOrEqualThanCodeSPermissions = listOf(
+            Manifest.permission.FOREGROUND_SERVICE,
+            Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.BLUETOOTH_ADVERTISE,
+            Manifest.permission.BLUETOOTH_CONNECT,
+        )
+
+        val lowerThanCodeSPermissions = listOf(
+            Manifest.permission.BLUETOOTH,
+            Manifest.permission.BLUETOOTH_ADMIN,
+        )
+
+        val allCodePermissions = listOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_NETWORK_STATE,
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.CHANGE_WIFI_STATE,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.NFC,
+        )
     }
 
     private lateinit var mNetworkService : NetworkService
@@ -112,6 +144,7 @@ class MainViewModel : BaseViewModel() {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun refreshBluetoothStatus(status: MConnectionStatus) {
         val bs = BluetoothStatus(SERVICE_STATUS_ERROR, R.color.red_disconnect, "-", "-",0f, "-", null)
 
@@ -129,5 +162,15 @@ class MainViewModel : BaseViewModel() {
         }
 
         _ldBluetoothStatus.postValue(bs)
+    }
+
+    fun getSupportedPermissions(): Array<String> {
+        val permissions = mutableListOf<String>()
+        permissions.addAll(allCodePermissions)
+        permissions.addAll(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) higherOrEqualThanCodeSPermissions
+            else lowerThanCodeSPermissions
+        )
+        return permissions.toTypedArray()
     }
 }

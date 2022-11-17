@@ -1,12 +1,10 @@
 package com.example.rfid_scanner.utils.generic.dialog
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LiveData
@@ -21,13 +19,6 @@ abstract class BaseDialog<VBinding : ViewBinding> : DialogFragment() {
     protected abstract fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?): VBinding
 
     private val disposableContainer = CompositeDisposable()
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) { // if granted
-        } else { // if not granted, provide popup message to explain
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,7 +56,6 @@ abstract class BaseDialog<VBinding : ViewBinding> : DialogFragment() {
     /**
      * Customization start here
      * */
-
     fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
@@ -80,15 +70,6 @@ abstract class BaseDialog<VBinding : ViewBinding> : DialogFragment() {
 
     fun <T> LiveData<T>.observeWithOwner(function: (T) -> Unit) {
         this.observe(viewLifecycleOwner, function)
-    }
-
-    fun requestPermissionIfNotGranted(permission: String) = when {
-        ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED -> true
-        shouldShowRequestPermissionRationale(permission) -> false
-        else -> {
-            requestPermissionLauncher.launch(permission)
-            false
-        }
     }
 
 }

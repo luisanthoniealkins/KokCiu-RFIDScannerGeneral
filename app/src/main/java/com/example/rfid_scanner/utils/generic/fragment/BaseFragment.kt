@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.viewbinding.ViewBinding
-import com.laalkins.bluetoothgeneralcontroller.utils.generic.viewmodel.BaseViewModel
+import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -74,7 +74,6 @@ abstract class BaseFragment<VBinding : ViewBinding, ViewModel : BaseViewModel> :
     /**
      * Customization start here
      * */
-
     private fun observeDataBase() {
         viewModel.lvToastMessage.observeWithOwner {
             it.getContentIfNotHandled()?.let { msg -> showToast(msg) }

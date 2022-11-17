@@ -12,8 +12,8 @@ import com.example.rfid_scanner.data.model.repository.MResponse.Companion.FINISH
 import com.example.rfid_scanner.data.model.repository.MResponse.Companion.FINISHED_SUCCESS
 import com.example.rfid_scanner.data.model.repository.MResponse.Companion.LOADING
 import com.example.rfid_scanner.data.model.repository.MResponse.ResponseData
-import com.example.rfid_scanner.data.repository.helper.RequestResult.getGeneralResponse
-import com.example.rfid_scanner.data.repository.helper.ResponseCode
+import com.example.rfid_scanner.data.repository.component.RequestResult.getGeneralResponse
+import com.example.rfid_scanner.data.repository.component.ResponseCode
 import com.example.rfid_scanner.service.StorageService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

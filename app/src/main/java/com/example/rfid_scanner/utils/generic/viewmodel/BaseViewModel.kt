@@ -3,7 +3,7 @@ package com.example.rfid_scanner.utils.generic.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.laalkins.bluetoothgeneralcontroller.utils.custom.kclass.HandledEvent
+import com.example.rfid_scanner.utils.custom.kclass.HandledEvent
 
 abstract class BaseViewModel : ViewModel() {
 

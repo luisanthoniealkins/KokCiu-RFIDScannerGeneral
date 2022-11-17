@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.rfid_scanner.databinding.FragmentTransSettingsBinding
+import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
 class TransSettingsFragment : BaseFragment<FragmentTransSettingsBinding, TransSettingsViewModel>(){
 

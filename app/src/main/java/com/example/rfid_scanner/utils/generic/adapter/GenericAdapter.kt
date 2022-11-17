@@ -1,10 +1,10 @@
-package com.laalkins.bluetoothgeneralcontroller.utils.generic.adapter
+package com.example.rfid_scanner.utils.generic.adapter
 
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.laalkins.bluetoothgeneralcontroller.utils.listener.ItemClickListener
+import com.example.rfid_scanner.utils.listener.ItemClickListener
 
 class GenericAdapter<T>(private val dataSet: MutableList<T>) : RecyclerView.Adapter<BaseViewHolder<T>>() {
 

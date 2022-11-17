@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rfid_scanner.databinding.FragmentDeviceListBinding
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BLE
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BTE
+import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
+import com.example.rfid_scanner.utils.listener.DeviceSelectedListener
 
 class DeviceListFragment : BaseFragment<FragmentDeviceListBinding, DeviceListViewModel>() {
 
@@ -15,7 +17,7 @@ class DeviceListFragment : BaseFragment<FragmentDeviceListBinding, DeviceListVie
 
     override fun getViewModelClass() = DeviceListViewModel::class.java
 
-    private lateinit var deviceSelectedListener: OnDeviceSelected
+    private lateinit var deviceSelectedListener: DeviceSelectedListener
 
     override fun setUpViews() = with(binding) {
         rvDeviceList.layoutManager = LinearLayoutManager(context)
@@ -51,7 +53,7 @@ class DeviceListFragment : BaseFragment<FragmentDeviceListBinding, DeviceListVie
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        deviceSelectedListener = context as OnDeviceSelected
+        deviceSelectedListener = context as DeviceSelectedListener
     }
 
     override fun onPause() {

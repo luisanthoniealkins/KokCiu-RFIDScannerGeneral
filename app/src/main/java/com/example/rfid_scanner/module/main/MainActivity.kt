@@ -12,16 +12,16 @@ import com.example.rfid_scanner.R
 import com.example.rfid_scanner.data.repository.VolleyRepository
 import com.example.rfid_scanner.databinding.ActivityMainBinding
 import com.example.rfid_scanner.databinding.BottomSheetStatusBinding
-import com.example.rfid_scanner.module.main.bluetooth.OnDeviceSelected
+import com.example.rfid_scanner.utils.listener.DeviceSelectedListener
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_NOT_CONNECTED
-import com.example.rfid_scanner.utils.helper.ToastHelper.Companion.showToast
 import com.example.rfid_scanner.service.BluetoothScannerService
 import com.example.rfid_scanner.service.NetworkService
 import com.example.rfid_scanner.service.StorageService
+import com.example.rfid_scanner.utils.generic.activity.BaseActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
-class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnDeviceSelected{
+class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), DeviceSelectedListener {
 
     override fun getViewBinding() = ActivityMainBinding.inflate(layoutInflater)
     override fun getViewModelClass() = MainViewModel::class.java
@@ -58,6 +58,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnDevic
 
     override fun initEvent() {
         initServiceWithContext()
+        initPermissionRequest()
     }
 
     override fun onDestroy() {
@@ -130,15 +131,19 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), OnDevic
         viewModel.initService()
     }
 
+    private fun initPermissionRequest() {
+        requestPermissions(viewModel.getSupportedPermissions(), 0)
+    }
+
     override fun onDeviceSelected(deviceAddress: String, deviceType: String) {
         viewModel.mBluetoothScannerService.connectBluetooth(deviceAddress, deviceType)
     }
 
     private var mARLEnableBluetooth = registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
-            showToast(applicationContext, "Bluetooth has turned on")
+            showToast("Bluetooth has turned on")
         } else {
-            showToast(applicationContext, "Error while turning on bluetooth")
+            showToast("Error while turning on bluetooth")
         }
     }
 

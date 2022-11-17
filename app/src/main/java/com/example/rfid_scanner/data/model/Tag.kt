@@ -1,5 +1,7 @@
 package com.example.rfid_scanner.data.model
 
+import com.example.rfid_scanner.utils.extension.StringExt.isLengthBetween
+
 data class TagEPC(val epc: String)
 
 data class TagEPCQty(val epc: String, var quantity: Int)
@@ -19,11 +21,14 @@ class Tag(
         const val STATUS_LOST = "Hilang"
         const val STATUS_UNKNOWN = "Asing"
         val statusList = listOf(STATUS_STORED, STATUS_SOLD, STATUS_BROKEN, STATUS_LOST, STATUS_UNKNOWN)
+
+        fun String.isProperTag(): Boolean {
+            return this.isLengthBetween(24,24)
+        }
     }
 
     val stockCode
         get() =
             if (stockId != null && stockId.split("#Q").size == 2) stockId.split("#Q")[0]
             else null
-
 }

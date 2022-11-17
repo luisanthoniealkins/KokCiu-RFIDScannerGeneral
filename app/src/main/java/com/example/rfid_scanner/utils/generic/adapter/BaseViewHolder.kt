@@ -1,4 +1,4 @@
-package com.laalkins.bluetoothgeneralcontroller.utils.generic.adapter
+package com.example.rfid_scanner.utils.generic.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
