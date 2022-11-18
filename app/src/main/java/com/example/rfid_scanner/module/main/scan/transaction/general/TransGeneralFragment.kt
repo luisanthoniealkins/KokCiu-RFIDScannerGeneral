@@ -29,6 +29,7 @@ import com.example.rfid_scanner.service.StorageService
 import com.example.rfid_scanner.utils.constant.Constant
 import com.example.rfid_scanner.utils.constant.Constant.BUTTON_SCAN_TEXT
 import com.example.rfid_scanner.utils.generic.fragment.ScanFragment
+import com.example.rfid_scanner.utils.helper.TagHelper
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
@@ -174,8 +175,24 @@ class TransGeneralFragment : ScanFragment<FragmentTransGeneralBinding, TransGene
             showToast(it)
             return
         }}
-        VerifyBottomSheet(viewModel, viewModel.mapOfTags.map { it.value })
-            .show(childFragmentManager, "Bottom Sheet Dialog Fragment")
+
+        val error3 = viewModel.checkSimilarTags()
+        if (error3.isNotEmpty()) {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Potensi Kode Duplikat")
+                .setMessage(error3)
+                .setPositiveButton("Ok") { _, _ -> showVerifyBottomSheet() }
+                .setNegativeButton("Batal") { _, _ -> }
+                .create()
+                .show()
+        } else {
+            showVerifyBottomSheet()
+        }
+    }
+
+    private fun showVerifyBottomSheet() {
+        VerifyBottomSheet(viewModel, viewModel.mapOfTags.map { it.value }, false)
+            .show(childFragmentManager, TagHelper.TAG_BOTTOM_SHEET)
     }
 
     @SuppressLint("InflateParams")

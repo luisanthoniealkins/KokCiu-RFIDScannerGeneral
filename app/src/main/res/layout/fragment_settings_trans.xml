@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".module.main.settings.transaction.TransSettingsFragment">
+    tools:context=".module.main.settings.transaction.SettingsTransFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -3,15 +3,15 @@ package com.example.rfid_scanner.module.main.settings.network
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import com.example.rfid_scanner.databinding.FragmentNetworkSettingsBinding
+import com.example.rfid_scanner.databinding.FragmentSettingsNetworkBinding
 import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
-class NetworkSettingsFragment : BaseFragment<FragmentNetworkSettingsBinding, NetworkSettingsViewModel>(){
+class SettingsNetworkFragment : BaseFragment<FragmentSettingsNetworkBinding, SettingsNetworkViewModel>(){
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentNetworkSettingsBinding.inflate(inflater, container, false)
+        FragmentSettingsNetworkBinding.inflate(inflater, container, false)
 
-    override fun getViewModelClass() = NetworkSettingsViewModel::class.java
+    override fun getViewModelClass() = SettingsNetworkViewModel::class.java
 
     override fun setUpViews() = with(binding) {
         imvBack.setOnClickListener { navigateBack() }
@@ -55,7 +55,7 @@ class NetworkSettingsFragment : BaseFragment<FragmentNetworkSettingsBinding, Net
 
         if (isError) return
 
-        val builder = AlertDialog.Builder(context!!)
+        val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Konfirmasi")
             .setMessage("Apakah anda yakin untuk menjalankan operasi?")
             .setPositiveButton("Ok") { _, _ ->

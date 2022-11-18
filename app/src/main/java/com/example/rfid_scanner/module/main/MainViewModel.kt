@@ -27,12 +27,15 @@ class MainViewModel : BaseViewModel() {
     companion object {
         val hideStatusDestination = setOf(
             R.id.deviceListFragment,
+            R.id.settingsTagFragment,
             R.id.networkSettingFragment,
             R.id.transSettingFragment,
+            R.id.exploreStockFragment,
             R.id.exploreStockIdFragment,
             R.id.explorePropertyFragment,
             R.id.alterPropertyFragment,
             R.id.qrReaderFragment,
+
         )
 
         @RequiresApi(Build.VERSION_CODES.S)

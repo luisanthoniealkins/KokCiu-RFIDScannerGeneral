@@ -1,5 +1,6 @@
 package com.example.rfid_scanner.data.model
 
+import com.example.rfid_scanner.service.StorageService
 import com.example.rfid_scanner.utils.extension.StringExt.isLengthBetween
 
 data class TagEPC(val epc: String)
@@ -23,7 +24,7 @@ class Tag(
         val statusList = listOf(STATUS_STORED, STATUS_SOLD, STATUS_BROKEN, STATUS_LOST, STATUS_UNKNOWN)
 
         fun String.isProperTag(): Boolean {
-            return this.isLengthBetween(24,24)
+            return this.isLengthBetween(StorageService.getI().minEPCLength,StorageService.getI().maxEPCLength)
         }
     }
 

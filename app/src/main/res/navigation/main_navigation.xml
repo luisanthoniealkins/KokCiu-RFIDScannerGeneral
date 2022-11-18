@@ -37,6 +37,15 @@
         <action
             android:id="@+id/to_transCheckoutFragment"
             app:destination="@id/transCheckoutFragment" />
+        <action
+            android:id="@+id/to_transAdjustmentFragment"
+            app:destination="@id/transAdjustmentFragment" />
+        <action
+            android:id="@+id/to_exploreStockFragment2"
+            app:destination="@id/exploreStockFragment" />
+        <action
+            android:id="@+id/to_settingsTagFragment"
+            app:destination="@id/settingsTagFragment" />
     </fragment>
 
     <fragment
@@ -46,9 +55,9 @@
         tools:layout="@layout/fragment_device_list" />
     <fragment
         android:id="@+id/networkSettingFragment"
-        android:name="com.example.rfid_scanner.module.main.settings.network.NetworkSettingsFragment"
+        android:name="com.example.rfid_scanner.module.main.settings.network.SettingsNetworkFragment"
         android:label="fragment_network_setting"
-        tools:layout="@layout/fragment_network_settings" />
+        tools:layout="@layout/fragment_settings_network" />
     <fragment
         android:id="@+id/tagScannerFragment"
         android:name="com.example.rfid_scanner.module.main.scan.non_transaction.tag_scanner.TagScannerFragment"
@@ -82,9 +91,9 @@
     </fragment>
     <fragment
         android:id="@+id/transSettingFragment"
-        android:name="com.example.rfid_scanner.module.main.settings.transaction.TransSettingsFragment"
+        android:name="com.example.rfid_scanner.module.main.settings.transaction.SettingsTransFragment"
         android:label="fragment_trans_setting"
-        tools:layout="@layout/fragment_trans_settings" />
+        tools:layout="@layout/fragment_settings_trans" />
     <fragment
         android:id="@+id/explorePropertyFragment"
         android:name="com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyFragment"
@@ -133,5 +142,28 @@
             android:name="customerCode"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/transAdjustmentFragment"
+        android:name="com.example.rfid_scanner.module.main.scan.transaction.adjustment.TransAdjustmentFragment"
+        android:label="fragment_trans_adjustment"
+        tools:layout="@layout/fragment_trans_adjustment" >
+        <action
+            android:id="@+id/to_exploreStockFragment"
+            app:destination="@id/exploreStockFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/exploreStockFragment"
+        android:name="com.example.rfid_scanner.module.main.data.explore.stock.ExploreStockFragment"
+        android:label="ExploreStockFragment"
+        tools:layout="@layout/fragment_explore">
+        <argument
+            android:name="isSearching"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsTagFragment"
+        android:name="com.example.rfid_scanner.module.main.settings.tag.SettingsTagFragment"
+        android:label="SettingsTagFragment"
+        tools:layout="@layout/fragment_settings_tag"/>
 
 </navigation>

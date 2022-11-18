@@ -2,6 +2,7 @@ package com.example.rfid_scanner.data.repository.component
 
 import com.example.rfid_scanner.data.model.*
 import com.example.rfid_scanner.data.model.repository.MResponse.ResponseData
+import com.example.rfid_scanner.utils.helper.LogHelper
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -136,6 +137,22 @@ object RequestResult {
             stocks.add(Stock(stockCode))
         }
         result.data = stocks
+
+        return result
+    }
+
+    fun getAllStockRFIDs(response: JSONObject): ResponseData {
+        val result = getGeneralResponse(response)
+        val tags = mutableListOf<Tag>()
+        val arr = response.getJSONArray("data")
+        for (i in 0 until arr.length()) {
+            val detail = arr[i] as JSONObject
+            val tagCode = detail.getString("rfid_code")
+            val id = detail.getString("stock_id")
+            val unitCount = detail.getInt("stock_unit_count")
+            tags.add(Tag(tagCode, "-", id, "-", unitCount))
+        }
+        result.data = tags
 
         return result
     }

@@ -101,11 +101,8 @@ class TransCheckoutFragment : ScanFragment<FragmentTransCheckoutBinding, TransCh
                 else "Verif"
 
             binding.btnVerifyAndCommit.setOnClickListener {
-                if (isVerified.value == true)
-                    CheckoutConfirmationDialog(viewModel.getTagCount(),  this@TransCheckoutFragment)
-                        .show(requireActivity().supportFragmentManager, TAG_DIALOG)
-                else
-                    verifyTags()
+                if (isVerified.value == true) showConfirmationDialog()
+                else verifyTags()
             }
         }
 
@@ -127,17 +124,40 @@ class TransCheckoutFragment : ScanFragment<FragmentTransCheckoutBinding, TransCh
         }
     }
 
+    private fun showConfirmationDialog() {
+        CheckoutConfirmationDialog(
+            viewModel.getTagCount(),
+            this@TransCheckoutFragment
+        ).show(requireActivity().supportFragmentManager, TAG_DIALOG)
+    }
+
     private fun verifyTags() {
         viewModel.getAdapterError()?.let {
             showToast(it)
             return
         }
 
+        val error3 = viewModel.checkSimilarTags()
+        if (error3.isNotEmpty()) {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Potensi Kode Duplikat")
+                .setMessage(error3)
+                .setPositiveButton("Ok") { _, _ -> showVerifyBottomSheet() }
+                .setNegativeButton("Batal") { _, _ -> }
+                .create()
+                .show()
+        } else {
+            showVerifyBottomSheet()
+        }
+    }
+
+    private fun showVerifyBottomSheet() {
         VerifyCheckoutBottomSheet(
             this@TransCheckoutFragment,
             viewModel.stockAdapter.dataSet
         ).show(requireActivity().supportFragmentManager, TagHelper.TAG_BOTTOM_SHEET)
     }
+
 
     override fun onVerifyBottomSheetDismiss(result: Boolean) {
         viewModel.submitVerifyResult(result)

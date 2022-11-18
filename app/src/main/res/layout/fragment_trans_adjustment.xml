@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".module.main.scan.transaction.adjustment.TransAdjustmentFragment">
 
     <TextView
         android:layout_width="match_parent"
@@ -38,9 +39,9 @@
                 android:textStyle="bold"/>
 
             <CheckBox
-                android:id="@+id/id_fragment_adjustment_cb_show_ok"
+                android:id="@+id/cb_show_ok"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:text="OK"
                 android:textSize="16sp"
                 android:buttonTint="@color/white"
@@ -67,7 +68,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="ID"
+                        android:text="Kode"
                         android:textColor="@color/black" />
 
                     <TextView
@@ -76,7 +77,7 @@
                         android:text=":"/>
 
                     <TextView
-                        android:id="@+id/tv_id"
+                        android:id="@+id/tv_code"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -121,9 +122,7 @@
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:dividerInsetStart="8dp"
-        app:dividerInsetEnd="8dp"/>
+        android:layout_height="wrap_content"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"

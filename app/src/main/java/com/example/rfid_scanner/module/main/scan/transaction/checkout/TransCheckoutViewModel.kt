@@ -20,6 +20,7 @@ import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.St
 import com.example.rfid_scanner.module.main.scan.transaction.general.adapter.ErrorAdapter
 import com.example.rfid_scanner.module.main.scan.transaction.general.adapter.TagAdapter
 import com.example.rfid_scanner.service.BluetoothScannerService
+import com.example.rfid_scanner.utils.extension.StringExt.getSimilarStrings
 import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import com.example.rfid_scanner.utils.generic.viewmodel.ScanViewModel
 import com.example.rfid_scanner.utils.helper.LogHelper
@@ -183,6 +184,12 @@ class TransCheckoutViewModel : ScanViewModel() {
                 _commitState.postValue(it.state)
             }
         }
+    }
+
+    fun checkSimilarTags(): String {
+        val list = mutableListOf<String>()
+        stockAdapter.dataSet.map { list.addAll(it.stock.items) }
+        return list.getSimilarStrings()
     }
 
 }

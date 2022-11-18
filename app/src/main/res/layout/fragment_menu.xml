@@ -263,8 +263,7 @@
                         android:id="@+id/btn_adjustment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Penyesuaian"
-                        android:enabled="false"/>
+                        android:text="Penyesuaian"/>
 
                     <Button
                         android:id="@+id/btn_transaction_general"
@@ -303,8 +302,7 @@
                         android:id="@+id/btn_add_edit_stock"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Barang"
-                        android:enabled="false"/>
+                        android:text="Barang"/>
 
                     <Button
                         android:id="@+id/btn_add_edit_brand"
@@ -386,6 +384,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Jaringan"/>
+
+                    <Button
+                        android:id="@+id/btn_settings_tag"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tag"/>
 
                 </LinearLayout>
 

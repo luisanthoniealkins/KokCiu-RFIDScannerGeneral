@@ -14,6 +14,9 @@ class StorageService(private val context: Context) {
         private const val SP_WIFI = "sp_wifi"
         private const val SP_LAST_STOCK_ID = "sp_last_stock_id"
         private const val SP_LAST_STOCK_NAME = "sp_last_stock_name"
+        private const val SP_MIN_EPC_LENGTH = "sp_min_epc_length"
+        private const val SP_MAX_EPC_LENGTH = "sp_max_epc_length"
+        private const val SP_EPC_DIFF_TOLERANCE = "sp_epc_diff_tolerance"
 
         @SuppressLint("StaticFieldLeak")
         var mInstance: StorageService? = null
@@ -52,6 +55,18 @@ class StorageService(private val context: Context) {
         set(value) { put(SP_LAST_STOCK_NAME, value) }
         get() = get(SP_LAST_STOCK_NAME, "PION PIRING BELAKANG 6X40")
 
+    var minEPCLength
+        set(value) { putInt(SP_MIN_EPC_LENGTH, value) }
+        get() = getInt(SP_MIN_EPC_LENGTH, 24)
+
+    var maxEPCLength
+        set(value) { putInt(SP_MAX_EPC_LENGTH, value) }
+        get() = getInt(SP_MAX_EPC_LENGTH, 24)
+
+    var epcDiffTolerance
+        set(value) { putInt(SP_EPC_DIFF_TOLERANCE, value) }
+        get() = getInt(SP_EPC_DIFF_TOLERANCE, 3)
+
     fun setStatusChecked(from: String, to: String, isChecked: Boolean) {
         val st = "${from}>${to}"
         getPref().edit().putBoolean(st, isChecked).apply()
@@ -65,6 +80,6 @@ class StorageService(private val context: Context) {
     private fun put(key: String, value: String?) = getPref().edit().putString(key, value).apply()
     private fun get(key: String, default: String) = getPref().getString(key, default)
 
-
-
+    private fun putInt(key: String, value: Int) = getPref().edit().putInt(key, value).apply()
+    private fun getInt(key: String, default: Int) = getPref().getInt(key, default)
 }

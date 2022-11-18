@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.rfid_scanner.service.StorageService
 import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 
-class NetworkSettingsViewModel : BaseViewModel() {
+class SettingsNetworkViewModel : BaseViewModel() {
 
     private val _ipAddress = MutableLiveData<String>().apply { postValue(StorageService.getI().ipAddress) }
     val ipAddress : LiveData<String> = _ipAddress

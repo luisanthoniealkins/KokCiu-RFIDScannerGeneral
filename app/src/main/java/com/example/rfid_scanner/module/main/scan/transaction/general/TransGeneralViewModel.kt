@@ -22,6 +22,8 @@ import com.example.rfid_scanner.module.main.scan.transaction.general.adapter.Tag
 import com.example.rfid_scanner.module.main.scan.transaction.general.adapter.TagAdapter.TagData
 import com.example.rfid_scanner.utils.listener.VerifyListener
 import com.example.rfid_scanner.service.StorageService
+import com.example.rfid_scanner.utils.extension.StringExt.getSimilarStrings
+import com.example.rfid_scanner.utils.extension.StringExt.isSimilarTo
 import com.example.rfid_scanner.utils.generic.viewmodel.ScanViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
@@ -205,5 +207,8 @@ class TransGeneralViewModel : ScanViewModel(), VerifyListener {
         _statusTo.value = pair?.second
     }
 
+    fun checkSimilarTags(): String {
+        return mapOfTags.map { it.value.epc }.getSimilarStrings()
+    }
 
 }

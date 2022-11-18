@@ -5,7 +5,7 @@ import com.example.rfid_scanner.module.main.settings.transaction.AllowedTransAda
 import com.example.rfid_scanner.service.StorageService
 import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 
-class TransSettingsViewModel : BaseViewModel() {
+class SettingsTransViewModel : BaseViewModel() {
 
     val adapter = AllowedTransAdapter()
 

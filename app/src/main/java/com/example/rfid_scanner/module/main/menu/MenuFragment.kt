@@ -69,8 +69,16 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(),
             navigateTo(MenuFragmentDirections.toTransGeneralFragment(REUSE))
         }
 
+        btnAdjustment.setOnClickListener {
+            navigateTo(MenuFragmentDirections.toTransAdjustmentFragment())
+        }
+
         btnCheckStockroom.setOnClickListener {
             navigateTo(MenuFragmentDirections.toCheckRoomFragment())
+        }
+
+        btnAddEditStock.setOnClickListener {
+            navigateTo(MenuFragmentDirections.toExploreStockFragment2(false))
         }
 
         btnAddEditStockId.setOnClickListener {
@@ -99,6 +107,10 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(),
 
         btnSettingsTrans.setOnClickListener {
             navigateTo(MenuFragmentDirections.toTransSettingFragment())
+        }
+
+        btnSettingsTag.setOnClickListener {
+            navigateTo(MenuFragmentDirections.toSettingsTagFragment())
         }
     }
 

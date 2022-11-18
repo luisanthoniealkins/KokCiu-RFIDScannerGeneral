@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".module.main.settings.network.NetworkSettingsFragment">
+    tools:context=".module.main.settings.network.SettingsNetworkFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,13 +50,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="IP Address"
-            android:textColorHint="@color/black">
+            android:textColorHint="@color/black"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edt_ip_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#f5f5f5"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -67,13 +67,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="Port"
-            android:textColorHint="@color/black">
+            android:textColorHint="@color/black"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edt_port"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#f5f5f5"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -84,13 +84,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="Nama Wifi"
-            android:textColorHint="@color/black">
+            android:textColorHint="@color/black"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edt_wifi_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#f5f5f5"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>

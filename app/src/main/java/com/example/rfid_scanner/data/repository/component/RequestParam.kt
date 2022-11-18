@@ -141,5 +141,10 @@ object RequestParam {
         return obj
     }
 
+    fun getAllStockRFIDS(stockCode: String): JSONObject {
+        val obj = JSONObject()
+        obj.put("stock_code", stockCode)
+        return obj
+    }
 
 }

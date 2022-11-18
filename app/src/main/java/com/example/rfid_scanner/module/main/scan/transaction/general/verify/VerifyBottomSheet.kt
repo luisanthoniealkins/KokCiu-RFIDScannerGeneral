@@ -24,7 +24,7 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class VerifyBottomSheet(private val listener: VerifyListener, private val verifyTags: List<Tag>) :
+class VerifyBottomSheet(private val listener: VerifyListener, private val verifyTags: List<Tag>, private val byPassError: Boolean) :
     BottomSheetDialogFragment() {
 
     private var _binding: BottomSheetVerifyBinding? = null
@@ -32,7 +32,7 @@ class VerifyBottomSheet(private val listener: VerifyListener, private val verify
     private lateinit var viewModel: VerifyViewModel
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = BottomSheetDialog(context!!)
+        val dialog = BottomSheetDialog(requireContext())
 
         _binding = BottomSheetVerifyBinding.inflate(LayoutInflater.from(context))
         viewModel = ViewModelProvider(this)[VerifyViewModel::class.java]
@@ -80,7 +80,7 @@ class VerifyBottomSheet(private val listener: VerifyListener, private val verify
         btnReset.setOnClickListener { viewModel.clearTags() }
 
         btnConfirm.setOnClickListener {
-            if (viewModel.errorAdapter.getError() == null && viewModel.verifyTagAdapter.isAllVerified()) {
+            if ((byPassError || viewModel.errorAdapter.getError() == null) && viewModel.verifyTagAdapter.isAllVerified()) {
                 listener.onVerifyBottomSheetDismiss(true)
                 showToast("Tag berhasil diverifikasi")
                 dismiss()
