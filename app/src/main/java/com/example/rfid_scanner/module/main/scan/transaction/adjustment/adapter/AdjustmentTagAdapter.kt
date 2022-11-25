@@ -64,6 +64,11 @@ class AdjustmentTagAdapter :
     fun getScannedTags() = dataListFull.filter { it.isScanned }.map { it.data }
     fun getUnScannedTags() = dataListFull.filter { !it.isScanned }.map { it.data }
 
+    fun getError(): String? {
+        if (getUnScannedTags().isEmpty()) return "Tidak ada tags yang perlu disesuaikan"
+        return null
+    }
+
     fun clearData() {
         dataListFull.clear()
         refresh()

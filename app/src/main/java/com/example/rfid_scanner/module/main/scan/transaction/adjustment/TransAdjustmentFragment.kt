@@ -63,7 +63,7 @@ class TransAdjustmentFragment : ScanFragment<FragmentTransAdjustmentBinding, Tra
         isVerified.observeWithOwner {
             binding.btnVerifyAndCommit.text =
                 if (it) "Hapus"
-                else "Verif"
+                else "Verifikasi"
 
             binding.btnVerifyAndCommit.setOnClickListener {
                 if (isVerified.value == true) showConfirmationDialog()
@@ -98,6 +98,11 @@ class TransAdjustmentFragment : ScanFragment<FragmentTransAdjustmentBinding, Tra
     }
 
     private fun verifyTags() {
+        viewModel.adjustmentTagAdapter.getError()?.let {
+            showToast(it)
+            return
+        }
+
         val error = viewModel.errorAdapter.getError()
         if (!error.isNullOrEmpty()) {
             val builder = AlertDialog.Builder(requireContext())

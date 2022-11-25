@@ -5,6 +5,7 @@ import com.example.rfid_scanner.utils.helper.DateHelper
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.*
 
 object RequestParam {
 
@@ -144,6 +145,13 @@ object RequestParam {
     fun getAllStockRFIDS(stockCode: String): JSONObject {
         val obj = JSONObject()
         obj.put("stock_code", stockCode)
+        return obj
+    }
+
+    fun getAllTransactions(date: Date?): JSONObject {
+        val obj = JSONObject()
+        obj.put("year", DateHelper.getDateAttribute(date, Calendar.YEAR))
+        obj.put("month", DateHelper.getDateAttribute(date, Calendar.MONTH) + 1)
         return obj
     }
 

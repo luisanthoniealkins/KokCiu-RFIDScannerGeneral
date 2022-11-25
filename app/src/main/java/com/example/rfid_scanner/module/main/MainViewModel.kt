@@ -35,7 +35,7 @@ class MainViewModel : BaseViewModel() {
             R.id.explorePropertyFragment,
             R.id.alterPropertyFragment,
             R.id.qrReaderFragment,
-
+            R.id.historyTransactionFragment,
         )
 
         @RequiresApi(Build.VERSION_CODES.S)

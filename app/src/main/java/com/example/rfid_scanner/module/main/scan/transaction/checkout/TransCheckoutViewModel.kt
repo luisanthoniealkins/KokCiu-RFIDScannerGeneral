@@ -58,7 +58,7 @@ class TransCheckoutViewModel : ScanViewModel() {
 
     private var channelTags = Channel<List<TagEPC>>()
 
-    private val bills = mutableListOf<Bill>()
+    val bills = mutableListOf<Bill>()
     private var activeStocks = mutableSetOf<String>()
     private var queriedTags = mutableSetOf<String>()
 
@@ -66,7 +66,6 @@ class TransCheckoutViewModel : ScanViewModel() {
         viewModelScope.launch {
             mBluetoothScannerService.setChannel(channelTags)
             launch { channelTags.consumeEach { queryTags(it) } }
-//            launch { mBluetoothScannerService.sfScanStatus.collect{ _scanStatus.postValue(it) } }
         }
     }
 
@@ -154,6 +153,7 @@ class TransCheckoutViewModel : ScanViewModel() {
         stockAdapter.mapOfOperations[clearStockTags]?.let { func -> (func as (() -> Unit))() }
         errorAdapter.mapOfOperations[clearErrorTags]?.let { func -> (func as (() -> Unit))() }
         _tagCountError.postValue(errorAdapter.itemCount)
+        _isVerified.postValue(false)
     }
 
     fun getAdapterError(): String? {

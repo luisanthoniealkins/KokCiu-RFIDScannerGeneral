@@ -11,6 +11,7 @@ import com.example.rfid_scanner.data.model.status.MConnectionStatus
 import com.example.rfid_scanner.data.model.status.ScanStatus
 import com.example.rfid_scanner.utils.constant.Constant.BTE_START_SCAN_COMMAND
 import com.example.rfid_scanner.utils.constant.Constant.BTE_STOP_SCAN_COMMAND
+import com.example.rfid_scanner.utils.helper.LogHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -92,7 +93,7 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
     }
 
     fun closeConnection() {
-        stopScan()
+        sendStopScanCommand()
         mConnectedThread?.cancel()
         updateStatus(true)
 //        (mContext as MainActivity).runOnUiThread { (mContext as MainActivity).setBatteryLevel(0) }
@@ -198,14 +199,18 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
         return device.createRfcommSocketToServiceRecord(BT_MODULE_UUID)
     }
 
-    fun startScan() {
+    fun sendStartScanCommand() {
         if (isScanning) return
         mConnectedThread?.write(BTE_START_SCAN_COMMAND, true)
     }
 
-    fun stopScan() {
+    fun sendStopScanCommand() {
         if (!isScanning || isPressing) return
         mConnectedThread?.write(BTE_STOP_SCAN_COMMAND, false)
+    }
+
+    fun sendCustomMessage(msg: String) {
+        mConnectedThread?.write(msg, false)
     }
 
     fun setChannel(channelTags: Channel<List<TagEPC>>) {

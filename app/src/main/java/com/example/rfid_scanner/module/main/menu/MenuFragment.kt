@@ -77,6 +77,10 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(),
             navigateTo(MenuFragmentDirections.toCheckRoomFragment())
         }
 
+        btnHistoryTransaction.setOnClickListener {
+            navigateTo(MenuFragmentDirections.toHistoryTransactionFragment())
+        }
+
         btnAddEditStock.setOnClickListener {
             navigateTo(MenuFragmentDirections.toExploreStockFragment2(false))
         }
@@ -99,6 +103,10 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(),
 
         btnAddEditVehicleType.setOnClickListener {
             navigateTo(MenuFragmentDirections.toExplorePropertyFragment(false, TYPE_VEHICLE_TYPE))
+        }
+
+        btnCustomPrint.setOnClickListener {
+            navigateTo(MenuFragmentDirections.toPrintCustomFragment())
         }
 
         btnSettingsNetwork.setOnClickListener {

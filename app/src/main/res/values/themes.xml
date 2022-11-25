@@ -23,4 +23,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="My_Widget.MaterialComponents.Chip.Choice" parent="Widget.MaterialComponents.Chip.Choice">
+        <!-- Chip background color selector -->
+        <item name="chipBackgroundColor">@color/blue_gray_text_non_main</item>
+        <!-- Border color -->
+        <item name="chipStrokeColor">@color/lighter_gray_item_transaction_default</item>
+    </style>
+
 </resources>

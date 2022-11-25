@@ -6,10 +6,10 @@ import com.example.rfid_scanner.databinding.FragmentTemplateBinding
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.qr_reader.QRReaderViewModel
 import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
-class TemplateFragment : BaseFragment<FragmentTemplateBinding, QRReaderViewModel>() {
+class TemplateFragment : BaseFragment<FragmentTemplateBinding, TemplateViewModel>() {
 
     /** Binding fragment with view and viewmodel */
-    override fun getViewModelClass() = QRReaderViewModel::class.java
+    override fun getViewModelClass() = TemplateViewModel::class.java
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentTemplateBinding.inflate(inflater, container, false)
 

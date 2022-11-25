@@ -52,4 +52,9 @@ object StringExt {
         } } }
         return result
     }
+
+    fun String.isNumberOnly(): Boolean {
+        for (x in this) if (x < '0' || x > '9') return false
+        return true
+    }
 }

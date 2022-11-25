@@ -8,6 +8,7 @@ import com.example.rfid_scanner.R
 import com.example.rfid_scanner.data.model.Bill
 import com.example.rfid_scanner.data.model.repository.MResponse
 import com.example.rfid_scanner.databinding.FragmentTransCheckoutBinding
+import com.example.rfid_scanner.module.main.menu.MenuFragmentDirections
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.TransCheckoutViewModel.Companion.TAB_ERROR
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.TransCheckoutViewModel.Companion.TAB_STOCK
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.dialog.CheckoutConfirmationDialog
@@ -98,7 +99,7 @@ class TransCheckoutFragment : ScanFragment<FragmentTransCheckoutBinding, TransCh
         isVerified.observeWithOwner {
             binding.btnVerifyAndCommit.text =
                 if (it) "Keluar"
-                else "Verif"
+                else "Verifikasi"
 
             binding.btnVerifyAndCommit.setOnClickListener {
                 if (isVerified.value == true) showConfirmationDialog()
@@ -111,6 +112,7 @@ class TransCheckoutFragment : ScanFragment<FragmentTransCheckoutBinding, TransCh
             if (it == MResponse.FINISHED_SUCCESS) {
                 showToast("Transaksi berhasil")
                 navigateBack()
+                navigateTo(MenuFragmentDirections.toPrintCheckoutFragment(bills.toTypedArray()))
             }
         }
     }

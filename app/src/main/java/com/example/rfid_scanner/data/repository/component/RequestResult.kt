@@ -1,10 +1,20 @@
 package com.example.rfid_scanner.data.repository.component
 
 import com.example.rfid_scanner.data.model.*
+import com.example.rfid_scanner.data.model.Transaction.*
+import com.example.rfid_scanner.data.model.Transaction.Companion.STATUS_HAPUS
+import com.example.rfid_scanner.data.model.Transaction.Companion.STATUS_KELUAR
+import com.example.rfid_scanner.data.model.Transaction.Companion.STATUS_MASUK
+import com.example.rfid_scanner.data.model.Transaction.Companion.STATUS_PAKAI_ULANG
+import com.example.rfid_scanner.data.model.Transaction.Companion.STATUS_PENYESUAIAN
+import com.example.rfid_scanner.data.model.Transaction.Companion.STATUS_RETUR
+import com.example.rfid_scanner.data.model.Transaction.Companion.STATUS_RUSAK
 import com.example.rfid_scanner.data.model.repository.MResponse.ResponseData
+import com.example.rfid_scanner.utils.helper.DateHelper
 import com.example.rfid_scanner.utils.helper.LogHelper
-import org.json.JSONException
+import org.json.JSONArray
 import org.json.JSONObject
+import java.util.*
 
 object RequestResult {
 
@@ -143,6 +153,7 @@ object RequestResult {
 
     fun getAllStockRFIDs(response: JSONObject): ResponseData {
         val result = getGeneralResponse(response)
+
         val tags = mutableListOf<Tag>()
         val arr = response.getJSONArray("data")
         for (i in 0 until arr.length()) {
@@ -153,6 +164,77 @@ object RequestResult {
             tags.add(Tag(tagCode, "-", id, "-", unitCount))
         }
         result.data = tags
+
+        return result
+    }
+
+    fun getAllTransactionsDates(response: JSONObject): ResponseData {
+        val result = getGeneralResponse(response)
+
+        val dates = mutableListOf<String>()
+        val arr = response.getJSONArray("data")
+        for (i in 0 until arr.length()) {
+            val date = arr[i] as String
+            dates.add(
+                DateHelper.getFormattedDateTime(
+                    "MMMM, yyyy",
+                    DateHelper.getDate("yyyy-MM-dd", date)!!
+                )
+            )
+        }
+        result.data = dates
+
+        return result
+    }
+
+    fun getAllTransactions(response: JSONObject): ResponseData {
+        val result = getGeneralResponse(response)
+
+        val obj = response.getJSONObject("data")
+        val arr = obj.getJSONArray("transactions")
+        val transactions = mutableListOf<Transaction>()
+        for (i in 0 until arr.length()) {
+            val detail = arr[i] as JSONObject
+//            LogHelper.postLog(detail.toString())
+            val code = detail.getString("bill_code")
+            val type = detail.getString("bill_type")
+            val date: Date = DateHelper.getDate("yyyy-MM-dd hh:mm:ss", detail.getString("bill_date"))!!
+            val transactionDetails = mutableListOf<TransactionDetail>()
+            val arrDetail = detail["bill_stocks"] as JSONArray
+            for (j in 0 until arrDetail.length()) {
+                val stock = arrDetail[j] as JSONObject
+                val stockCode = stock.getString("stock_code")
+                val stockName = stock.getString("stock_name")
+                val stockUnit = stock.getString("stock_unit")
+                val stockVehicleType = stock.getString("stock_vehicle_type")
+                val stockQuantity = stock.getString("stock_quantity").toInt()
+                transactionDetails.add(
+                    TransactionDetail(
+                        stockCode,
+                        stockName,
+                        stockVehicleType,
+                        stockUnit,
+                        stockQuantity
+                    )
+                )
+            }
+            when (type) {
+                STATUS_MASUK -> transactions.add(CheckIn(code, date))
+                STATUS_KELUAR -> {
+                    val customer = detail.getString("bill_customer")
+                    val delivery = detail.getString("bill_delivery")
+                    transactions.add(CheckOut(code, date, customer, delivery))
+                }
+                STATUS_RETUR -> transactions.add(Return(code, date))
+                STATUS_RUSAK -> transactions.add(Broken(code, date))
+                STATUS_HAPUS -> transactions.add(Clear(code, date))
+                STATUS_PENYESUAIAN -> transactions.add(Lost(code, date))
+                STATUS_PAKAI_ULANG -> transactions.add(Reuse(code, date))
+                else -> transactions.add(Other(code, date))
+            }
+            transactions[transactions.size - 1].setDetails(transactionDetails)
+        }
+        result.data = transactions
 
         return result
     }

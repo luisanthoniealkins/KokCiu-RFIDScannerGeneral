@@ -194,7 +194,7 @@
             android:id="@+id/btn_scan"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:text="@string/scan"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="4dp"/>
@@ -203,7 +203,7 @@
             android:id="@+id/btn_reset"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:text="@string/ulang"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"/>
@@ -212,8 +212,8 @@
             android:id="@+id/btn_verify_and_commit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Verif"
+            android:layout_weight="3"
+            android:text="Verifikasi"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="8dp"/>
 

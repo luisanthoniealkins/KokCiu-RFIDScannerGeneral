@@ -104,13 +104,17 @@ class BluetoothScannerService(context: Context) {
     }
 
     fun startScan() {
-        if (connectedType == DEVICE_TYPE_BTE) mBluetoothBTEService.startScan()
+        if (connectedType == DEVICE_TYPE_BTE) mBluetoothBTEService.sendStartScanCommand()
         else mBluetoothBLEService.startScan()
     }
 
     fun stopScan() {
-        if (connectedType == DEVICE_TYPE_BTE) mBluetoothBTEService.stopScan()
+        if (connectedType == DEVICE_TYPE_BTE) mBluetoothBTEService.sendStopScanCommand()
         else mBluetoothBLEService.stopScan()
+    }
+
+    fun sendCustomMessage(msg: String) {
+        if (connectedType == DEVICE_TYPE_BTE) mBluetoothBTEService.sendCustomMessage(msg)
     }
 
     fun setChannel(channelTags: Channel<List<TagEPC>>) {

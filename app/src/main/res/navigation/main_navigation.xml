@@ -46,6 +46,15 @@
         <action
             android:id="@+id/to_settingsTagFragment"
             app:destination="@id/settingsTagFragment" />
+        <action
+            android:id="@+id/to_historyTransactionFragment"
+            app:destination="@id/historyTransactionFragment" />
+        <action
+            android:id="@+id/to_printCustomFragment"
+            app:destination="@id/printCustomFragment" />
+        <action
+            android:id="@+id/to_printCheckoutFragment"
+            app:destination="@id/printCheckoutFragment" />
     </fragment>
 
     <fragment
@@ -165,5 +174,24 @@
         android:name="com.example.rfid_scanner.module.main.settings.tag.SettingsTagFragment"
         android:label="SettingsTagFragment"
         tools:layout="@layout/fragment_settings_tag"/>
+    <fragment
+        android:id="@+id/historyTransactionFragment"
+        android:name="com.example.rfid_scanner.module.main.history.transaction.HistoryTransactionFragment"
+        android:label="fragment_history_transaction"
+        tools:layout="@layout/fragment_history_transaction" />
+    <fragment
+        android:id="@+id/printCustomFragment"
+        android:name="com.example.rfid_scanner.module.main.print.custom.PrintCustomFragment"
+        android:label="fragment_print_custom"
+        tools:layout="@layout/fragment_print_custom" />
+    <fragment
+        android:id="@+id/printCheckoutFragment"
+        android:name="com.example.rfid_scanner.module.main.print.checkout.PrintCheckoutFragment"
+        android:label="fragment_print_checkout"
+        tools:layout="@layout/fragment_print_checkout" >
+        <argument
+            android:name="bills"
+            app:argType="com.example.rfid_scanner.data.model.Bill[]" />
+    </fragment>
 
 </navigation>

@@ -18,4 +18,6 @@ object Constant {
     const val PASSWORD_ADMIN = "admin22"
     const val PASSWORD_SUPER_ADMIN = "s22"
 
+    const val PRINTER_BT_ADDRESS = "66:32:26:32:44:45"
+
 }

@@ -26,8 +26,6 @@ import com.example.rfid_scanner.module.main.scan.transaction.general.TransGenera
 import com.example.rfid_scanner.module.main.scan.transaction.general.TransGeneralViewModel.Companion.GENERAL
 import com.example.rfid_scanner.module.main.scan.transaction.general.verify.VerifyBottomSheet
 import com.example.rfid_scanner.service.StorageService
-import com.example.rfid_scanner.utils.constant.Constant
-import com.example.rfid_scanner.utils.constant.Constant.BUTTON_SCAN_TEXT
 import com.example.rfid_scanner.utils.generic.fragment.ScanFragment
 import com.example.rfid_scanner.utils.helper.TagHelper
 import com.google.android.material.tabs.TabLayout
@@ -101,7 +99,7 @@ class TransGeneralFragment : ScanFragment<FragmentTransGeneralBinding, TransGene
             binding.btnStatusTo.text = it
             binding.btnVerifyAndCommit.text =
                 if (isVerified.value == true) mapOfCommitButton[it]
-                else "Verif"
+                else "Verifikasi"
             binding.llCheckIn.isVisible = (statusFrom.value == STATUS_UNKNOWN && statusTo.value == STATUS_STORED)
         }
         allowTrans.observeWithOwner {
@@ -118,7 +116,7 @@ class TransGeneralFragment : ScanFragment<FragmentTransGeneralBinding, TransGene
         isVerified.observeWithOwner {
             binding.btnVerifyAndCommit.text =
                 if (isVerified.value == true) mapOfCommitButton[statusTo.value]
-                else "Verif"
+                else "Verifikasi"
 
             binding.btnVerifyAndCommit.setOnClickListener {
                 if (isVerified.value == true)  showConfirmationDialog()
