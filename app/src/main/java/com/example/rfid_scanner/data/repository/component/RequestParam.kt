@@ -155,4 +155,20 @@ object RequestParam {
         return obj
     }
 
+    fun getStockDetail(stockCode: String, date: Date?): JSONObject {
+        val obj = JSONObject()
+        obj.put("stock_code", stockCode)
+        obj.put("year", DateHelper.getDateAttribute(date, Calendar.YEAR))
+        obj.put("month", DateHelper.getDateAttribute(date, Calendar.MONTH) + 1)
+        return obj
+    }
+
+    fun getStockTransaction(stockCode: String, date: Date?): JSONObject {
+        val obj = JSONObject()
+        obj.put("stock_code", stockCode)
+        obj.put("year", DateHelper.getDateAttribute(date, Calendar.YEAR))
+        obj.put("month", DateHelper.getDateAttribute(date, Calendar.MONTH) + 1)
+        return obj
+    }
+
 }

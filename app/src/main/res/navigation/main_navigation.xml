@@ -55,6 +55,9 @@
         <action
             android:id="@+id/to_printCheckoutFragment"
             app:destination="@id/printCheckoutFragment" />
+        <action
+            android:id="@+id/to_historyStockFragment"
+            app:destination="@id/historyStockFragment" />
     </fragment>
 
     <fragment
@@ -192,6 +195,15 @@
         <argument
             android:name="bills"
             app:argType="com.example.rfid_scanner.data.model.Bill[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyStockFragment"
+        android:name="com.example.rfid_scanner.module.main.history.stock.HistoryStockFragment"
+        android:label="fragment_history_stock"
+        tools:layout="@layout/fragment_history_stock" >
+        <action
+            android:id="@+id/to_exploreStockFragment3"
+            app:destination="@id/exploreStockFragment" />
     </fragment>
 
 </navigation>

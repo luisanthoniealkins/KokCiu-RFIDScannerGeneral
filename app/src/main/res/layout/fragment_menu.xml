@@ -184,8 +184,7 @@
                         android:id="@+id/btn_history_stock"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Barang"
-                        android:enabled="false"/>
+                        android:text="Barang"/>
 
                 </LinearLayout>
 

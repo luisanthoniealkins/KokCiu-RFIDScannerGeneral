@@ -81,6 +81,10 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(),
             navigateTo(MenuFragmentDirections.toHistoryTransactionFragment())
         }
 
+        btnHistoryStock.setOnClickListener {
+            navigateTo(MenuFragmentDirections.toHistoryStockFragment())
+        }
+
         btnAddEditStock.setOnClickListener {
             navigateTo(MenuFragmentDirections.toExploreStockFragment2(false))
         }

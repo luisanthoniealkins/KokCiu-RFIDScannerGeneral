@@ -11,7 +11,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Detail Barang"
+        android:text="Info Barang"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textAlignment="center"/>
@@ -19,7 +19,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="8dp"
+        app:cardElevation="8dp"
         app:cardCornerRadius="4dp"
         android:layout_margin="8dp">
 
@@ -27,8 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp">
-
+            android:padding="8dp"
+            android:background="@color/white">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,7 +45,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/id_fragment_stock_detail_tv_stock_code"
+                    android:id="@+id/tv_stock_code"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"/>
@@ -67,7 +67,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/id_fragment_stock_detail_tv_stock_brand"
+                    android:id="@+id/tv_stock_brand"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"/>
@@ -89,7 +89,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/id_fragment_stock_detail_tv_stock_vehicle_type"
+                    android:id="@+id/tv_stock_vehicle_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"/>
@@ -105,7 +105,7 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:text="Detail Transaksi"
+        android:text="Rekap Transaksi"
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -126,7 +126,7 @@
             android:orientation="horizontal">
 
             <AutoCompleteTextView
-                android:id="@+id/id_fragment_stock_detail_actv_date"
+                android:id="@+id/actv_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
@@ -141,7 +141,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="8dp"
+        app:cardElevation="8dp"
         app:cardCornerRadius="4dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp">
@@ -167,7 +167,7 @@
                     android:text="Stok Bulan Sebelumnya: "/>
 
                 <TextView
-                    android:id="@+id/id_fragment_stock_detail_tv_previous_stock"
+                    android:id="@+id/tv_previous_stock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
@@ -195,7 +195,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/id_fragment_stock_detail_tv_check_in"
+                    android:id="@+id/tv_check_in"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"/>
@@ -217,7 +217,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/id_fragment_stock_detail_tv_check_out"
+                    android:id="@+id/tv_check_out"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"/>
@@ -239,7 +239,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/id_fragment_stock_detail_tv_return"
+                    android:id="@+id/tv_return"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"/>
@@ -261,7 +261,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/id_fragment_stock_detail_tv_broken"
+                    android:id="@+id/tv_broken"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"/>
@@ -283,7 +283,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/id_fragment_stock_detail_tv_clear"
+                    android:id="@+id/tv_clear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"/>
@@ -305,7 +305,7 @@
                     android:textColor="@color/black"/>
 
                 <TextView
-                    android:id="@+id/id_fragment_stock_detail_tv_lost"
+                    android:id="@+id/tv_lost"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"/>
@@ -327,7 +327,7 @@
                     android:text="Stok Bulan ini: "/>
 
                 <TextView
-                    android:id="@+id/id_fragment_stock_detail_tv_current_stock"
+                    android:id="@+id/tv_current_stock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
@@ -355,7 +355,7 @@
                     android:text="Stok Gudang: "/>
 
                 <TextView
-                    android:id="@+id/id_fragment_stock_detail_tv_available_stock"
+                    android:id="@+id/tv_available_stock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
@@ -363,7 +363,7 @@
                     android:layout_marginEnd="4dp"/>
 
                 <TextView
-                    android:id="@+id/id_fragment_stock_detail_tv_stock_unit"
+                    android:id="@+id/tv_stock_unit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"

@@ -1,6 +1,6 @@
 package com.example.rfid_scanner.data.model
 
-class Stock(
+open class Stock(
     var code: String,
     name: String? = null,
     var brand: String = "-",
@@ -61,3 +61,20 @@ data class StockId(
         }
     }
 }
+
+class DetailStock(
+    code: String?,
+    name: String?,
+    brand: String?,
+    vehicleType: String?,
+    unit: String?,
+    availableStock: Int,
+    val checkInStock: Int,
+    val checkOutStock: Int,
+    val returnStock: Int,
+    val brokenStock: Int,
+    val clearStock: Int,
+    val lostStock: Int,
+    val curStock: Int,
+    val prevStock: Int
+) : Stock(code!!, name, brand!!, vehicleType!!, unit!!, availableStock)

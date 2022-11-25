@@ -40,17 +40,14 @@ class HistoryTransactionFragment : BaseFragment<FragmentHistoryTransactionBindin
         dates.add(DateHelper.getFormattedDateTime("MMMM, yyyy", DateHelper.currentDate))
         actvDate.setAdapter(ArrayAdapter(requireContext(), R.layout.item_date, dates))
         actvDate.setText(dates[0], false)
-        actvDate.setOnItemClickListener { adapterView: AdapterView<*>, view: View?, i: Int, l: Long ->
+        actvDate.setOnItemClickListener { adapterView: AdapterView<*>, _: View?, i: Int, _: Long ->
             viewModel.adapter.setTransactions(mutableListOf())
             viewModel.getAllTransactions(DateHelper.getDate("MMMM, yyyy", adapterView.getItemAtPosition(i).toString())!!)
         }
 
-        chipCheckIn.setOnCheckedChangeListener { _, _ -> applyFilter()}
-        chipCheckOut.setOnCheckedChangeListener { _, _ -> applyFilter()}
-        chipReturn.setOnCheckedChangeListener { _, _ -> applyFilter()}
-        chipBroken.setOnCheckedChangeListener { _, _ -> applyFilter()}
-        chipClear.setOnCheckedChangeListener { _, _ -> applyFilter()}
-        chipAdjustment.setOnCheckedChangeListener { _, _ -> applyFilter()}
+        listOf(chipCheckIn, chipCheckOut, chipReturn, chipBroken, chipClear, chipAdjustment).map {
+            it.setOnCheckedChangeListener { _, _ -> applyFilter()}
+        }
 
         rvItem.layoutManager = LinearLayoutManager(requireContext())
         rvItem.adapter = viewModel.adapter
@@ -71,16 +68,11 @@ class HistoryTransactionFragment : BaseFragment<FragmentHistoryTransactionBindin
         lvTransactionDates.observeWithOwner {
             binding.actvDate.setAdapter(ArrayAdapter(requireContext(), R.layout.item_date, it))
         }
-
-        lvTransactions.observeWithOwner {
-            viewModel.adapter.setTransactions(it)
-        }
     }
 
     override fun initEvent() {
         applyFilter()
-        viewModel.getAllTransactions(DateHelper.currentDate)
         viewModel.getAllTransactionDates()
+        viewModel.getAllTransactions(DateHelper.currentDate)
     }
-
 }
