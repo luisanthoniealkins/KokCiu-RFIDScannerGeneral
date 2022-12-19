@@ -7,8 +7,9 @@ import com.example.rfid_scanner.utils.constant.Constant.PASSWORD_SUPER_ADMIN
 import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 
 class MenuViewModel : BaseViewModel() {
-    
-    private val _isAdminUnlocked = MutableLiveData<Boolean>().apply { postValue(false) }
+
+    // TODO: WOI GANTI KE FALSE
+    private val _isAdminUnlocked = MutableLiveData<Boolean>().apply { postValue(true) }
     val isAdminUnlocked : LiveData<Boolean> = _isAdminUnlocked
 
     fun submitPassword(password: String?): Boolean {

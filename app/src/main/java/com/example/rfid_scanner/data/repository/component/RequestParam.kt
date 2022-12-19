@@ -171,4 +171,12 @@ object RequestParam {
         return obj
     }
 
+    fun addEditGeneralProperty(generalProperty: GeneralProperty): JSONObject {
+        val obj = JSONObject()
+        obj.put("property_code", generalProperty.propertyCode)
+        obj.put("property_name", generalProperty.propertyName)
+        return obj
+    }
+
+
 }

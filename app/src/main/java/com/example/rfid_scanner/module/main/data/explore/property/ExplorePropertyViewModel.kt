@@ -7,6 +7,9 @@ import com.example.rfid_scanner.data.model.GeneralProperty
 import com.example.rfid_scanner.data.repository.VolleyRepository
 import com.example.rfid_scanner.data.repository.component.RequestEndPoint
 import com.example.rfid_scanner.data.repository.component.RequestResult
+import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_BRAND
+import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_CUSTOMER
+import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_VEHICLE_TYPE
 import com.example.rfid_scanner.utils.custom.kclass.HandledEvent
 import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import com.example.rfid_scanner.utils.listener.ItemClickListener
@@ -15,11 +18,6 @@ import kotlinx.coroutines.launch
 class ExplorePropertyViewModel : BaseViewModel(), ItemClickListener {
 
     companion object {
-        const val TYPE_CUSTOMER = 0
-        const val TYPE_BRAND = 1
-        const val TYPE_VEHICLE_TYPE = 2
-        const val TYPE_UNIT = 3
-
         const val KEY_PROPERTY_CUSTOMER = "keyPropertysCustomer"
         const val KEY_PROPERTY_BRAND = "keyPropertyBrand"
         const val KEY_PROPERTY_VEHICLE_TYPE = "keyPropertyVehicleType"
@@ -36,9 +34,9 @@ class ExplorePropertyViewModel : BaseViewModel(), ItemClickListener {
     private suspend fun getAllProperty(type: Int) {
         VolleyRepository.getI().requestAPI(
             when(type) {
-                TYPE_CUSTOMER -> RequestEndPoint.GET_ALL_CUSTOMERS
-                TYPE_BRAND -> RequestEndPoint.GET_ALL_BRANDS
-                TYPE_VEHICLE_TYPE -> RequestEndPoint.GET_ALL_VEHICLE_TYPES
+                PROPERTY_TYPE_CUSTOMER -> RequestEndPoint.GET_ALL_CUSTOMERS
+                PROPERTY_TYPE_BRAND -> RequestEndPoint.GET_ALL_BRANDS
+                PROPERTY_TYPE_VEHICLE_TYPE -> RequestEndPoint.GET_ALL_VEHICLE_TYPES
                 else -> RequestEndPoint.GET_ALL_UNITS
             },
             null,

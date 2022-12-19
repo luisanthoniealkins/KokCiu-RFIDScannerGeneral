@@ -20,4 +20,8 @@ object Constant {
 
     const val PRINTER_BT_ADDRESS = "66:32:26:32:44:45"
 
+    const val PROPERTY_TYPE_CUSTOMER = 0
+    const val PROPERTY_TYPE_BRAND = 1
+    const val PROPERTY_TYPE_VEHICLE_TYPE = 2
+    const val PROPERTY_TYPE_UNIT = 3
 }

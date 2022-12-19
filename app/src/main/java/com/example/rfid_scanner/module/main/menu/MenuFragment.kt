@@ -6,16 +6,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.example.rfid_scanner.databinding.FragmentMenuBinding
 import com.example.rfid_scanner.module.main.MainViewModel
-import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyViewModel.Companion.TYPE_BRAND
-import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyViewModel.Companion.TYPE_CUSTOMER
-import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyViewModel.Companion.TYPE_UNIT
-import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyViewModel.Companion.TYPE_VEHICLE_TYPE
 import com.example.rfid_scanner.module.main.scan.transaction.general.TransGeneralViewModel.Companion.BROKEN
 import com.example.rfid_scanner.module.main.scan.transaction.general.TransGeneralViewModel.Companion.CHECK_IN
 import com.example.rfid_scanner.module.main.scan.transaction.general.TransGeneralViewModel.Companion.CLEAR
 import com.example.rfid_scanner.module.main.scan.transaction.general.TransGeneralViewModel.Companion.GENERAL
 import com.example.rfid_scanner.module.main.scan.transaction.general.TransGeneralViewModel.Companion.RETURN
 import com.example.rfid_scanner.module.main.scan.transaction.general.TransGeneralViewModel.Companion.REUSE
+import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_BRAND
+import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_CUSTOMER
+import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_UNIT
+import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_VEHICLE_TYPE
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_OK
 import com.example.rfid_scanner.utils.custom.view.PasswordDialog
 import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
@@ -94,19 +94,19 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(),
         }
 
         btnAddEditCustomer.setOnClickListener {
-            navigateTo(MenuFragmentDirections.toExplorePropertyFragment(false, TYPE_CUSTOMER))
+            navigateTo(MenuFragmentDirections.toExplorePropertyFragment(false, PROPERTY_TYPE_CUSTOMER))
         }
 
         btnAddEditBrand.setOnClickListener {
-            navigateTo(MenuFragmentDirections.toExplorePropertyFragment(false, TYPE_BRAND))
+            navigateTo(MenuFragmentDirections.toExplorePropertyFragment(false, PROPERTY_TYPE_BRAND))
         }
 
         btnAddEditUnit.setOnClickListener {
-            navigateTo(MenuFragmentDirections.toExplorePropertyFragment(false, TYPE_UNIT))
+            navigateTo(MenuFragmentDirections.toExplorePropertyFragment(false, PROPERTY_TYPE_UNIT))
         }
 
         btnAddEditVehicleType.setOnClickListener {
-            navigateTo(MenuFragmentDirections.toExplorePropertyFragment(false, TYPE_VEHICLE_TYPE))
+            navigateTo(MenuFragmentDirections.toExplorePropertyFragment(false, PROPERTY_TYPE_VEHICLE_TYPE))
         }
 
         btnCustomPrint.setOnClickListener {

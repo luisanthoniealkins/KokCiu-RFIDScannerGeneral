@@ -13,9 +13,9 @@ import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropert
 import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyViewModel.Companion.KEY_PROPERTY_CUSTOMER
 import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyViewModel.Companion.KEY_PROPERTY_UNIT
 import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyViewModel.Companion.KEY_PROPERTY_VEHICLE_TYPE
-import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyViewModel.Companion.TYPE_BRAND
-import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyViewModel.Companion.TYPE_CUSTOMER
-import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyViewModel.Companion.TYPE_VEHICLE_TYPE
+import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_BRAND
+import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_CUSTOMER
+import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_VEHICLE_TYPE
 import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
 class ExplorePropertyFragment : BaseFragment<FragmentExploreBinding, ExplorePropertyViewModel>() {
@@ -33,9 +33,9 @@ class ExplorePropertyFragment : BaseFragment<FragmentExploreBinding, ExploreProp
     override fun setUpViews() = with(binding) {
         toolbar.inflateMenu(R.menu.menu_search)
         toolbar.title = when(viewModel.type) {
-            TYPE_CUSTOMER -> "Pilih Customer"
-            TYPE_BRAND -> "Pilih Merek"
-            TYPE_VEHICLE_TYPE -> "Pilih Tipe Kendaraan"
+            PROPERTY_TYPE_CUSTOMER -> "Pilih Customer"
+            PROPERTY_TYPE_BRAND -> "Pilih Merek"
+            PROPERTY_TYPE_VEHICLE_TYPE -> "Pilih Tipe Kendaraan"
             else -> "Pilih Unit"
         }
 
@@ -70,9 +70,9 @@ class ExplorePropertyFragment : BaseFragment<FragmentExploreBinding, ExploreProp
             if (searching) {
                 getNavController()?.previousBackStackEntry?.savedStateHandle?.set(
                     when (viewModel.type) {
-                        TYPE_CUSTOMER -> KEY_PROPERTY_CUSTOMER
-                        TYPE_BRAND -> KEY_PROPERTY_BRAND
-                        TYPE_VEHICLE_TYPE -> KEY_PROPERTY_VEHICLE_TYPE
+                        PROPERTY_TYPE_CUSTOMER -> KEY_PROPERTY_CUSTOMER
+                        PROPERTY_TYPE_BRAND -> KEY_PROPERTY_BRAND
+                        PROPERTY_TYPE_VEHICLE_TYPE -> KEY_PROPERTY_VEHICLE_TYPE
                         else -> KEY_PROPERTY_UNIT
                     },
                     it.getContentIfNotHandled()
