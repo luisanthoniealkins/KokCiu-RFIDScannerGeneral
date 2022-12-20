@@ -9,6 +9,7 @@ import com.example.rfid_scanner.data.model.StockRequirement
 import com.example.rfid_scanner.data.repository.VolleyRepository
 import com.example.rfid_scanner.data.repository.component.RequestEndPoint
 import com.example.rfid_scanner.data.repository.component.RequestResult
+import com.example.rfid_scanner.utils.custom.kclass.HandledEvent
 import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import com.example.rfid_scanner.utils.listener.ItemClickListener
 import kotlinx.coroutines.launch
@@ -22,20 +23,18 @@ class ExploreStockViewModel : BaseViewModel(), ItemClickListener {
     val exploreAdapter = ExploreStockAdapter(this)
     var searching = false
 
-    private val _selectedItem = MutableLiveData<Stock>()
-    val selectedItem : LiveData<Stock> = _selectedItem
+    private val _selectedItem = MutableLiveData<HandledEvent<Stock>>()
+    val selectedItem : LiveData<HandledEvent<Stock>> = _selectedItem
 
-    init {
-        viewModelScope.launch { getAllStocks() }
-    }
-
-    private suspend fun getAllStocks() {
-        VolleyRepository.getI().requestAPI(
-            RequestEndPoint.GET_ALL_STOCKS,
-            null,
-            RequestResult::getAllStocks
-        ).collect{ res ->
-            res.response?.data?.let { addStocks(it as List<StockRequirement>) }
+    fun getAllStocks() {
+        viewModelScope.launch {
+            VolleyRepository.getI().requestAPI(
+                RequestEndPoint.GET_ALL_STOCKS,
+                null,
+                RequestResult::getAllStocks
+            ).collect { res ->
+                res.response?.data?.let { addStocks(it as List<StockRequirement>) }
+            }
         }
     }
 
@@ -44,6 +43,6 @@ class ExploreStockViewModel : BaseViewModel(), ItemClickListener {
     }
 
     override fun onItemClick(item: Any) {
-        _selectedItem.postValue(item as Stock)
+        _selectedItem.postValue(HandledEvent(item as Stock))
     }
 }

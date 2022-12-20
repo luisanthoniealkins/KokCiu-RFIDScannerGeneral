@@ -7,7 +7,10 @@ import com.example.rfid_scanner.data.model.StockId
 import com.example.rfid_scanner.data.repository.VolleyRepository
 import com.example.rfid_scanner.data.repository.component.RequestEndPoint
 import com.example.rfid_scanner.data.repository.component.RequestResult
-import com.example.rfid_scanner.module.main.data.explore.stockId.ExploreStockIdAdapter.StockIdData
+import com.example.rfid_scanner.module.main.data.explore.stockId.adapter.ExploreStockIdAdapter
+import com.example.rfid_scanner.module.main.data.explore.stockId.adapter.ExploreStockIdAdapter.StockIdData
+import com.example.rfid_scanner.module.main.data.explore.stockId.adapter.QuantityAdapter.StockIdSelected
+import com.example.rfid_scanner.utils.custom.kclass.HandledEvent
 import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import com.example.rfid_scanner.utils.listener.ItemClickListener
 import kotlinx.coroutines.launch
@@ -21,36 +24,37 @@ class ExploreStockIdViewModel : BaseViewModel(), ItemClickListener {
     val exploreAdapter = ExploreStockIdAdapter(this)
     var searching = false
 
-    private val _selectedItem = MutableLiveData<StockId>()
-    val selectedItem : LiveData<StockId> = _selectedItem
+    private val _selectedItem = MutableLiveData<HandledEvent<StockIdSelected>>()
+    val selectedItem : LiveData<HandledEvent<StockIdSelected>> = _selectedItem
 
-    init {
-        viewModelScope.launch { getAllStockIds() }
-    }
-
-    private suspend fun getAllStockIds() {
-        VolleyRepository.getI().requestAPI(
-            RequestEndPoint.GET_ALL_STOCK_IDS,
-            null,
-            RequestResult::getAllStockIds
-        ).collect{ res ->
-            res.response?.data?.let { addStockIds(it as List<StockId>) }
+    fun getAllStockIds() {
+        viewModelScope.launch {
+            VolleyRepository.getI().requestAPI(
+                RequestEndPoint.GET_ALL_STOCK_IDS,
+                null,
+                RequestResult::getAllStockIds
+            ).collect{ res ->
+                res.response?.data?.let { addStockIds(it as List<StockId>) }
+            }
         }
     }
 
     private fun addStockIds(list: List<StockId>) {
         exploreAdapter.setStockIds(
+            !searching,
             list.groupBy {
                 it.stock.code
             }.map {
-                StockIdData(it.value[0].stock, it.value)
+                StockIdData(it.value.first().stock, it.value)
             }
         )
     }
 
     override fun onItemClick(item: Any) {
-        _selectedItem.postValue(item as StockId)
+        _selectedItem.postValue(HandledEvent(item as StockIdSelected))
     }
+
+
 
 
 }

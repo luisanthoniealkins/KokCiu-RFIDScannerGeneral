@@ -54,6 +54,7 @@ class PrintCheckoutFragment : BaseFragment<FragmentPrintCheckoutBinding, PrintCh
 
         if (isError) return
 
+        binding.btnPrint.isEnabled = false
         viewModel.printWithFormat(kodiCount.toInt())
     }
 

@@ -1,4 +1,4 @@
-package com.example.rfid_scanner.module.main.data.explore.stockId
+package com.example.rfid_scanner.module.main.data.explore.stockId.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.rfid_scanner.data.model.Stock
 import com.example.rfid_scanner.data.model.StockId
 import com.example.rfid_scanner.databinding.ItemExploreStockBinding
-import com.example.rfid_scanner.module.main.data.explore.stockId.child.QuantityAdapter
 import com.example.rfid_scanner.utils.extension.StringExt.hasPattern
 import com.example.rfid_scanner.utils.listener.ItemClickListener
 import com.example.rfid_scanner.utils.helper.TextHelper.emptyString
@@ -20,6 +19,7 @@ class ExploreStockIdAdapter(private val listener: ItemClickListener) :
     private var dataListFull = listOf<StockIdData>()
     private var dataList = listOf<StockIdData>()
     private var textFilter = ""
+    private var canAddNew = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ExploreStockIdVH(ItemExploreStockBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -31,7 +31,8 @@ class ExploreStockIdAdapter(private val listener: ItemClickListener) :
     override fun getItemCount() = if (textFilter.isEmpty()) dataListFull.size else dataList.size
 
 
-    fun setStockIds(stocks: List<StockIdData>) {
+    fun setStockIds(canAddNew: Boolean, stocks: List<StockIdData>) {
+        this.canAddNew = canAddNew
         dataListFull = stocks
         filter(textFilter)
     }
@@ -60,9 +61,9 @@ class ExploreStockIdAdapter(private val listener: ItemClickListener) :
             tvName.text = data.stock.name ?: emptyString()
             tvCode.text = data.stock.code
             tvType.text = data.stock.vehicleType
-            tvAvailableStock.text = ("${data.stock.availableStock} ${data.stock.unit}")
+            tvAvailableStock.text = "${data.stock.availableStock} ${data.stock.unit}"
             rvItem.layoutManager = GridLayoutManager(root.context, 4)
-            rvItem.adapter = QuantityAdapter(listener, data.stockIds.sortedBy { it.unitCount })
+            rvItem.adapter = QuantityAdapter(listener, data.stockIds.sortedBy { it.unitCount }, canAddNew)
         }
     }
 

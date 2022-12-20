@@ -3,8 +3,8 @@ package com.example.rfid_scanner.module.main.print.custom
 import android.os.Handler
 import android.os.Looper
 import com.example.rfid_scanner.service.BluetoothScannerService
+import com.example.rfid_scanner.service.StorageService
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BTE
-import com.example.rfid_scanner.utils.constant.Constant.PRINTER_BT_ADDRESS
 import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import com.example.rfid_scanner.utils.helper.TextHelper.emptyString
 
@@ -23,7 +23,7 @@ class PrintCustomViewModel : BaseViewModel() {
         showToast("Connecting to printer bluetooth")
 
         Handler(Looper.getMainLooper()).postDelayed({
-            mBluetoothScannerService.connectBluetooth(PRINTER_BT_ADDRESS, DEVICE_TYPE_BTE)
+            mBluetoothScannerService.connectBluetooth(StorageService.getI().printerMacAddress!!, DEVICE_TYPE_BTE)
         }, 1000)
     }
 

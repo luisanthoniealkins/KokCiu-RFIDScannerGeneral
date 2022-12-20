@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".module.main.data.alter.property.AlterPropertyFragment">
+    tools:context=".module.main.data.alter.stockId.AlterStockIdFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,7 +28,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            tools:text="Tambah Properti"
+            android:text="Tambah barang (Qty)"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/black"/>
@@ -45,16 +46,16 @@
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_code"
+            android:id="@+id/til_stock_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:hint="@string/kode"
+            android:hint="Kode Barang (Qty)"
             android:textColorHint="@color/black"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_code"
+                android:id="@+id/edt_stock_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapCharacters"
@@ -63,20 +64,21 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_name"
+            android:id="@+id/til_unit_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:hint="@string/nama"
+            android:hint="@string/jumlah_unit_per_item"
             android:textColorHint="@color/black"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_name"
+                android:id="@+id/edt_unit_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapCharacters"
-                android:textColor="@color/black" />
+                android:inputType="numberDecimal"
+                android:textColor="@color/black"
+                android:text="1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,6 +89,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@string/tambah" />
+        android:text="Tambah Barang (Qty)" />
 
 </LinearLayout>

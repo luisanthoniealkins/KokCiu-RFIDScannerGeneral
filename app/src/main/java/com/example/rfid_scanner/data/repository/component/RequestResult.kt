@@ -1,6 +1,5 @@
 package com.example.rfid_scanner.data.repository.component
 
-import android.util.Log
 import com.example.rfid_scanner.data.model.*
 import com.example.rfid_scanner.data.model.Transaction.*
 import com.example.rfid_scanner.data.model.Transaction.Companion.STATUS_HAPUS
@@ -15,7 +14,6 @@ import com.example.rfid_scanner.utils.helper.DateHelper
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.util.*
 
 object RequestResult {
 
@@ -299,6 +297,19 @@ object RequestResult {
             transactions.last().setQuantity(quantity)
         }
         result.data = transactions
+
+        return result
+    }
+
+    fun getStockCode(response: JSONObject): ResponseData {
+        val result = getGeneralResponse(response)
+
+        val obj = response.getJSONObject("data")
+        val brandCode = obj.getString("stock_brand_code")
+        val vehicleTypeCode = obj.getString("stock_vehicle_type_code")
+        val stockUnitCode = obj.getString("stock_unit_code")
+        val stock = Stock("-", "-", brandCode, vehicleTypeCode, stockUnitCode)
+        result.data = stock
 
         return result
     }

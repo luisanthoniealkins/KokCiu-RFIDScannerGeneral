@@ -65,26 +65,27 @@ class ExplorePropertyFragment : BaseFragment<FragmentExploreBinding, ExploreProp
     }
 
     override fun observeData() = with(viewModel) {
-        selectedItem.observeWithOwner {
-            if (it.hasBeenHandled) return@observeWithOwner
-            if (searching) {
-                getNavController()?.previousBackStackEntry?.savedStateHandle?.set(
-                    when (viewModel.type) {
-                        PROPERTY_TYPE_CUSTOMER -> KEY_PROPERTY_CUSTOMER
-                        PROPERTY_TYPE_BRAND -> KEY_PROPERTY_BRAND
-                        PROPERTY_TYPE_VEHICLE_TYPE -> KEY_PROPERTY_VEHICLE_TYPE
-                        else -> KEY_PROPERTY_UNIT
-                    },
-                    it.getContentIfNotHandled()
-                )
-                navigateBack()
-            } else {
-                navigateTo(
-                    ExplorePropertyFragmentDirections.toAlterPropertyFragment(
-                        viewModel.type,
-                        it.getContentIfNotHandled()
+        selectedItem.observeWithOwner { heGeneralProperty ->
+            heGeneralProperty.getContentIfNotHandled()?.let {
+                if (searching) {
+                    getNavController()?.previousBackStackEntry?.savedStateHandle?.set(
+                        when (viewModel.type) {
+                            PROPERTY_TYPE_CUSTOMER -> KEY_PROPERTY_CUSTOMER
+                            PROPERTY_TYPE_BRAND -> KEY_PROPERTY_BRAND
+                            PROPERTY_TYPE_VEHICLE_TYPE -> KEY_PROPERTY_VEHICLE_TYPE
+                            else -> KEY_PROPERTY_UNIT
+                        },
+                        it
                     )
-                )
+                    navigateBack()
+                } else {
+                    navigateTo(
+                        ExplorePropertyFragmentDirections.toAlterPropertyFragment(
+                            viewModel.type,
+                            it
+                        )
+                    )
+                }
             }
         }
     }

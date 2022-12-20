@@ -1,12 +1,15 @@
 package com.example.rfid_scanner.module.main.data.alter.property
 
+import android.content.DialogInterface
 import android.text.InputFilter
 import android.text.InputFilter.AllCaps
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.navArgs
 import com.example.rfid_scanner.R
 import com.example.rfid_scanner.data.model.GeneralProperty
+import com.example.rfid_scanner.data.repository.component.ResponseCode
 import com.example.rfid_scanner.databinding.FragmentAlterPropertyBinding
 import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_BRAND
 import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_CUSTOMER
@@ -48,8 +51,16 @@ class AlterPropertyFragment : BaseFragment<FragmentAlterPropertyBinding, AlterPr
         btnConfirm.text = prefix
         btnConfirm.setOnClickListener {
             validateInput()?.let {
-                binding.btnConfirm.isEnabled = false
-                viewModel.saveData(it)
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Konfirmasi")
+                    .setMessage("Apakah Anda yakin untuk menjalankan operasi?")
+                    .setPositiveButton("Ok") { _: DialogInterface?, _: Int ->
+                        binding.btnConfirm.isEnabled = false
+                        viewModel.saveData(it)
+                    }
+                    .setNegativeButton("Batal") { _: DialogInterface?, _: Int -> }
+                    .create()
+                    .show()
             }
         }
     }
@@ -67,12 +78,11 @@ class AlterPropertyFragment : BaseFragment<FragmentAlterPropertyBinding, AlterPr
 
     override fun observeData() = with(viewModel) {
         saveComplete.observeWithOwner {
-            if (it) navigateBack()
-            else binding.btnConfirm.isEnabled = true
+            if (it.code == ResponseCode.OK) navigateBack()
+            else {
+                binding.btnConfirm.isEnabled = true
+                showToast(it.message)
+            }
         }
     }
-
-
-
-
 }

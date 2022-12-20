@@ -178,5 +178,32 @@ object RequestParam {
         return obj
     }
 
+    fun addEditStockId(stockId: StockId): JSONObject {
+        val obj = JSONObject()
+        obj.put("stock_id", stockId.id)
+        obj.put("stock_code", stockId.stock.code)
+        obj.put("stock_unit_count", stockId.unitCount)
+        return obj
+    }
+
+    fun getStockCode(stockCode: String): JSONObject {
+        val obj = JSONObject()
+        obj.put("stock_code", stockCode)
+        return obj
+    }
+
+    fun addEditStock(stock: Stock): JSONObject {
+        val obj = JSONObject()
+
+        obj.put("stock_code", stock.code)
+        obj.put("stock_name", stock.name)
+        obj.put("stock_brand_code", stock.brand)
+        obj.put("stock_vehicle_type_code", stock.vehicleType)
+        obj.put("stock_unit_code", stock.unit)
+
+        return obj
+    }
+
+
 
 }

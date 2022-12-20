@@ -6,6 +6,12 @@ object TextHelper {
 
     fun emptyString() = ""
 
+    fun getIdFromCodeAndUnitCount(code: String, unitCount: Int): String {
+        return "$code#Q$unitCount"
+    }
 
+    fun getIdFromCodeAndUnitCount(code: String, unitCount: CharSequence?): String {
+        return "$code#Q$unitCount"
+    }
 
 }

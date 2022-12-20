@@ -1,6 +1,7 @@
 package com.example.rfid_scanner.module.main.data.explore.stockId
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.SearchView
@@ -9,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rfid_scanner.R
 import com.example.rfid_scanner.databinding.FragmentExploreBinding
+import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyFragmentDirections
 import com.example.rfid_scanner.module.main.data.explore.stockId.ExploreStockIdViewModel.Companion.KEY_STOCK_ID
 import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
@@ -21,9 +23,8 @@ class ExploreStockIdFragment : BaseFragment<FragmentExploreBinding, ExploreStock
 
     override fun retrieveArgs() {
         val args: ExploreStockIdFragmentArgs by navArgs()
-
         viewModel.searching = args.isSearching
-        binding.fabAdd.isVisible = !args.isSearching
+        viewModel.getAllStockIds()
     }
 
     override fun setUpViews() = with(binding) {
@@ -42,15 +43,24 @@ class ExploreStockIdFragment : BaseFragment<FragmentExploreBinding, ExploreStock
 
         rvItem.layoutManager = LinearLayoutManager(context)
         rvItem.adapter = viewModel.exploreAdapter
+
+        fabAdd.visibility = View.GONE
     }
 
     override fun observeData() = with(viewModel) {
         selectedItem.observeWithOwner {
-            if (searching) {
-                getNavController()?.previousBackStackEntry?.savedStateHandle?.set(KEY_STOCK_ID, listOf(it.id, it.stock.name))
-                navigateBack()
-            } else {
-
+            it.getContentIfNotHandled()?.let { stockIdSelected ->
+                if (searching) {
+                    getNavController()
+                        ?.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set(KEY_STOCK_ID, listOf(stockIdSelected.stockId.id, stockIdSelected.stockId.stock.name))
+                    navigateBack()
+                } else {
+                    navigateTo(
+                        ExploreStockIdFragmentDirections.toAlterStockIdFragment(stockIdSelected.stockId.stock.code)
+                    )
+                }
             }
         }
     }

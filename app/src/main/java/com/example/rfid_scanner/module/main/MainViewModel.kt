@@ -37,6 +37,9 @@ class MainViewModel : BaseViewModel() {
             R.id.qrReaderFragment,
             R.id.historyTransactionFragment,
             R.id.historyStockFragment,
+            R.id.alterStockIdFragment,
+            R.id.alterStockFragment,
+            R.id.settingsBluetoothFragment,
         )
 
         @RequiresApi(Build.VERSION_CODES.S)

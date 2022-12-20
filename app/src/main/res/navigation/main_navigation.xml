@@ -14,7 +14,7 @@
             android:id="@+id/to_BLEDeviceListFragment"
             app:destination="@id/deviceListFragment" />
         <action
-            android:id="@+id/to_networkSettingFragment"
+            android:id="@+id/to_settingNetworkFragment"
             app:destination="@id/networkSettingFragment" />
         <action
             android:id="@+id/to_tagScannerFragment"
@@ -29,7 +29,7 @@
             android:id="@+id/to_exploreStockIdFragment"
             app:destination="@id/exploreStockIdFragment" />
         <action
-            android:id="@+id/to_transSettingFragment"
+            android:id="@+id/to_settingTransFragment"
             app:destination="@id/transSettingFragment" />
         <action
             android:id="@+id/to_explorePropertyFragment"
@@ -58,6 +58,9 @@
         <action
             android:id="@+id/to_historyStockFragment"
             app:destination="@id/historyStockFragment" />
+        <action
+            android:id="@+id/to_settingsBluetoothFragment"
+            app:destination="@id/settingsBluetoothFragment" />
     </fragment>
 
     <fragment
@@ -100,6 +103,9 @@
         <argument
             android:name="isSearching"
             app:argType="boolean" />
+        <action
+            android:id="@+id/to_alterStockIdFragment"
+            app:destination="@id/alterStockIdFragment" />
     </fragment>
     <fragment
         android:id="@+id/transSettingFragment"
@@ -171,6 +177,9 @@
         <argument
             android:name="isSearching"
             app:argType="boolean" />
+        <action
+            android:id="@+id/to_alterStockFragment"
+            app:destination="@id/alterStockFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsTagFragment"
@@ -205,5 +214,47 @@
             android:id="@+id/to_exploreStockFragment3"
             app:destination="@id/exploreStockFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/alterStockIdFragment"
+        android:name="com.example.rfid_scanner.module.main.data.alter.stockId.AlterStockIdFragment"
+        android:label="fragment_alter_stock_id"
+        tools:layout="@layout/fragment_alter_stock_id" >
+        <argument
+            android:name="stockCode"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/alterStockFragment"
+        android:name="com.example.rfid_scanner.module.main.data.alter.stock.AlterStockFragment"
+        android:label="fragment_alter_stock"
+        tools:layout="@layout/fragment_alter_stock" >
+        <argument android:name="stockCode"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="stockName"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="stockBrand"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="stockVehicleType"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="stockUnit"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/to_explorePropertyFragment"
+            app:destination="@id/explorePropertyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsBluetoothFragment"
+        android:name="com.example.rfid_scanner.module.main.settings.bluetooth.SettingsBluetoothFragment"
+        android:label="fragment_settings_bluetooth"
+        tools:layout="@layout/fragment_settings_bluetooth" />
 
 </navigation>

@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rfid_scanner.R
 import com.example.rfid_scanner.databinding.FragmentExploreBinding
+import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyFragmentDirections
 import com.example.rfid_scanner.module.main.data.explore.stock.ExploreStockViewModel.Companion.KEY_STOCK
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.qr_reader.QRReaderViewModel
 import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
@@ -23,9 +24,8 @@ class ExploreStockFragment : BaseFragment<FragmentExploreBinding, ExploreStockVi
 
     override fun retrieveArgs() {
         val args: ExploreStockFragmentArgs by navArgs()
-
         viewModel.searching = args.isSearching
-        binding.fabAdd.isVisible = !args.isSearching
+        viewModel.getAllStocks()
     }
 
     override fun setUpViews(): Unit = with(binding) {
@@ -45,22 +45,40 @@ class ExploreStockFragment : BaseFragment<FragmentExploreBinding, ExploreStockVi
         rvItem.layoutManager = LinearLayoutManager(context)
         rvItem.adapter = viewModel.exploreAdapter
 
+        fabAdd.isVisible = !viewModel.searching
+        fabAdd.setOnClickListener {
+            navigateTo(ExploreStockFragmentDirections.toAlterStockFragment(
+                null,
+                null,
+                null,
+                null,
+                null,
+            ))
+        }
+
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                getNavController()?.previousBackStackEntry?.savedStateHandle?.set(
-                    KEY_STOCK, null)
+                getNavController()?.previousBackStackEntry?.savedStateHandle?.set(KEY_STOCK, null)
                 navigateBack()
             }
         })
     }
 
     override fun observeData() = with(viewModel) {
-        selectedItem.observeWithOwner {
-            if (searching) {
-                getNavController()?.previousBackStackEntry?.savedStateHandle?.set(KEY_STOCK, listOf(it.code, it.name))
-                navigateBack()
-            } else {
-
+        selectedItem.observeWithOwner { heStock ->
+            heStock.getContentIfNotHandled()?.let {
+                if (searching) {
+                    getNavController()?.previousBackStackEntry?.savedStateHandle?.set(KEY_STOCK, listOf(it.code, it.name))
+                    navigateBack()
+                } else {
+                    navigateTo(ExploreStockFragmentDirections.toAlterStockFragment(
+                        it.code,
+                        it.name,
+                        it.brand,
+                        it.vehicleType,
+                        it.unit,
+                    ))
+                }
             }
         }
     }

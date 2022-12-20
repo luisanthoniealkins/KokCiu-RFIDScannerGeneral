@@ -446,6 +446,12 @@
                         android:layout_height="wrap_content"
                         android:text="Transaksi"/>
 
+                    <Button
+                        android:id="@+id/btn_settings_bluetooth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Bluetooth"/>
+
                 </LinearLayout>
 
             </LinearLayout>

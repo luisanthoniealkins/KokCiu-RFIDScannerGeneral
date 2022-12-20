@@ -4,12 +4,15 @@ import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.rfid_scanner.data.model.Bill
 import com.example.rfid_scanner.service.BluetoothScannerService
+import com.example.rfid_scanner.service.StorageService
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BTE
-import com.example.rfid_scanner.utils.constant.Constant.PRINTER_BT_ADDRESS
 import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import com.example.rfid_scanner.utils.helper.TextHelper.emptyString
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PrintCheckoutViewModel : BaseViewModel() {
 
@@ -31,7 +34,7 @@ class PrintCheckoutViewModel : BaseViewModel() {
         showToast("Connecting to printer bluetooth")
 
         Handler(Looper.getMainLooper()).postDelayed({
-            mBluetoothScannerService.connectBluetooth(PRINTER_BT_ADDRESS, DEVICE_TYPE_BTE)
+            mBluetoothScannerService.connectBluetooth(StorageService.getI().printerMacAddress!!, DEVICE_TYPE_BTE)
         }, 1000)
     }
 
@@ -54,8 +57,13 @@ class PrintCheckoutViewModel : BaseViewModel() {
                 getPrintFormat("NO  : ", bills.map { it.billCode }) +
                 footer
 
-        repeat(packageCount) { mBluetoothScannerService.sendCustomMessage(str) }
-        _lvTaskFinished.postValue(true)
+        viewModelScope.launch {
+            repeat(packageCount) {
+                mBluetoothScannerService.sendCustomMessage(str)
+                delay(200)
+            }
+            _lvTaskFinished.postValue(true)
+        }
     }
 
     private fun getPrintFormat(headerType: String, content: List<String>): String{

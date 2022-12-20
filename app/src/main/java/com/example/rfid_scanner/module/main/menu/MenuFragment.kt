@@ -114,15 +114,19 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(),
         }
 
         btnSettingsNetwork.setOnClickListener {
-            navigateTo(MenuFragmentDirections.toNetworkSettingFragment())
+            navigateTo(MenuFragmentDirections.toSettingNetworkFragment())
         }
 
         btnSettingsTrans.setOnClickListener {
-            navigateTo(MenuFragmentDirections.toTransSettingFragment())
+            navigateTo(MenuFragmentDirections.toSettingTransFragment())
         }
 
         btnSettingsTag.setOnClickListener {
             navigateTo(MenuFragmentDirections.toSettingsTagFragment())
+        }
+
+        btnSettingsBluetooth.setOnClickListener {
+            navigateTo(MenuFragmentDirections.toSettingsBluetoothFragment())
         }
     }
 

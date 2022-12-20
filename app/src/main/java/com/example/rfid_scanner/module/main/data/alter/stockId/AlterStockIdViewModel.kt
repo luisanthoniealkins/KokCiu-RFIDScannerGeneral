@@ -1,13 +1,15 @@
-package com.example.rfid_scanner.module.main.data.alter.property
+package com.example.rfid_scanner.module.main.data.alter.stockId
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.rfid_scanner.data.model.GeneralProperty
+import com.example.rfid_scanner.data.model.StockId
 import com.example.rfid_scanner.data.model.repository.MResponse
 import com.example.rfid_scanner.data.repository.VolleyRepository
 import com.example.rfid_scanner.data.repository.component.RequestEndPoint.Companion.ADD_BRAND
 import com.example.rfid_scanner.data.repository.component.RequestEndPoint.Companion.ADD_CUSTOMER
+import com.example.rfid_scanner.data.repository.component.RequestEndPoint.Companion.ADD_STOCK_ID
 import com.example.rfid_scanner.data.repository.component.RequestEndPoint.Companion.ADD_UNIT
 import com.example.rfid_scanner.data.repository.component.RequestEndPoint.Companion.ADD_VEHICLE_TYPE
 import com.example.rfid_scanner.data.repository.component.RequestEndPoint.Companion.EDIT_BRAND
@@ -23,46 +25,23 @@ import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_VEHICLE_TY
 import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import kotlinx.coroutines.launch
 
-class AlterPropertyViewModel : BaseViewModel() {
+class AlterStockIdViewModel : BaseViewModel() {
 
-    var type: Int = 0
-    var property: GeneralProperty? = null
-    var isCreate = false
+    var stockCode: String = ""
 
     private val _saveComplete = MutableLiveData<MResponse.ResponseData>()
     val saveComplete: LiveData<MResponse.ResponseData> = _saveComplete
 
-    fun setMode(type: Int, property: GeneralProperty?) {
-        this.type = type
-        this.property = property
-        isCreate = (property == null)
-    }
-
-    fun saveData(generalProperty: GeneralProperty) {
-        val endpoint = if (isCreate) {
-            when(type) {
-                PROPERTY_TYPE_CUSTOMER -> ADD_CUSTOMER
-                PROPERTY_TYPE_BRAND -> ADD_BRAND
-                PROPERTY_TYPE_VEHICLE_TYPE -> ADD_VEHICLE_TYPE
-                else -> ADD_UNIT
-            }
-        } else {
-            when(type) {
-                PROPERTY_TYPE_CUSTOMER -> EDIT_CUSTOMER
-                PROPERTY_TYPE_BRAND -> EDIT_BRAND
-                PROPERTY_TYPE_VEHICLE_TYPE -> EDIT_VEHICLE_TYPE
-                else -> EDIT_UNIT
-            }
-        }
-
+    fun saveData(it: StockId) {
         viewModelScope.launch {
             VolleyRepository.getI().requestAPI(
-                endpoint,
-                RequestParam.addEditGeneralProperty(generalProperty),
+                ADD_STOCK_ID,
+                RequestParam.addEditStockId(it),
                 RequestResult::getGeneralResponse
             ).collect{ res ->
                 res.response?.let { _saveComplete.postValue(it) }
             }
         }
     }
+
 }

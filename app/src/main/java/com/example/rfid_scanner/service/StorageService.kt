@@ -17,6 +17,7 @@ class StorageService(private val context: Context) {
         private const val SP_MIN_EPC_LENGTH = "sp_min_epc_length"
         private const val SP_MAX_EPC_LENGTH = "sp_max_epc_length"
         private const val SP_EPC_DIFF_TOLERANCE = "sp_epc_diff_tolerance"
+        private const val SP_PRINTER_MAC_ADDRESS = "sp_printer_mac_address"
 
         @SuppressLint("StaticFieldLeak")
         var mInstance: StorageService? = null
@@ -66,6 +67,10 @@ class StorageService(private val context: Context) {
     var epcDiffTolerance
         set(value) { putInt(SP_EPC_DIFF_TOLERANCE, value) }
         get() = getInt(SP_EPC_DIFF_TOLERANCE, 3)
+
+    var printerMacAddress
+        set(value) { getPref().edit().putString(SP_PRINTER_MAC_ADDRESS, value).apply() }
+        get() = getPref().getString(SP_PRINTER_MAC_ADDRESS, "66:32:26:32:44:45")
 
     fun setStatusChecked(from: String, to: String, isChecked: Boolean) {
         val st = "${from}>${to}"
