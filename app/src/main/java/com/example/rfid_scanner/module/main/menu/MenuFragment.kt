@@ -77,6 +77,10 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(),
             navigateTo(MenuFragmentDirections.toCheckRoomFragment())
         }
 
+        btnCheckTagDetail.setOnClickListener {
+            navigateTo(MenuFragmentDirections.toCheckTagDetailFragment(null))
+        }
+
         btnHistoryTransaction.setOnClickListener {
             navigateTo(MenuFragmentDirections.toHistoryTransactionFragment())
         }

@@ -25,16 +25,8 @@ class TagScannerFragment : ScanFragment<FragmentTagScannerBinding, TagScannerVie
     }
 
     override fun observeData() = with(viewModel) {
-        tagCount.observe(viewLifecycleOwner, { binding.tvTagCount.text = ("$it tag") })
+        tagCount.observeWithOwner { binding.tvTagCount.text = "$it tag" }
 
-        scanStatus.observe(viewLifecycleOwner, { updateUIButton(it) })
+        scanStatus.observeWithOwner { updateUIButton(it) }
     }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.mBluetoothScannerService.stopScan()
-    }
-
-
-
 }

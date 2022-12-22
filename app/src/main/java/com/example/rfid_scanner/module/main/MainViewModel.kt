@@ -40,6 +40,7 @@ class MainViewModel : BaseViewModel() {
             R.id.alterStockIdFragment,
             R.id.alterStockFragment,
             R.id.settingsBluetoothFragment,
+            R.id.transactionRFIDFragment
         )
 
         @RequiresApi(Build.VERSION_CODES.S)

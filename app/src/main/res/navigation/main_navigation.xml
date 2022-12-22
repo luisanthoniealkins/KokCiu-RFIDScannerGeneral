@@ -61,6 +61,9 @@
         <action
             android:id="@+id/to_settingsBluetoothFragment"
             app:destination="@id/settingsBluetoothFragment" />
+        <action
+            android:id="@+id/to_checkTagDetailFragment"
+            app:destination="@id/checkTagDetailFragment" />
     </fragment>
 
     <fragment
@@ -190,7 +193,11 @@
         android:id="@+id/historyTransactionFragment"
         android:name="com.example.rfid_scanner.module.main.history.transaction.HistoryTransactionFragment"
         android:label="fragment_history_transaction"
-        tools:layout="@layout/fragment_history_transaction" />
+        tools:layout="@layout/fragment_history_transaction" >
+        <action
+            android:id="@+id/to_transactionRFIDFragment"
+            app:destination="@id/transactionRFIDFragment" />
+    </fragment>
     <fragment
         android:id="@+id/printCustomFragment"
         android:name="com.example.rfid_scanner.module.main.print.custom.PrintCustomFragment"
@@ -213,6 +220,9 @@
         <action
             android:id="@+id/to_exploreStockFragment3"
             app:destination="@id/exploreStockFragment" />
+        <action
+            android:id="@+id/to_transactionRFIDFragment"
+            app:destination="@id/transactionRFIDFragment" />
     </fragment>
     <fragment
         android:id="@+id/alterStockIdFragment"
@@ -256,5 +266,23 @@
         android:name="com.example.rfid_scanner.module.main.settings.bluetooth.SettingsBluetoothFragment"
         android:label="fragment_settings_bluetooth"
         tools:layout="@layout/fragment_settings_bluetooth" />
+    <fragment
+        android:id="@+id/checkTagDetailFragment"
+        android:name="com.example.rfid_scanner.module.main.scan.non_transaction.check_detail.CheckTagDetailFragment"
+        android:label="fragment_check_tag_detail"
+        tools:layout="@layout/fragment_check_tag_detail" >
+        <argument android:name="searchTag"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/transactionRFIDFragment"
+        android:name="com.example.rfid_scanner.module.main.data.info.transaction_rfid.TransactionRFIDFragment"
+        android:label="TransactionRFIDFragment"
+        tools:layout="@layout/fragment_explore" >
+        <argument
+            android:name="transactionCode"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

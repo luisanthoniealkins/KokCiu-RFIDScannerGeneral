@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="chip_transactions" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginHorizontal">4dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="rippleColor">@color/white</item>
+        <item name="chipStrokeColor">#55000000</item>
+        <item name="chipStrokeWidth">2dp</item>
+    </style>
+
+</resources>

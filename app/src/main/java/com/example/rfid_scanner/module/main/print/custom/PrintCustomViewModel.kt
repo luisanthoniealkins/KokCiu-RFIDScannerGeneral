@@ -24,7 +24,7 @@ class PrintCustomViewModel : BaseViewModel() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             mBluetoothScannerService.connectBluetooth(StorageService.getI().printerMacAddress!!, DEVICE_TYPE_BTE)
-        }, 1000)
+        }, 250)
     }
 
     fun print(text: String) {
@@ -38,7 +38,7 @@ class PrintCustomViewModel : BaseViewModel() {
         showToast("Reconnecting to previous bluetooth")
         Handler(Looper.getMainLooper()).postDelayed({
             mBluetoothScannerService.connectBluetooth(previousConnectedAddress, previousConnectedType)
-        }, 1000)
+        }, 250)
     }
 
 }

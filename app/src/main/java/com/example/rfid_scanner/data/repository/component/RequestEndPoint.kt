@@ -39,6 +39,7 @@ class RequestEndPoint {
         const val GET_ALL_STOCK_IDS = "getAllStockIds"
         const val REUSE_TAG = "reuseTag" // DEPRECATED
         const val TRANSACTION_GENERAL = "transactionGeneral"
+        const val GET_TRANSACTION_RFIDS = "getTransactionRFIDS"
     }
 
 }

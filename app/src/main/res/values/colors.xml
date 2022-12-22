@@ -8,8 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="gray3">#ededed</color>
     <color name="gray2">#757575</color>
+    <color name="gray3">#ededed</color>
     <color name="blue2">#2398bc</color>
     <color name="green_connect">#3cb027</color>
     <color name="red_disconnect">#b00020</color>
@@ -34,6 +34,7 @@
     <color name="light_gray_item_transaction_clear">#bdbdbd</color>
     <color name="light_yellow_item_transaction_adjust">#ffee58</color>
     <color name="lighter_gray_item_transaction_default">#99f5f5f5</color>
+    <color name="blue_gray_item_transaction_other">#78909c</color>
 
     <color name="green_item_ok">#9AE66E</color>
     <color name="red_item_error">#ff867c</color>
@@ -51,4 +52,7 @@
     <color name="gray_default_text_color">#808080</color>
 
     <color name="dark_gray_bluetooth_device_item_non_main">#eeeeee</color>
+
+    <color name="dark_gray_default_boundary_color">#616161</color>
+
 </resources>

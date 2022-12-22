@@ -31,18 +31,26 @@ class ExplorePropertyViewModel : BaseViewModel(), ItemClickListener {
     private val _selectedItem = MutableLiveData<HandledEvent<GeneralProperty>>()
     val selectedItem : LiveData<HandledEvent<GeneralProperty>> = _selectedItem
 
-    private suspend fun getAllProperty(type: Int) {
-        VolleyRepository.getI().requestAPI(
-            when(type) {
-                PROPERTY_TYPE_CUSTOMER -> RequestEndPoint.GET_ALL_CUSTOMERS
-                PROPERTY_TYPE_BRAND -> RequestEndPoint.GET_ALL_BRANDS
-                PROPERTY_TYPE_VEHICLE_TYPE -> RequestEndPoint.GET_ALL_VEHICLE_TYPES
-                else -> RequestEndPoint.GET_ALL_UNITS
-            },
-            null,
-            RequestResult::getAllGeneralProperties
-        ).collect{ res ->
-            res.response?.data?.let { addProperties(it as List<GeneralProperty>) }
+    fun setMode(searching: Boolean, type: Int) {
+        this.searching = searching
+        this.type = type
+        getAllProperty(type)
+    }
+
+    private fun getAllProperty(type: Int) {
+        viewModelScope.launch {
+            VolleyRepository.getI().requestAPI(
+                when(type) {
+                    PROPERTY_TYPE_CUSTOMER -> RequestEndPoint.GET_ALL_CUSTOMERS
+                    PROPERTY_TYPE_BRAND -> RequestEndPoint.GET_ALL_BRANDS
+                    PROPERTY_TYPE_VEHICLE_TYPE -> RequestEndPoint.GET_ALL_VEHICLE_TYPES
+                    else -> RequestEndPoint.GET_ALL_UNITS
+                },
+                null,
+                RequestResult::getAllGeneralProperties
+            ).collect{ res ->
+                res.response?.data?.let { addProperties(it as List<GeneralProperty>) }
+            }
         }
     }
 
@@ -54,11 +62,7 @@ class ExplorePropertyViewModel : BaseViewModel(), ItemClickListener {
         _selectedItem.postValue(HandledEvent(item as GeneralProperty))
     }
 
-    fun setMode(searching: Boolean, type: Int) {
-        this.searching = searching
-        this.type = type
-        viewModelScope.launch { getAllProperty(type) }
-    }
+
 
 
 }

@@ -3,140 +3,155 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Tanggal"
-        android:orientation="horizontal">
-
-        <AutoCompleteTextView
-            android:id="@+id/actv_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:backgroundTint="@color/white"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    tools:context=".module.main.history.stock.fragment.transaction.HistoryStockTransactionFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="4dp"
-        android:layout_marginBottom="-8dp">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="8dp"
+        android:layout_marginTop="4dp">
 
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:id="@+id/chip_check_in"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:checked="true"
-            android:text="Masuk"
-            android:textAlignment="center"
-            android:layout_marginHorizontal="4dp"
-            app:chipBackgroundColor="@color/bg_chip_state_list_green"
-            app:rippleColor="@color/white"
-            app:chipStrokeColor="#55000000"
-            app:chipStrokeWidth="2dp"
-            android:textColor="@color/black" />
+            android:hint="Tanggal"
+            android:orientation="horizontal">
 
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:id="@+id/chip_check_out"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="Keluar"
-            android:textAlignment="center"
-            android:layout_marginHorizontal="4dp"
-            app:chipBackgroundColor="@color/bg_chip_state_list_red"
-            app:rippleColor="@color/white"
-            app:chipStrokeColor="#55000000"
-            app:chipStrokeWidth="2dp"
-            android:textColor="@color/black" />
+            <AutoCompleteTextView
+                android:id="@+id/actv_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textColor="@color/black"
+                android:textStyle="bold"/>
 
-        <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:id="@+id/chip_return"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="Retur"
-            android:textAlignment="center"
-            android:layout_marginHorizontal="4dp"
-            app:chipBackgroundColor="@color/bg_chip_state_list_blue"
-            app:rippleColor="@color/white"
-            app:chipStrokeColor="#55000000"
-            app:chipStrokeWidth="2dp"
-            android:textColor="@color/black" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            style="?attr/materialButtonOutlinedStyle"
+            android:id="@+id/btn_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Filter"
+            android:layout_marginStart="8dp"
+            android:insetBottom="0dp"
+            android:insetTop="5dp"
+            android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
+            android:drawableTint="@color/dark_gray_default_boundary_color"
+            android:textColor="@color/dark_gray_default_boundary_color"/>
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_chip_container_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="4dp">
+        android:paddingHorizontal="4dp"
+        android:layout_marginBottom="-8dp"
+        android:visibility="gone">
 
         <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/chip_transactions"
+            android:id="@+id/chip_check_in"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Masuk"
+            app:chipBackgroundColor="@color/bg_chip_state_list_green" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/chip_transactions"
+            android:id="@+id/chip_check_out"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Keluar"
+            app:chipBackgroundColor="@color/bg_chip_state_list_red" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/chip_transactions"
+            android:id="@+id/chip_return"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Retur"
+            app:chipBackgroundColor="@color/bg_chip_state_list_blue" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_chip_container_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="4dp"
+        android:layout_marginBottom="-8dp"
+        android:visibility="gone">
+
+        <com.google.android.material.chip.Chip
+            style="@style/chip_transactions"
             android:id="@+id/chip_broken"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:checked="true"
             android:text="Rusak"
-            android:textAlignment="center"
-            android:layout_marginHorizontal="4dp"
-            app:chipBackgroundColor="@color/bg_chip_state_list_brown"
-            app:rippleColor="@color/white"
-            app:chipStrokeColor="#55000000"
-            app:chipStrokeWidth="2dp"
-            android:textColor="@color/black" />
+            app:chipBackgroundColor="@color/bg_chip_state_list_brown" />
 
         <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/chip_transactions"
             android:id="@+id/chip_clear"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:checked="true"
             android:text="Hapus"
-            android:textAlignment="center"
-            android:layout_marginHorizontal="4dp"
-            app:chipBackgroundColor="@color/bg_chip_state_list_gray"
-            app:rippleColor="@color/white"
-            app:chipStrokeColor="#55000000"
-            app:chipStrokeWidth="2dp"
-            android:textColor="@color/black" />
+            app:chipBackgroundColor="@color/bg_chip_state_list_gray" />
 
         <com.google.android.material.chip.Chip
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+            style="@style/chip_transactions"
             android:id="@+id/chip_adjustment"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:checked="true"
             android:text="Penyesuaian"
-            android:textAlignment="center"
-            android:layout_marginHorizontal="4dp"
-            app:chipBackgroundColor="@color/bg_chip_state_list_yellow"
-            app:rippleColor="@color/white"
-            app:chipStrokeColor="#55000000"
-            app:chipStrokeWidth="2dp"
-            android:textColor="@color/black" />
+            app:chipBackgroundColor="@color/bg_chip_state_list_yellow" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_chip_container_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="4dp"
+        android:visibility="gone">
+
+        <com.google.android.material.chip.Chip
+            style="@style/chip_transactions"
+            android:id="@+id/chip_others"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:checked="false"
+            android:text="Tambahan"
+            app:chipBackgroundColor="@color/bg_chip_state_list_blue_gray" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_margin="6dp"/>
 
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/dv_filter"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_item"

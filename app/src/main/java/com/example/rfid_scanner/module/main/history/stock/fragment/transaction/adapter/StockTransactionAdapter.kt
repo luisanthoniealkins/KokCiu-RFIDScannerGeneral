@@ -52,7 +52,8 @@ class StockTransactionAdapter(
         _return: Boolean,
         broken: Boolean,
         clear: Boolean,
-        adjust: Boolean
+        adjust: Boolean,
+        other: Boolean
     ) {
         checkedStatus[Transaction.STATUS_MASUK] = checkIn
         checkedStatus[Transaction.STATUS_KELUAR] = checkOut
@@ -60,8 +61,8 @@ class StockTransactionAdapter(
         checkedStatus[Transaction.STATUS_RUSAK] = broken
         checkedStatus[Transaction.STATUS_HAPUS] = clear
         checkedStatus[Transaction.STATUS_PENYESUAIAN] = adjust
-        checkedStatus[Transaction.STATUS_PAKAI_ULANG] = false
-        checkedStatus[Transaction.STATUS_CUSTOM] = false
+        checkedStatus[Transaction.STATUS_PAKAI_ULANG] = other
+        checkedStatus[Transaction.STATUS_CUSTOM] = other
         refresh()
     }
 
@@ -91,7 +92,7 @@ class StockTransactionAdapter(
                         Transaction.STATUS_RUSAK -> R.color.light_brown_item_transaction_broken
                         Transaction.STATUS_HAPUS -> R.color.light_gray_item_transaction_clear
                         Transaction.STATUS_PENYESUAIAN -> R.color.light_yellow_item_transaction_adjust
-                        else -> R.color.design_default_color_background
+                        else -> R.color.blue_gray_item_transaction_other
                     }, null
                 )
             )

@@ -15,10 +15,12 @@ import java.util.*
 
 class HistoryStockTransactionViewModel : BaseViewModel() {
 
+    val adapter = StockTransactionAdapter(mutableListOf())
+
+    var showFilterList = false
+
     private val _lvTransactionDates = MutableLiveData<List<String>>()
     val lvTransactionDates : LiveData<List<String>> = _lvTransactionDates
-
-    val adapter = StockTransactionAdapter(mutableListOf())
 
     private lateinit var currentStockCode: String
 

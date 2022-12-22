@@ -1,7 +1,6 @@
 package com.example.rfid_scanner.module.main.history.transaction.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,12 +16,14 @@ import com.example.rfid_scanner.data.model.Transaction.CheckOut
 import com.example.rfid_scanner.databinding.ItemTransactionBinding
 import com.example.rfid_scanner.utils.app.App
 import com.example.rfid_scanner.utils.extension.StringExt.hasLowerCaseSubsequence
+import com.example.rfid_scanner.utils.extension.StringExt.hasPattern
 import com.example.rfid_scanner.utils.helper.DateHelper
-import com.example.rfid_scanner.utils.helper.LogHelper
+import com.example.rfid_scanner.utils.listener.ItemClickListener
 import java.util.*
 
 class TransactionAdapter(
     var mTransactionsFull: List<Transaction>,
+    var listener: ItemClickListener
 ): RecyclerView.Adapter<TransactionAdapter.TransactionHolder>(), Filterable {
 
     private var mTransactions = mutableListOf<Transaction>()
@@ -54,7 +55,8 @@ class TransactionAdapter(
         _return: Boolean,
         broken: Boolean,
         clear: Boolean,
-        adjust: Boolean
+        adjust: Boolean,
+        other: Boolean
     ) {
         checkedStatus[Transaction.STATUS_MASUK] = checkIn
         checkedStatus[Transaction.STATUS_KELUAR] = checkOut
@@ -62,8 +64,8 @@ class TransactionAdapter(
         checkedStatus[Transaction.STATUS_RUSAK] = broken
         checkedStatus[Transaction.STATUS_HAPUS] = clear
         checkedStatus[Transaction.STATUS_PENYESUAIAN] = adjust
-        checkedStatus[Transaction.STATUS_PAKAI_ULANG] = false
-        checkedStatus[Transaction.STATUS_CUSTOM] = false
+        checkedStatus[Transaction.STATUS_PAKAI_ULANG] = other
+        checkedStatus[Transaction.STATUS_CUSTOM] = other
         refresh()
     }
 
@@ -76,22 +78,28 @@ class TransactionAdapter(
             val filteredList: MutableList<Transaction> = ArrayList()
             textFilter = ""
             for (tr in mTransactionsFull) {
-                LogHelper.postLog(tr.type.toString())
                 if (!checkedStatus[tr.type]!!) continue
                 if (constraint.isNotEmpty()) {
                     val filterPattern =
                         constraint.toString().lowercase(Locale.getDefault()).trim { it <= ' ' }
                     textFilter = filterPattern.lowercase(Locale.getDefault())
-                    var ok = false
-                    if (tr.code!!.lowercase(Locale.getDefault()).hasLowerCaseSubsequence(textFilter)) ok = true
-                    if (tr.getFormattedDate("yyyy-MM-dd / hh:mm").lowercase(Locale.getDefault()).hasLowerCaseSubsequence(textFilter)) ok = true
-                    if (tr.type == Transaction.STATUS_KELUAR && (tr as CheckOut).customer.hasLowerCaseSubsequence(textFilter)) ok = true
-                    if (!ok) continue
+
+                    var match = false
+                    if ((tr.code!!.lowercase(Locale.getDefault()).hasLowerCaseSubsequence(textFilter)) ||
+                        (tr.getFormattedDate("yyyy-MM-dd / hh:mm").hasLowerCaseSubsequence(textFilter)) ||
+                        (tr.type == Transaction.STATUS_KELUAR && (tr as CheckOut).customer.hasLowerCaseSubsequence(textFilter))
+                    ) match = true
+
+                    tr.getDetails().map {
+                        val str = "${it.stockName} ${it.stockCode} ${it.stockVehicleType}"
+                        if (str.hasPattern(textFilter)) match = true
+                        if (match) return@map
+                    }
+
+                    if (!match) continue
                 }
                 filteredList.add(tr)
             }
-            LogHelper.postLog("halo")
-            LogHelper.postLog(filteredList.toString())
             val results = FilterResults()
             results.values = filteredList
             return results
@@ -100,11 +108,6 @@ class TransactionAdapter(
         @SuppressLint("NotifyDataSetChanged")
         override fun publishResults(constraint: CharSequence, results: FilterResults) {
             mTransactions.clear()
-
-            LogHelper.postLog(results.values.toString())
-//            if (results.values as kotlin.collections.List<> )
-
-
             mTransactions.addAll(results.values as List<Transaction>)
             notifyDataSetChanged()
         }
@@ -123,23 +126,33 @@ class TransactionAdapter(
         fun bind(data: Transaction) = with(binding){
             tvCode.text = data.code
             tvDate.text = DateHelper.getFormattedDateTime("yyyy-MM-dd / hh:mm", data.date!!)
-            llCustomer.visibility = View.GONE
-            var color: Int = R.color.design_default_color_background
-            when (data.type) {
-                Transaction.STATUS_MASUK -> color = R.color.green_item_transaction_check_in
-                Transaction.STATUS_KELUAR -> {
-                    llCustomer.visibility = View.VISIBLE
-                    tvCustomer.text = (data as CheckOut).customer
-                    color = R.color.light_red_transaction_check_out
-                }
-                Transaction.STATUS_RETUR -> color = R.color.blue_item_transaction_return
-                Transaction.STATUS_RUSAK -> color = R.color.light_brown_item_transaction_broken
-                Transaction.STATUS_HAPUS -> color = R.color.light_gray_item_transaction_clear
-                Transaction.STATUS_PENYESUAIAN -> color = R.color.light_yellow_item_transaction_adjust
+            if (data.type == Transaction.STATUS_KELUAR) {
+                llCustomer.visibility = View.VISIBLE
+                tvCustomer.text = (data as CheckOut).customer
+            } else {
+                llCustomer.visibility = View.GONE
             }
-            llViewHolder.setBackgroundColor(ResourcesCompat.getColor(App.res!!, color, null))
+
+            llViewHolder.setBackgroundColor(
+                ResourcesCompat.getColor(
+                    App.res!!,
+                    when (data.type) {
+                        Transaction.STATUS_MASUK -> R.color.green_item_transaction_check_in
+                        Transaction.STATUS_KELUAR -> R.color.light_red_transaction_check_out
+                        Transaction.STATUS_RETUR -> R.color.blue_item_transaction_return
+                        Transaction.STATUS_RUSAK -> R.color.light_brown_item_transaction_broken
+                        Transaction.STATUS_HAPUS -> R.color.light_gray_item_transaction_clear
+                        Transaction.STATUS_PENYESUAIAN -> R.color.light_yellow_item_transaction_adjust
+                        else -> R.color.blue_gray_item_transaction_other
+                    },
+                    null
+                )
+            )
+
             val adapter = TransactionDetailViewHolder(data.getDetails()).getAdapter()
             rvItem.adapter = adapter
+
+            imvInfo.setOnClickListener { data.code?.let { code -> listener.onItemClick(code) } }
         }
     }
 }

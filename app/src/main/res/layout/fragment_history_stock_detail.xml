@@ -48,7 +48,8 @@
                     android:id="@+id/tv_stock_code"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/black"
+                    android:textIsSelectable="true"/>
 
             </LinearLayout>
 
@@ -111,32 +112,23 @@
         android:layout_marginEnd="8dp"
         android:textAlignment="center"/>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="8dp"
-        app:cardCornerRadius="4dp"
+        android:hint="Tanggal"
+        android:orientation="horizontal"
         android:layout_margin="8dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+        <AutoCompleteTextView
+            android:id="@+id/actv_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tanggal"
-            android:orientation="horizontal">
+            android:inputType="none"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
 
-            <AutoCompleteTextView
-                android:id="@+id/actv_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:backgroundTint="@color/white"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

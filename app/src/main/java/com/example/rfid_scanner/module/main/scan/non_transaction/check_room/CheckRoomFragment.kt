@@ -69,11 +69,4 @@ class CheckRoomFragment : ScanFragment<FragmentCheckRoomBinding, CheckRoomViewMo
 
         scanStatus.observeWithOwner { updateUIButton(it) }
     }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.mBluetoothScannerService.stopScan()
-    }
-
-
 }

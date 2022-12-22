@@ -313,5 +313,60 @@ object RequestResult {
 
         return result
     }
+
+    fun getRFIDDetail(response: JSONObject): ResponseData {
+        val result = getGeneralResponse(response)
+
+        val jsonKey = arrayOf("rfid", "stock", "check_in", "check_out", "return", "broken", "lost")
+
+        val views = HashMap<String, HashMap<String, String>>()
+        val data = response.getJSONObject("data")
+        for (key in jsonKey) {
+            if (!data.has(key)) continue
+            val obj = data.getJSONObject(key)
+            val property = HashMap<String, String>()
+            when (key) {
+                "rfid" -> {
+                    property["rfid_code"] = obj.getString("rfid_code")
+                    property["rfid_status"] = obj.getString("rfid_status")
+                }
+                "stock" -> {
+                    property["stock_id"] = obj.getString("stock_id")
+                    property["stock_unit_count"] = obj.getString("stock_unit_count")
+                    property["stock_code"] = obj.getString("stock_code")
+                    property["stock_name"] = obj.getString("stock_name")
+                    property["stock_brand"] = obj.getString("stock_brand")
+                    property["stock_vehicle_type"] = obj.getString("stock_vehicle_type")
+                }
+                "check_out" -> {
+                    property["bill_delivery"] = obj.getString("bill_delivery")
+                    property["bill_customer"] = obj.getString("bill_customer")
+                    property["bill_code"] = obj.getString("bill_code")
+                    property["bill_date"] = obj.getString("bill_date")
+                }
+                else -> {
+                    property["bill_code"] = obj.getString("bill_code")
+                    property["bill_date"] = obj.getString("bill_date")
+                }
+            }
+            views[key] = property
+        }
+        result.data = views
+
+        return result
+    }
+
+    fun getTransactionRFIDS(response: JSONObject): ResponseData {
+        val result = getGeneralResponse(response)
+
+        val rfids = mutableListOf<String>()
+        val arr = response.getJSONArray("data")
+        for (i in 0 until arr.length()) {
+            rfids.add(arr[i] as String)
+        }
+        result.data = rfids
+
+        return result
+    }
 }
 

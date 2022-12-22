@@ -13,7 +13,7 @@ abstract class ScanFragment<VBinding : ViewBinding, ViewModel : ScanViewModel> :
      * Customization start here
      * */
     abstract fun getScanButton() : Button
-    abstract fun getResetButton() : Button
+    abstract fun getResetButton() : Button?
     abstract fun getNonScanButtons() : List<Button>
 
     override fun onPause() {
@@ -23,8 +23,8 @@ abstract class ScanFragment<VBinding : ViewBinding, ViewModel : ScanViewModel> :
 
     fun updateUIButton(status: ScanStatus) {
         getNonScanButtons().map { it.isEnabled = !status.isScanning }
-        if (!getResetButton().hasOnClickListeners()) {
-            getResetButton().setOnClickListener { viewModel.resetTags() }
+        if (getResetButton()?.hasOnClickListeners() == false) {
+            getResetButton()?.setOnClickListener { viewModel.resetTags() }
         }
 
         with(getScanButton()) {
