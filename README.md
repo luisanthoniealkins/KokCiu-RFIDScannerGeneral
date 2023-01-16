@@ -10,7 +10,7 @@ This project is made as a request from local warehouse owner to digitalize their
 Tech Stacks:
 - Database: MySQL with phpMyAdmin as user interface
 - API endpoint:
- - Programming Languange: Php
+>> Programming Languange: Php
 - Mobile Apps:
  - Programming Languange: Kotlin
  - Developing Tools: Android Studio
