@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.rfid_scanner.data.model.*
 import com.example.rfid_scanner.data.model.Tag.Companion.isProperTag
-import com.example.rfid_scanner.data.model.status.ScanStatus
 import com.example.rfid_scanner.data.repository.VolleyRepository
 import com.example.rfid_scanner.data.repository.component.RequestEndPoint
 import com.example.rfid_scanner.data.repository.component.RequestParam
@@ -17,13 +16,8 @@ import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.St
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.StockViewHolder.Companion.addOrUpdateStock
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.StockViewHolder.Companion.addTagsToStock
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.StockViewHolder.Companion.clearStockTags
-import com.example.rfid_scanner.module.main.scan.transaction.general.adapter.ErrorAdapter
-import com.example.rfid_scanner.module.main.scan.transaction.general.adapter.TagAdapter
-import com.example.rfid_scanner.service.BluetoothScannerService
 import com.example.rfid_scanner.utils.extension.StringExt.getSimilarStrings
-import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import com.example.rfid_scanner.utils.generic.viewmodel.ScanViewModel
-import com.example.rfid_scanner.utils.helper.LogHelper
 import com.example.rfid_scanner.utils.helper.TextHelper.emptyString
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach

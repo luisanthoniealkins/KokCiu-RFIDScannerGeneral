@@ -6,14 +6,29 @@
     android:orientation="vertical"
     tools:context=".module.main.print.checkout.PrintCheckoutFragment">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:text="Cetak Bon"/>
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="Cetak Bon"/>
+
+        <Button
+            android:id="@+id/btn_force_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Force Exit"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"/>
+    </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"

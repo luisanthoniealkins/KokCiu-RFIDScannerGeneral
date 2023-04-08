@@ -6,17 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.rfid_scanner.data.model.Bill
-import com.example.rfid_scanner.service.BluetoothScannerService
 import com.example.rfid_scanner.service.StorageService
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BTE
-import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
+import com.example.rfid_scanner.utils.generic.viewmodel.ScanViewModel
 import com.example.rfid_scanner.utils.helper.TextHelper.emptyString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class PrintCheckoutViewModel : BaseViewModel() {
-
-    val mBluetoothScannerService = BluetoothScannerService.getInstance()
+class PrintCheckoutViewModel : ScanViewModel() {
 
     private val _lvTaskFinished = MutableLiveData<Boolean>()
     val lvTaskFinished: LiveData<Boolean> = _lvTaskFinished
@@ -35,7 +32,7 @@ class PrintCheckoutViewModel : BaseViewModel() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             mBluetoothScannerService.connectBluetooth(StorageService.getI().printerMacAddress!!, DEVICE_TYPE_BTE)
-        }, 250)
+        }, 500)
     }
 
     fun reconnectPreviousBluetooth() {
@@ -45,22 +42,25 @@ class PrintCheckoutViewModel : BaseViewModel() {
         showToast("Reconnecting to previous bluetooth")
         Handler(Looper.getMainLooper()).postDelayed({
             mBluetoothScannerService.connectBluetooth(previousConnectedAddress, previousConnectedType)
-        }, 250)
+        }, 500)
     }
 
     fun printWithFormat(packageCount: Int) {
         val footer = "\n--------------------------------\n\n"
+        val footer2 = "\n\n\n\n--------------------------------\n\n"
+
         val str = getPrintFormat("NAMA: ", listOf(bills.first().customerName)) +
                 getPrintFormat("VIA : ", listOf(bills.first().delivery)) +
                 "\n" +
                 getPrintFormat("KOLI: ", listOf("$packageCount")) +
                 getPrintFormat("NO  : ", bills.map { it.billCode }) +
-                footer
+                if (packageCount < 3) footer2
+                else footer
 
         viewModelScope.launch {
             repeat(packageCount) {
                 mBluetoothScannerService.sendCustomMessage(str)
-                delay(200)
+                delay(500)
             }
             _lvTaskFinished.postValue(true)
         }

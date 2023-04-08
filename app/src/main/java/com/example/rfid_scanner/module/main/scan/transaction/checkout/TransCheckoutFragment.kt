@@ -141,8 +141,8 @@ class TransCheckoutFragment : ScanFragment<FragmentTransCheckoutBinding, TransCh
 
         val error3 = viewModel.checkSimilarTags()
         if (error3.isNotEmpty()) {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Potensi Kode Duplikat")
+            AlertDialog.Builder(requireContext())
+                .setTitle("Potensi Kode Duplikat")
                 .setMessage(error3)
                 .setPositiveButton("Ok") { _, _ -> showVerifyBottomSheet() }
                 .setNegativeButton("Batal") { _, _ -> }

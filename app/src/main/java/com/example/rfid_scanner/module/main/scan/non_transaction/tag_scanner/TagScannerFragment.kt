@@ -3,7 +3,9 @@ package com.example.rfid_scanner.module.main.scan.non_transaction.tag_scanner
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.rfid_scanner.data.model.Bill
 import com.example.rfid_scanner.databinding.FragmentTagScannerBinding
+import com.example.rfid_scanner.module.main.menu.MenuFragmentDirections
 import com.example.rfid_scanner.utils.generic.fragment.ScanFragment
 
 class TagScannerFragment : ScanFragment<FragmentTagScannerBinding, TagScannerViewModel>() {
@@ -22,6 +24,15 @@ class TagScannerFragment : ScanFragment<FragmentTagScannerBinding, TagScannerVie
         rvItem.adapter = viewModel.adapter
 
         btnReset.setOnClickListener { viewModel.clearTags() }
+
+        btnToPrint.setOnClickListener {
+            navigateBack()
+            val bill = Bill("JL12345678/20220320/88M//HK123456789/2/HYK2201277/3")
+            bill.customerName = "Aan"
+            navigateTo(MenuFragmentDirections.toPrintCheckoutFragment(
+                arrayOf(bill, bill, bill)
+            ))
+        }
     }
 
     override fun observeData() = with(viewModel) {

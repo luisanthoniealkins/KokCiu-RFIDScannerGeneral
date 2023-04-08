@@ -24,6 +24,16 @@ class Bill() : Parcelable {
     val formattedDateTime: String
         get() = DateHelper.getFormattedDateTime1(date)
 
+    constructor(
+        billCode: String,
+        customerName: String,
+        delivery: String,
+    ) : this() {
+        this.billCode = billCode
+        this.customerName = customerName
+        this.delivery = delivery
+    }
+
     constructor(parcel: Parcel) : this() {
         billCode = parcel.readString().toString()
         customerCode = parcel.readString().toString()

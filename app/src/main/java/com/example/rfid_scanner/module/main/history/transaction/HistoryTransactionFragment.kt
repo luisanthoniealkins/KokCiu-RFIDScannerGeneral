@@ -12,7 +12,9 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rfid_scanner.R
+import com.example.rfid_scanner.data.model.Bill
 import com.example.rfid_scanner.databinding.FragmentHistoryTransactionBinding
+import com.example.rfid_scanner.module.main.menu.MenuFragmentDirections
 import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 import com.example.rfid_scanner.utils.helper.DateHelper
 
@@ -106,7 +108,12 @@ class HistoryTransactionFragment : BaseFragment<FragmentHistoryTransactionBindin
 
         lvSelectedItem.observeWithOwner { heCode ->
             heCode.getContentIfNotHandled()?.let {
-                navigateTo(HistoryTransactionFragmentDirections.toTransactionRFIDFragment(it))
+                if (it is Bill) {
+                    navigateBack()
+                    navigateTo(MenuFragmentDirections.toPrintCheckoutFragment(arrayOf(it)))
+                } else {
+                    navigateTo(HistoryTransactionFragmentDirections.toTransactionRFIDFragment(it as String))
+                }
             }
         }
     }

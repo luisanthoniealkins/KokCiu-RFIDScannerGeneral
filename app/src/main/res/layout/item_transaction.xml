@@ -38,6 +38,14 @@
                 android:layout_marginStart="4dp"
                 app:tint="#CC000000" />
 
+            <ImageView
+                android:id="@+id/imv_print"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_baseline_print_24"
+                android:layout_marginStart="4dp"
+                app:tint="#CC000000" />
+
             <TextView
                 android:id="@+id/tv_date"
                 android:layout_width="0dp"

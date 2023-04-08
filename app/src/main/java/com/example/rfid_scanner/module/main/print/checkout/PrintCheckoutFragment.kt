@@ -1,9 +1,11 @@
 package com.example.rfid_scanner.module.main.print.checkout
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.navArgs
 import com.example.rfid_scanner.databinding.FragmentPrintCheckoutBinding
 import com.example.rfid_scanner.utils.extension.StringExt.isNumberOnly
@@ -25,6 +27,17 @@ class PrintCheckoutFragment : BaseFragment<FragmentPrintCheckoutBinding, PrintCh
     override fun setUpViews(): Unit = with(binding) {
         btnPrint.setOnClickListener { verifyInput() }
 
+        btnForceExit.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Peringatan Tutup Halaman")
+                .setMessage("Yakin untuk menutup halaman ini?\n\n" +
+                        "Note: Bon masih bisa dicetak via menu transaksi")
+                .setPositiveButton("Ok") { _, _ -> navigateBack()  }
+                .setNegativeButton("Batal") { _, _ -> }
+                .create()
+                .show()
+        }
+
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 showToast("Tekan cetak untuk keluar dari halaman ini")
@@ -38,6 +51,11 @@ class PrintCheckoutFragment : BaseFragment<FragmentPrintCheckoutBinding, PrintCh
                 viewModel.reconnectPreviousBluetooth()
                 navigateBack()
             }
+        }
+
+        scanStatus.observeWithOwner {
+            binding.btnPrint.isEnabled = it.isConnected
+            binding.btnForceExit.visibility = if (it.isConnected) View.GONE else View.VISIBLE
         }
     }
 

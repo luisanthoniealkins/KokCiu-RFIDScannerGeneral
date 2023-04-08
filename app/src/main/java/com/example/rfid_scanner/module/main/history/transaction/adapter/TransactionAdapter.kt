@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rfid_scanner.R
+import com.example.rfid_scanner.data.model.Bill
 import com.example.rfid_scanner.data.model.Transaction
 import com.example.rfid_scanner.data.model.Transaction.CheckOut
 import com.example.rfid_scanner.databinding.ItemTransactionBinding
@@ -131,7 +133,11 @@ class TransactionAdapter(
                 tvCustomer.text = (data as CheckOut).customer
             } else {
                 llCustomer.visibility = View.GONE
+                imvPrint.visibility = View.GONE
             }
+
+            imvPrint.visibility = if (data.type == Transaction.STATUS_KELUAR)
+                View.VISIBLE else View.GONE
 
             llViewHolder.setBackgroundColor(
                 ResourcesCompat.getColor(
@@ -153,6 +159,19 @@ class TransactionAdapter(
             rvItem.adapter = adapter
 
             imvInfo.setOnClickListener { data.code?.let { code -> listener.onItemClick(code) } }
+
+            imvPrint.setOnClickListener {
+                data.code?.let {
+                    val checkOutData = data as CheckOut
+                    listener.onItemClick(
+                        Bill(
+                            it,
+                            checkOutData.customer,
+                            checkOutData.delivery
+                        )
+                    )
+                }
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.example.rfid_scanner.data.model.Bill
 import com.example.rfid_scanner.databinding.FragmentMenuBinding
 import com.example.rfid_scanner.module.main.MainViewModel
 import com.example.rfid_scanner.module.main.scan.transaction.general.TransGeneralViewModel.Companion.BROKEN
