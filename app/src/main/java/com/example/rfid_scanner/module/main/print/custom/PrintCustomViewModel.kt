@@ -8,6 +8,7 @@ import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BTE
 import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import com.example.rfid_scanner.utils.helper.TextHelper.emptyString
 
+
 class PrintCustomViewModel : BaseViewModel() {
 
     val mBluetoothScannerService = BluetoothScannerService.getInstance()
@@ -28,6 +29,8 @@ class PrintCustomViewModel : BaseViewModel() {
     }
 
     fun print(text: String) {
+        val bb3 = byteArrayOf(0x1B, 0x21, 0x20)
+        mBluetoothScannerService.sendBytesTemp(bb3)
         mBluetoothScannerService.sendCustomMessage(text)
     }
 

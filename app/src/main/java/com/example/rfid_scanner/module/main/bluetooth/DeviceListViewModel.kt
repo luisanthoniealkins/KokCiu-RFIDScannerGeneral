@@ -13,8 +13,7 @@ import com.rscja.deviceapi.RFIDWithUHFBLE
 class DeviceListViewModel : BaseViewModel(), ItemClickListener {
 
     companion object {
-//        const val SCAN_PERIOD: Long = 10000 // 10 seconds
-        const val SCAN_PERIOD: Long = 5000 // 10 seconds
+        const val SCAN_PERIOD: Long = 10000 // 10 seconds
 
         val bteDeviceAddressList = setOf(
             "98:DA:B0:00:3D:59"

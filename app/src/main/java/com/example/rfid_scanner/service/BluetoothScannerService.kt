@@ -117,6 +117,10 @@ class BluetoothScannerService(context: Context) {
         if (connectedType == DEVICE_TYPE_BTE) mBluetoothBTEService.sendCustomMessage(msg)
     }
 
+    fun sendBytesTemp(bytes: ByteArray) {
+        if (connectedType == DEVICE_TYPE_BTE) mBluetoothBTEService.sendBytesTemp(bytes)
+    }
+
     fun setChannel(channelTags: Channel<List<TagEPC>>) {
         mBluetoothBLEService.setChannel(channelTags)
         mBluetoothBTEService.setChannel(channelTags)

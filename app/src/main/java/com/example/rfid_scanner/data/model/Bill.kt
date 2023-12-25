@@ -46,11 +46,14 @@ class Bill() : Parcelable {
         Log.d(TAG, "Encoded message: $encodedText")
 
         val billData = encodedText.split("/").toTypedArray()
+        for (i in billData.indices) billData[i] = billData[i].trim { it <= ' ' }
+
         if (!(billData.size >= 4 && billData.size % 2 == 0)) return
 
         billCode = billData[0]
         customerCode = billData[2]
         delivery = billData[3]
+
         if (billData[1].length != 8) {
             Log.d(TAG, "Calendar length should be 8 chars")
             return

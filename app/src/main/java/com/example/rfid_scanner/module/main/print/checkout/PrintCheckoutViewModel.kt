@@ -1,5 +1,7 @@
 package com.example.rfid_scanner.module.main.print.checkout
 
+import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
@@ -13,6 +15,7 @@ import com.example.rfid_scanner.utils.helper.TextHelper.emptyString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@SuppressLint("MissingPermission")
 class PrintCheckoutViewModel : ScanViewModel() {
 
     private val _lvTaskFinished = MutableLiveData<Boolean>()
@@ -31,8 +34,17 @@ class PrintCheckoutViewModel : ScanViewModel() {
         showToast("Connecting to printer bluetooth")
 
         Handler(Looper.getMainLooper()).postDelayed({
+//            BluetoothAdapter.getDefaultAdapter().disable()
             mBluetoothScannerService.connectBluetooth(StorageService.getI().printerMacAddress!!, DEVICE_TYPE_BTE)
         }, 500)
+
+//        Handler(Looper.getMainLooper()).postDelayed({
+//            BluetoothAdapter.getDefaultAdapter().enable()
+//        }, 1000)
+//
+//        Handler(Looper.getMainLooper()).postDelayed({
+//            mBluetoothScannerService.connectBluetooth(StorageService.getI().printerMacAddress!!, DEVICE_TYPE_BTE)
+//        }, 1500)
     }
 
     fun reconnectPreviousBluetooth() {
@@ -46,19 +58,22 @@ class PrintCheckoutViewModel : ScanViewModel() {
     }
 
     fun printWithFormat(packageCount: Int) {
-        val footer = "\n--------------------------------\n\n"
-        val footer2 = "\n\n\n\n--------------------------------\n\n"
+        val header = "\n\n"
+        val footer = "\n\n\n----------------\n\n"
 
-        val str = getPrintFormat("NAMA: ", listOf(bills.first().customerName)) +
+        val str = header +
+                getPrintFormat("", listOf(bills.first().customerName)) +
+                "\n" +
                 getPrintFormat("VIA : ", listOf(bills.first().delivery)) +
                 "\n" +
                 getPrintFormat("KOLI: ", listOf("$packageCount")) +
                 getPrintFormat("NO  : ", bills.map { it.billCode }) +
-                if (packageCount < 3) footer2
-                else footer
+                footer
 
         viewModelScope.launch {
             repeat(packageCount) {
+                val fontFormatByte = byteArrayOf(0x1B, 0x21, 0x20)
+                mBluetoothScannerService.sendBytesTemp(fontFormatByte)
                 mBluetoothScannerService.sendCustomMessage(str)
                 delay(500)
             }
@@ -71,12 +86,12 @@ class PrintCheckoutViewModel : ScanViewModel() {
         var line = headerType
         content.map {
             it.map { c ->
-                if (line.length == 32) {
+                if (line.length == 16) {
                     completeText += line + "\n"
                     line = emptyString()
                     repeat(headerType.length) { line += " " }
                 }
-                if (!(line.last() == ' ' && c == ' ')) line += c
+                if (!((line.isEmpty() || line.last() == ' ') && c == ' ')) line += c
             }
             if (line.isNotEmpty()) {
                 completeText += line + "\n"

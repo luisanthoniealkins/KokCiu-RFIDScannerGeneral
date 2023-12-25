@@ -189,6 +189,12 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
             mmOutputStream?.write(bytes)
         }
 
+        fun writeBytesTemp(bytes: ByteArray, scan: Boolean) {
+            isScanning = scan
+            updateScanStatus()
+            mmOutputStream?.write(bytes)
+        }
+
         // Call this method from the main activity to shut down the connection.
         fun cancel() = mmSocket?.close()
     }
@@ -211,6 +217,10 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
 
     fun sendCustomMessage(msg: String) {
         mConnectedThread?.write(msg, false)
+    }
+
+    fun sendBytesTemp(bytes: ByteArray) {
+        mConnectedThread?.writeBytesTemp(bytes, false)
     }
 
     fun setChannel(channelTags: Channel<List<TagEPC>>) {
