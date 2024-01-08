@@ -24,7 +24,7 @@ class RequestEndPoint {
         const val EDIT_STOCK = "editStock"
         const val GET_RFIDS = "getRFIDs"
         const val GET_RFID_DETAIL = "getRFIDDetail"
-        const val CHECK_OUT = "checkOut"
+        const val CHECK_OUT = "checkOut" // DEPRECATED
         const val CLEAR_TAG = "clearTag" // DEPRECATED
         const val CHECK_OUT_BROKEN = "checkOutBroken" // DEPRECATED
         const val CHECK_SERVER = "checkServer"

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="4dp"
     app:cardCornerRadius="4dp">
 
@@ -28,7 +29,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                tools:text="CC231227023414"/>
 
             <ImageView
                 android:id="@+id/imv_info"
@@ -52,7 +54,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:textAlignment="textEnd"/>
+                android:textAlignment="textEnd"
+                tools:text="2023-12-27 / 02:34"/>
 
         </LinearLayout>
 
@@ -78,7 +81,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                tools:text="ABENG"/>
 
         </LinearLayout>
 

@@ -12,6 +12,7 @@
     <color name="gray3">#ededed</color>
     <color name="blue2">#2398bc</color>
     <color name="green_connect">#3cb027</color>
+    <color name="blue_refresh">#03A9F4</color>
     <color name="red_disconnect">#b00020</color>
     <color name="yellow_warning">#f9a825</color>
 

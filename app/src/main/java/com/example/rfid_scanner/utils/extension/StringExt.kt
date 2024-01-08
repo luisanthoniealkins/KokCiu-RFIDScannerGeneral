@@ -1,7 +1,10 @@
 package com.example.rfid_scanner.utils.extension
 
+import android.util.Log
 import com.example.rfid_scanner.service.StorageService
 import com.example.rfid_scanner.utils.extension.StringExt.isSimilarTo
+import com.example.rfid_scanner.utils.helper.LogHelper
+import com.example.rfid_scanner.utils.helper.TagHelper
 
 object StringExt {
 
@@ -50,6 +53,24 @@ object StringExt {
                 }
             }
         } } }
+        return result
+    }
+
+    fun List<String>.getSimilarStringsTo(text: String): String {
+        val set = mutableSetOf<String>()
+        var result = ""
+        this.map { str ->
+            if (str.isSimilarTo(text, StorageService.getI().epcDiffTolerance)) {
+                if (!set.contains(text)) {
+                    set.add(text)
+                    result += text + "\n"
+                }
+                if (!set.contains(str)) {
+                    set.add(str)
+                    result += str + "\n"
+                }
+            }
+        }
         return result
     }
 

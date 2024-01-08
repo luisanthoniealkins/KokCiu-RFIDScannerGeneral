@@ -2,16 +2,18 @@ package com.example.rfid_scanner.module.main.scan.transaction.adjustment.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rfid_scanner.R
 import com.example.rfid_scanner.data.model.Tag
 import com.example.rfid_scanner.databinding.ItemTagDetailBinding
+import com.example.rfid_scanner.module.main.bluetooth.DeviceListAdapter
 import com.example.rfid_scanner.utils.app.App
+import com.example.rfid_scanner.utils.listener.ItemClickListener
 
-class AdjustmentTagAdapter :
+class AdjustmentTagAdapter(private val listener: ItemClickListener) :
     RecyclerView.Adapter<AdjustmentTagAdapter.VerifyTagVH>()  {
 
     private val dataListFull= mutableListOf<AdjustmentTagData>()
@@ -87,6 +89,10 @@ class AdjustmentTagAdapter :
                     else R.color.light_gray_item_default,
                     null,
                 ))
+
+                itemView.setOnClickListener {
+                    listener.onItemClick(data.data)
+                }
 
                 /**
                  * TAMBAHIN CHECKER

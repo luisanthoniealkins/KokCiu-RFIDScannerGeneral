@@ -5,17 +5,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".module.main.scan.transaction.adjustment.TransAdjustmentFragment">
+    tools:context=".module.main.scan.transaction.replacement.TransReplacementFragment">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:text="Penyesuaian"/>
+        android:orientation="horizontal"
+        android:gravity="center">
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="Ganti EPC"/>
+
+        <TextView
+            android:id="@+id/tv_epc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:text="E23456789012345678901234" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,30 +50,10 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:paddingVertical="8dp"
                 android:layout_weight="1"
                 android:text="@string/detail_barang"
                 android:textSize="16sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"/>
-
-            <CheckBox
-                android:id="@+id/cb_replace_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="GANTI EPC"
-                android:textSize="16sp"
-                android:buttonTint="@color/white"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_marginEnd="8dp"/>
-
-            <CheckBox
-                android:id="@+id/cb_show_ok"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="OK"
-                android:textSize="16sp"
-                android:buttonTint="@color/white"
                 android:textColor="@color/white"
                 android:textStyle="bold"/>
 
@@ -150,12 +148,12 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tag (0)" />
+            android:text="@string/tag_mirip_sama_0" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/error_0"/>
+            android:text="@string/tag_lain_0"/>
 
     </com.google.android.material.tabs.TabLayout>
 

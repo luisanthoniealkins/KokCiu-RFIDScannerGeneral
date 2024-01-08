@@ -9,7 +9,7 @@ import com.example.rfid_scanner.R
 import com.example.rfid_scanner.data.model.Tag
 import com.example.rfid_scanner.databinding.ItemTagDetailBinding
 
-class TagAdapter() : RecyclerView.Adapter<TagAdapter.TagVH>() {
+class TagAdapter : RecyclerView.Adapter<TagAdapter.TagVH>() {
 
     private val dataList = mutableListOf<Tag>()
 
@@ -62,7 +62,4 @@ class TagAdapter() : RecyclerView.Adapter<TagAdapter.TagVH>() {
     }
 
     data class TagData(val position: Int, var data: Tag)
-
-
-
 }

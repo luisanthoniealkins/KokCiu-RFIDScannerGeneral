@@ -51,15 +51,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
-            <ImageView
-                android:id="@+id/imv_refresh_wifi"
+            <Button
+                android:id="@+id/btn_refresh_wifi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_refresh_24"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="8dp"/>
+                android:text="Refresh"
+                android:backgroundTint="@color/blue_refresh"
+                android:layout_marginEnd="8dp"/>
 
         </LinearLayout>
 
@@ -179,15 +177,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
-            <ImageView
-                android:id="@+id/imv_refresh_server"
+            <Button
+                android:id="@+id/btn_refresh_server"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_refresh_24"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="8dp"/>
+                android:text="Refresh"
+                android:backgroundTint="@color/blue_refresh"
+                android:layout_marginEnd="8dp"/>
 
         </LinearLayout>
 

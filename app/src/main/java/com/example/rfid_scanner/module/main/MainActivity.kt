@@ -113,8 +113,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), DeviceS
                 }
             }
 
-            imvRefreshWifi.setOnClickListener { viewModel.refreshNetworkStatus() }
-            imvRefreshServer.setOnClickListener { viewModel.checkServer() }
+            btnRefreshWifi.setOnClickListener { viewModel.refreshNetworkStatus() }
+            btnRefreshServer.setOnClickListener { viewModel.checkServer() }
 
             dialog.setContentView(root)
         }

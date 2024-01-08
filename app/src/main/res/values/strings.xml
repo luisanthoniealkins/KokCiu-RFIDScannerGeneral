@@ -72,4 +72,6 @@
     <string name="_0_tag">0 tag</string>
     <string name="kode_faktur">Kode Faktur</string>
     <string name="code">Kode :</string>
+    <string name="tag_mirip_sama_0">Tag Mirip / Sama (0)</string>
+    <string name="tag_lain_0">Tag Lain (0)</string>
 </resources>

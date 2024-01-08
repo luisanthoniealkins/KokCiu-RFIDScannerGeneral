@@ -64,6 +64,9 @@
         <action
             android:id="@+id/to_checkTagDetailFragment"
             app:destination="@id/checkTagDetailFragment" />
+        <action
+            android:id="@+id/to_transReplacementFragment"
+            app:destination="@id/transReplacementFragment" />
     </fragment>
 
     <fragment
@@ -171,6 +174,25 @@
         <action
             android:id="@+id/to_exploreStockFragment"
             app:destination="@id/exploreStockFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/transReplacementFragment"
+        android:name="com.example.rfid_scanner.module.main.scan.transaction.replacement.TransReplacementFragment"
+        android:label="fragment_trans_replacement"
+        tools:layout="@layout/fragment_trans_replacement">
+
+        <argument
+            android:name="stockCode"
+            app:argType="string" />
+        <argument
+            android:name="stockName"
+            app:argType="string" />
+        <argument android:name="tagEPC"
+            app:argType="string" />
+        <argument android:name="tagStockId"
+            app:argType="string" />
+        <argument android:name="tagStockUnitCount"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/exploreStockFragment"

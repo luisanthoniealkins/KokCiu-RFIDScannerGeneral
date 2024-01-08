@@ -1,57 +1,54 @@
-package com.example.rfid_scanner.module.main.scan.transaction.adjustment
+package com.example.rfid_scanner.module.main.scan.transaction.replacement
 
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.rfid_scanner.data.model.Tag
 import com.example.rfid_scanner.data.model.repository.MResponse
-import com.example.rfid_scanner.databinding.FragmentTransAdjustmentBinding
-import com.example.rfid_scanner.module.main.data.explore.stock.ExploreStockViewModel
-import com.example.rfid_scanner.module.main.menu.MenuFragmentDirections
-import com.example.rfid_scanner.module.main.scan.transaction.adjustment.TransAdjustmentViewModel.Companion.TAB_ERROR
-import com.example.rfid_scanner.module.main.scan.transaction.adjustment.TransAdjustmentViewModel.Companion.TAB_TAG
-import com.example.rfid_scanner.module.main.scan.transaction.general.verify.VerifyBottomSheet
+import com.example.rfid_scanner.databinding.FragmentTransReplacementBinding
+import com.example.rfid_scanner.module.main.scan.transaction.replacement.TransReplacementViewModel.Companion.TAB_ERROR
+import com.example.rfid_scanner.module.main.scan.transaction.replacement.TransReplacementViewModel.Companion.TAB_TAG
+import com.example.rfid_scanner.module.main.scan.transaction.replacement.verify.VerifyBottomSheet
 import com.example.rfid_scanner.utils.generic.fragment.ScanFragment
 import com.google.android.material.tabs.TabLayout
 
-class TransAdjustmentFragment : ScanFragment<FragmentTransAdjustmentBinding, TransAdjustmentViewModel>() {
+class TransReplacementFragment : ScanFragment<FragmentTransReplacementBinding, TransReplacementViewModel>() {
 
-    override fun getViewModelClass() = TransAdjustmentViewModel::class.java
+    override fun getViewModelClass() = TransReplacementViewModel::class.java
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentTransAdjustmentBinding.inflate(inflater, container, false)
+        FragmentTransReplacementBinding.inflate(inflater, container, false)
 
     override fun getScanButton() = binding.btnScan
     override fun getResetButton() = binding.btnReset
     override fun getNonScanButtons() = listOf(binding.btnReset, binding.btnVerifyAndCommit)
 
     override fun retrieveArgs() {
-        getNavController()?.currentBackStackEntry?.savedStateHandle?.getLiveData<List<String>?>(
-            ExploreStockViewModel.KEY_STOCK)?.observeWithOwner {
-                if (it == null) {
-                    navigateBack()
-                } else {
-                    binding.tvCode.text = it[0]
-                    binding.tvName.text = it[1]
-                    viewModel.setStockCode(it[0])
-                }
-        }
+        val args: TransReplacementFragmentArgs by navArgs()
+
+        binding.tvCode.text = args.stockCode
+        binding.tvName.text = args.stockName
+        binding.tvEpc.text = args.tagEPC
+
+        viewModel.setReplacementData(
+            args.stockCode,
+            Tag(
+                epc = args.tagEPC,
+                stockId = args.tagStockId,
+                stockUnitCount = args.tagStockUnitCount
+            )
+        )
     }
 
     override fun setUpViews() = with(binding) {
-
-        cbShowOk.setOnCheckedChangeListener { _, b -> viewModel.setShowingOK(b) }
-        cbReplaceTag.setOnCheckedChangeListener { _, b ->
-            binding.btnVerifyAndCommit.visibility = if (b) View.GONE else View.VISIBLE
-            viewModel.setReplaceTag(b)
-        }
-
         rvItem.layoutManager = LinearLayoutManager(context)
-        rvItem.adapter = viewModel.adjustmentTagAdapter
+        rvItem.adapter = viewModel.replacementTagAdapter
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tab.position) {
-                    TAB_TAG -> rvItem.adapter = viewModel.adjustmentTagAdapter
+                    TAB_TAG -> rvItem.adapter = viewModel.replacementTagAdapter
                     TAB_ERROR -> rvItem.adapter = viewModel.errorAdapter
                 }
             }
@@ -61,14 +58,14 @@ class TransAdjustmentFragment : ScanFragment<FragmentTransAdjustmentBinding, Tra
     }
 
     override fun observeData() = with(viewModel) {
-        tagCountOK.observeWithOwner { binding.tabLayout.getTabAt(TAB_TAG)?.text = "Tag (${it})" }
-        tagCountError.observeWithOwner { binding.tabLayout.getTabAt(TAB_ERROR)?.text = "Error (${it})" }
+        tagCountOK.observeWithOwner { binding.tabLayout.getTabAt(TAB_TAG)?.text = "Tag Mirip / Sama (${it})" }
+        tagCountError.observeWithOwner { binding.tabLayout.getTabAt(TAB_ERROR)?.text = "Tag Lain (${it})" }
 
         scanStatus.observeWithOwner { updateUIButton(it) }
 
         isVerified.observeWithOwner {
             binding.btnVerifyAndCommit.text =
-                if (it) "Hapus"
+                if (it) "Ganti"
                 else "Verifikasi"
 
             binding.btnVerifyAndCommit.setOnClickListener {
@@ -84,24 +81,6 @@ class TransAdjustmentFragment : ScanFragment<FragmentTransAdjustmentBinding, Tra
                 navigateBack()
             }
         }
-
-        selectedToReplaceEPC.observeWithOwner { tag ->
-            navigateBack()
-            navigateTo(MenuFragmentDirections.toTransReplacementFragment(
-                binding.tvCode.text.toString(),
-                binding.tvName.text.toString(),
-                tag.epc,
-                tag.stockId!!,
-                tag.stockUnitCount,
-            ))
-        }
-    }
-
-    override fun initEvent() {
-        if (viewModel.isInitialEntry) {
-            viewModel.isInitialEntry = false
-            navigateTo(TransAdjustmentFragmentDirections.toExploreStockFragment(true))
-        }
     }
 
     private fun showConfirmationDialog() {
@@ -115,7 +94,7 @@ class TransAdjustmentFragment : ScanFragment<FragmentTransAdjustmentBinding, Tra
     }
 
     private fun verifyTags() {
-        viewModel.adjustmentTagAdapter.getError()?.let {
+        viewModel.replacementTagAdapter.getErrorMessage()?.let {
             showToast(it)
             return
         }
@@ -140,7 +119,6 @@ class TransAdjustmentFragment : ScanFragment<FragmentTransAdjustmentBinding, Tra
             val builder = AlertDialog.Builder(requireContext())
             builder.setTitle("Potensi Kode Duplikat")
                 .setMessage(error3)
-                .setPositiveButton("Ok") { _, _ -> showVerifyBottomSheet() }
                 .setNegativeButton("Batal") { _, _ -> }
                 .create()
                 .show()
@@ -150,7 +128,7 @@ class TransAdjustmentFragment : ScanFragment<FragmentTransAdjustmentBinding, Tra
     }
 
     private fun showVerifyBottomSheet() {
-        VerifyBottomSheet(viewModel, viewModel.adjustmentTagAdapter.getScannedTags(), true)
+        VerifyBottomSheet(viewModel, viewModel.replacementTagAdapter.getScannedTags())
             .show(childFragmentManager, "Bottom Sheet Dialog Fragment")
     }
 

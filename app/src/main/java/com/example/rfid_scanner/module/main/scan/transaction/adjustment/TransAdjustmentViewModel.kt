@@ -1,5 +1,6 @@
 package com.example.rfid_scanner.module.main.scan.transaction.adjustment
 
+import android.bluetooth.BluetoothDevice
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -11,24 +12,26 @@ import com.example.rfid_scanner.data.repository.component.RequestParam
 import com.example.rfid_scanner.data.repository.component.RequestResult
 import com.example.rfid_scanner.module.main.scan.transaction.adjustment.adapter.AdjustmentTagAdapter
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.ErrorViewHolder
-import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.StockViewHolder
-import com.example.rfid_scanner.module.main.scan.transaction.general.adapter.ErrorAdapter
 import com.example.rfid_scanner.utils.extension.StringExt.getSimilarStrings
 import com.example.rfid_scanner.utils.listener.VerifyListener
 import com.example.rfid_scanner.utils.generic.viewmodel.ScanViewModel
+import com.example.rfid_scanner.utils.listener.ItemClickListener
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 
-class TransAdjustmentViewModel : ScanViewModel(), VerifyListener {
+class TransAdjustmentViewModel : ScanViewModel(), VerifyListener, ItemClickListener {
 
     companion object {
         const val TAB_TAG = 0
         const val TAB_ERROR = 1
     }
 
-    val adjustmentTagAdapter = AdjustmentTagAdapter()
+    val adjustmentTagAdapter = AdjustmentTagAdapter(this)
     val errorAdapter = ErrorViewHolder().getAdapter()
+
+    private val _selectedToReplaceEPC = MutableLiveData<Tag>()
+    val selectedToReplaceEPC : LiveData<Tag> = _selectedToReplaceEPC
 
     private val _tagCountOK = MutableLiveData<Int>()
     val tagCountOK : LiveData<Int> = _tagCountOK
@@ -39,7 +42,6 @@ class TransAdjustmentViewModel : ScanViewModel(), VerifyListener {
     private val _isVerified = MutableLiveData<Boolean>().apply { postValue(false) }
     val isVerified : LiveData<Boolean> = _isVerified
 
-
     private val _commitState = MutableLiveData<Int>()
     val commitState : LiveData<Int> = _commitState
 
@@ -49,6 +51,8 @@ class TransAdjustmentViewModel : ScanViewModel(), VerifyListener {
 
     private var queriedTags = mutableSetOf<String>()
     private var currentStockCode = ""
+
+    private var isReplaceEPC = false;
 
     init {
         viewModelScope.launch {
@@ -138,6 +142,10 @@ class TransAdjustmentViewModel : ScanViewModel(), VerifyListener {
         adjustmentTagAdapter.setShowingOK(b)
     }
 
+    fun setReplaceTag(b : Boolean) {
+        isReplaceEPC = b
+    }
+
     fun commitTransaction() {
         viewModelScope.launch {
 //            VolleyRepository.getI().requestAPI(
@@ -157,8 +165,8 @@ class TransAdjustmentViewModel : ScanViewModel(), VerifyListener {
                 RequestEndPoint.TRANSACTION_GENERAL,
                 RequestParam.transactionGeneral(
                     tags = adjustmentTagAdapter.getUnScannedTags(),
-                    statusFrom = "Gudang",
-                    statusTo = "Hilang",
+                    statusFrom = Tag.STATUS_STORED,
+                    statusTo = Tag.STATUS_LOST,
                 ),
                 RequestResult::getGeneralResponse
             ).collect {
@@ -169,5 +177,11 @@ class TransAdjustmentViewModel : ScanViewModel(), VerifyListener {
 
     fun checkSimilarTags(): String =
         adjustmentTagAdapter.getScannedTags().map { it.epc }.getSimilarStrings()
+
+    override fun onItemClick(item: Any) {
+        if (isReplaceEPC) {
+            _selectedToReplaceEPC.postValue(item as Tag)
+        }
+    }
 
 }
