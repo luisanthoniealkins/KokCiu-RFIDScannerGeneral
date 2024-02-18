@@ -13,16 +13,18 @@ import com.example.rfid_scanner.module.main.scan.transaction.general.TransGenera
 import com.example.rfid_scanner.module.main.scan.transaction.general.TransGeneralViewModel.Companion.GENERAL
 import com.example.rfid_scanner.module.main.scan.transaction.general.TransGeneralViewModel.Companion.RETURN
 import com.example.rfid_scanner.module.main.scan.transaction.general.TransGeneralViewModel.Companion.REUSE
+import com.example.rfid_scanner.utils.constant.Constant
 import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_BRAND
 import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_CUSTOMER
 import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_UNIT
 import com.example.rfid_scanner.utils.constant.Constant.PROPERTY_TYPE_VEHICLE_TYPE
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_OK
+import com.example.rfid_scanner.utils.constant.Constant.Users.Basic
+import com.example.rfid_scanner.utils.constant.Constant.Users.MasterAdmin
 import com.example.rfid_scanner.utils.custom.view.PasswordDialog
 import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
-class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(),
-    PasswordDialog.PasswordDialogListener {
+class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(){
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentMenuBinding.inflate(inflater, container, false)
@@ -32,11 +34,6 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(),
     private val acViewModel: MainViewModel by activityViewModels()
 
     override fun setUpViews() = with(binding) {
-        btnAdminMode.setOnClickListener {
-            btnAdminMode.isEnabled = false
-            val passwordDialog = PasswordDialog(this@MenuFragment)
-            passwordDialog.show(childFragmentManager, "password dialog")
-        }
 
         btnScanTag.setOnClickListener {
             navigateTo(MenuFragmentDirections.toTagScannerFragment())
@@ -118,6 +115,10 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(),
             navigateTo(MenuFragmentDirections.toPrintCustomFragment())
         }
 
+        btnSettingsGeneral.setOnClickListener {
+            navigateTo(MenuFragmentDirections.toSettingsGeneralFragment())
+        }
+
         btnSettingsNetwork.setOnClickListener {
             navigateTo(MenuFragmentDirections.toSettingNetworkFragment())
         }
@@ -136,12 +137,14 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(),
     }
 
     override fun observeData() = with(viewModel) {
-        isAdminUnlocked.observeWithOwner {
-            binding.btnAdminMode.visibility = if (it) View.GONE else View.VISIBLE
-            binding.llAdmin.visibility = if (it) View.VISIBLE else View.GONE
+        acViewModel.userMode.observeWithOwner {
+            binding.llAdmin.visibility = if (it != Basic) View.VISIBLE else View.GONE
             binding.llAdminAndOnline.visibility =
-                if (it && acViewModel.ldServerStatus.value?.status == SERVICE_STATUS_OK) View.VISIBLE
+                if (it != Basic && acViewModel.ldServerStatus.value?.status == SERVICE_STATUS_OK) View.VISIBLE
                 else View.GONE
+
+            binding.btnSettingsTrans.visibility = if (it == MasterAdmin) View.VISIBLE else View.GONE
+            binding.btnTransactionGeneral.visibility = if (it == MasterAdmin) View.VISIBLE else View.GONE
         }
 
         acViewModel.ldServerStatus.observeWithOwner {
@@ -150,18 +153,11 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(),
                 else View.GONE
 
             binding.llAdminAndOnline.visibility =
-                if (isAdminUnlocked.value == true && it.status == SERVICE_STATUS_OK) View.VISIBLE
+                if (acViewModel.userMode.value != Basic && it.status == SERVICE_STATUS_OK) View.VISIBLE
                 else View.GONE
         }
     }
 
-    override fun submitPassword(password: String?) {
-        if (!viewModel.submitPassword(password)) showToast("Password admin salah")
-    }
-
-    override fun reEnableButton() {
-        binding.btnAdminMode.isEnabled = true
-    }
 }
 
 

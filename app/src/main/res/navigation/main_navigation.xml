@@ -67,6 +67,9 @@
         <action
             android:id="@+id/to_transReplacementFragment"
             app:destination="@id/transReplacementFragment" />
+        <action
+            android:id="@+id/to_settingsGeneralFragment"
+            app:destination="@id/settingsGeneralFragment" />
     </fragment>
 
     <fragment
@@ -306,5 +309,10 @@
             android:name="transactionCode"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsGeneralFragment"
+        android:name="com.example.rfid_scanner.module.main.settings.general.SettingsGeneralFragment"
+        android:label="fragment_settings_general"
+        tools:layout="@layout/fragment_settings_general" />
 
 </navigation>

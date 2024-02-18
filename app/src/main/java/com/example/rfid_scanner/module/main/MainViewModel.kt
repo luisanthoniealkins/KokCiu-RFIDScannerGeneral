@@ -10,13 +10,16 @@ import androidx.lifecycle.MutableLiveData
 import com.example.rfid_scanner.R
 import com.example.rfid_scanner.data.model.status.BluetoothStatus
 import com.example.rfid_scanner.data.model.status.MConnectionStatus
-import com.example.rfid_scanner.data.model.status.NetworkStatus
 import com.example.rfid_scanner.data.model.status.ServerStatus
 import com.example.rfid_scanner.data.repository.VolleyRepository
 import com.example.rfid_scanner.data.repository.component.RequestEndPoint
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_ERROR
 import com.example.rfid_scanner.utils.constant.Constant.SERVICE_STATUS_OK
 import com.example.rfid_scanner.service.*
+import com.example.rfid_scanner.utils.constant.Constant.PASSWORD_ADMIN
+import com.example.rfid_scanner.utils.constant.Constant.PASSWORD_SUPER_ADMIN
+import com.example.rfid_scanner.utils.constant.Constant.Users
+import com.example.rfid_scanner.utils.constant.Constant.Users.*
 import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +43,8 @@ class MainViewModel : BaseViewModel() {
             R.id.alterStockIdFragment,
             R.id.alterStockFragment,
             R.id.settingsBluetoothFragment,
-            R.id.transactionRFIDFragment
+            R.id.transactionRFIDFragment,
+            R.id.settingsGeneralFragment,
         )
 
         @RequiresApi(Build.VERSION_CODES.S)
@@ -71,26 +75,23 @@ class MainViewModel : BaseViewModel() {
         )
     }
 
-    private lateinit var mNetworkService : NetworkService
+    private val _userMode = MutableLiveData<Users>().apply { postValue(Basic) }
+    val userMode : LiveData<Users> = _userMode
+    
     private lateinit var mServerService : VolleyRepository
     lateinit var mBluetoothScannerService : BluetoothScannerService
 
-    private val _ldNetworkStatus = MutableLiveData<NetworkStatus>()
-    val ldNetworkStatus : LiveData<NetworkStatus> = _ldNetworkStatus
-
-    private val _ldServerStatus = MutableLiveData<ServerStatus>()
+    private val _ldServerStatus = MutableLiveData<ServerStatus>().apply { postValue(ServerStatus("", R.color.red_disconnect, "-", null)) }
     val ldServerStatus : LiveData<ServerStatus> = _ldServerStatus
 
     private val _ldBluetoothStatus = MutableLiveData<BluetoothStatus>()
     val ldBluetoothStatus : LiveData<BluetoothStatus> = _ldBluetoothStatus
 
     fun initService() {
-        mNetworkService = NetworkService.getInstance()
         mServerService = VolleyRepository.getI()
         mBluetoothScannerService = BluetoothScannerService.getInstance()
 
         CoroutineScope(Dispatchers.IO).launch {
-            launch { mNetworkService.sfStatus.collect{ refreshNetworkStatus() } }
             launch { mServerService.sfStatus.collect{ refreshServerStatus(it) } }
             launch { mBluetoothScannerService.sfStatus.collect{ refreshBluetoothStatus(it) } }
         }
@@ -98,44 +99,11 @@ class MainViewModel : BaseViewModel() {
     }
 
     fun stopService() {
-        mNetworkService.stopService()
         mBluetoothScannerService.disconnectBluetooth()
     }
 
     fun checkServer() {
-        VolleyRepository.getI().requestAPI(RequestEndPoint.CHECK_SERVER)
-    }
-
-    fun refreshNetworkStatus() {
-        val ns = NetworkStatus(SERVICE_STATUS_ERROR, R.color.red_disconnect, "-", 0,"-", null)
-
-        if (!mNetworkService.isWifiEnabled) ns.message = "Wifi offline"
-        else if (!mNetworkService.isWifiConnected) ns.message = "Wifi belum terhubung"
-        else if (!StorageService.getI().wifi.equals(mNetworkService.wifiSSID)) {
-            ns.ssid = mNetworkService.wifiSSID
-            ns.message = "Diharapkan ${StorageService.getI().wifi}"
-        } else {
-            ns.ssid = mNetworkService.wifiSSID
-            ns.status = SERVICE_STATUS_OK
-
-            val wifiStrength: Int = mNetworkService.wifiStrength
-            ns.strength = wifiStrength
-
-            when {
-                wifiStrength < 30 -> {
-                    ns.statusColor = R.color.red_disconnect
-                    ns.message = "Sinyal lemah"
-                }
-                wifiStrength < 70 -> {
-                    ns.statusColor = R.color.yellow_warning
-                    ns.message = "Sinyal lemah"
-                }
-                else ->
-                    ns.statusColor = R.color.green_connect
-            }
-        }
-
-        _ldNetworkStatus.postValue(ns)
+        VolleyRepository.getI().requestAPI(RequestEndPoint.CHECK_SERVER, null, null, false)
     }
 
     private fun refreshServerStatus(isConnected: Boolean?) {
@@ -180,5 +148,11 @@ class MainViewModel : BaseViewModel() {
             else lowerThanCodeSPermissions
         )
         return permissions.toTypedArray()
+    }
+
+    fun submitPassword(password: String?): Boolean {
+        if (password == PASSWORD_SUPER_ADMIN) _userMode.postValue(MasterAdmin)
+        if (password == PASSWORD_ADMIN) _userMode.postValue(BasicAdmin)
+        return ((password == PASSWORD_ADMIN) || (password == PASSWORD_SUPER_ADMIN))
     }
 }

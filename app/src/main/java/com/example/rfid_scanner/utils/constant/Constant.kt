@@ -2,6 +2,8 @@ package com.example.rfid_scanner.utils.constant
 
 object Constant {
 
+    const val APP_VERSION = "1.1 Unstable"
+
     const val DEVICE_NOT_CONNECTED = "no_connection"
     const val DEVICE_TYPE_BTE = "bte" // short range
     const val DEVICE_TYPE_BLE = "ble" // long range
@@ -22,4 +24,10 @@ object Constant {
     const val PROPERTY_TYPE_BRAND = 1
     const val PROPERTY_TYPE_VEHICLE_TYPE = 2
     const val PROPERTY_TYPE_UNIT = 3
+
+    enum class Users {
+        Basic,
+        BasicAdmin,
+        MasterAdmin,
+    }
 }

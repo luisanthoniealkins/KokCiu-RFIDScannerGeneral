@@ -35,7 +35,7 @@ class PrintCheckoutViewModel : ScanViewModel() {
 
         Handler(Looper.getMainLooper()).postDelayed({
 //            BluetoothAdapter.getDefaultAdapter().disable()
-            mBluetoothScannerService.connectBluetooth(StorageService.getI().printerMacAddress!!, DEVICE_TYPE_BTE)
+            mBluetoothScannerService.connectBluetooth(StorageService.getI().printerMacAddress, DEVICE_TYPE_BTE)
         }, 500)
 
 //        Handler(Looper.getMainLooper()).postDelayed({

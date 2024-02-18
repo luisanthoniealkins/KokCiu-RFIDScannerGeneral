@@ -1,6 +1,5 @@
 package com.example.rfid_scanner.module.main.scan.transaction.replacement
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog

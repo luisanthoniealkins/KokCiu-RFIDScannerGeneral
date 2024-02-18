@@ -2,6 +2,7 @@ package com.example.rfid_scanner.module.main
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.app.AlertDialog
@@ -17,6 +18,9 @@ import com.example.rfid_scanner.utils.constant.Constant.DEVICE_NOT_CONNECTED
 import com.example.rfid_scanner.service.BluetoothScannerService
 import com.example.rfid_scanner.service.NetworkService
 import com.example.rfid_scanner.service.StorageService
+import com.example.rfid_scanner.utils.constant.Constant
+import com.example.rfid_scanner.utils.constant.Constant.APP_VERSION
+import com.example.rfid_scanner.utils.constant.Constant.Users.Basic
 import com.example.rfid_scanner.utils.generic.activity.BaseActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -38,9 +42,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), DeviceS
     }
 
     override fun observeData() = with(viewModel) {
-        ldNetworkStatus.observeWithOwner {
-            binding.tvWifiStatus.text = it.status
-            binding.tvWifiStatus.setTextColor(gColor(it.statusColor))
+        userMode.observeWithOwner {
+            binding.llAdminMode.visibility = if (it != Basic) View.VISIBLE else View.GONE
         }
 
         ldServerStatus.observeWithOwner {
@@ -74,13 +77,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), DeviceS
         val sBinding = BottomSheetStatusBinding.inflate(inflater)
 
         with(sBinding) {
-            viewModel.ldNetworkStatus.observeWithOwner {
-                tvWifiStatus.text = it.status
-                tvWifiStatus.setTextColor(gColor(it.statusColor))
-                tvWifiSsid.text = it.ssid
-                tvWifiStrength.text = ("${it.strength}%")
-                tvWifiMessage.text = it.message
-            }
+            tvVersion.text = "ver. $APP_VERSION"
+
+            llAdminMode.visibility = if (viewModel.userMode.value != Basic) View.GONE else View.VISIBLE
 
             viewModel.ldServerStatus.observeWithOwner {
                 tvServerStatus.text = it.status
@@ -113,8 +112,15 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(), DeviceS
                 }
             }
 
-            btnRefreshWifi.setOnClickListener { viewModel.refreshNetworkStatus() }
             btnRefreshServer.setOnClickListener { viewModel.checkServer() }
+            btnAdminMode.setOnClickListener {
+                if (viewModel.submitPassword(edtPassword.text.toString())){
+                    showToast("Mode Admin diaktifkan")
+                    dialog.hide()
+                } else {
+                    showToast("Password salah")
+                }
+            }
 
             dialog.setContentView(root)
         }

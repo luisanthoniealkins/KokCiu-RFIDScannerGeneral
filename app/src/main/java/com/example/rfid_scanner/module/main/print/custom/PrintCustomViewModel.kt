@@ -24,7 +24,7 @@ class PrintCustomViewModel : BaseViewModel() {
         showToast("Connecting to printer bluetooth")
 
         Handler(Looper.getMainLooper()).postDelayed({
-            mBluetoothScannerService.connectBluetooth(StorageService.getI().printerMacAddress!!, DEVICE_TYPE_BTE)
+            mBluetoothScannerService.connectBluetooth(StorageService.getI().printerMacAddress, DEVICE_TYPE_BTE)
         }, 500)
     }
 

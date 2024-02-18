@@ -3,6 +3,7 @@ package com.example.rfid_scanner.data.repository
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonObjectRequest
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.json.JSONObject
+
 
 class VolleyRepository(private val context: Context) {
 
@@ -49,7 +51,7 @@ class VolleyRepository(private val context: Context) {
     }
 
     // API CALL
-    fun requestAPI(endpoint: String, obj: JSONObject? = null, function: ((JSONObject) -> ResponseData)? = null): StateFlow<MResponse> {
+    fun requestAPI(endpoint: String, obj: JSONObject? = null, function: ((JSONObject) -> ResponseData)? = null, useRetryPolicy: Boolean = true): StateFlow<MResponse> {
         if (obj != null && IS_DEBUG) Log.d("12345", "$endpoint $obj")
 
         val sfResponse = MutableStateFlow(MResponse(LOADING, null))
@@ -81,6 +83,14 @@ class VolleyRepository(private val context: Context) {
                 _sfStatus.value = false
                 sfResponse.value = MResponse(FINISHED_FAILURE, null)
             }
+
+        if (useRetryPolicy) {
+            request.retryPolicy = DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+            )
+        }
 
         requestQueue?.add(request)
 

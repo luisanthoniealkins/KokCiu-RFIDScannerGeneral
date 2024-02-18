@@ -3,6 +3,7 @@ package com.example.rfid_scanner.data.model
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
+import com.example.rfid_scanner.service.StorageService
 import com.example.rfid_scanner.utils.helper.DateHelper
 import com.example.rfid_scanner.utils.helper.TagHelper.TAG
 import java.util.*
@@ -45,7 +46,7 @@ class Bill() : Parcelable {
     constructor(encodedText: String) : this() {
         Log.d(TAG, "Encoded message: $encodedText")
 
-        val billData = encodedText.split("/").toTypedArray()
+        val billData = encodedText.split(StorageService.getI().qrCodeDelimiter).toTypedArray()
         for (i in billData.indices) billData[i] = billData[i].trim { it <= ' ' }
 
         if (!(billData.size >= 4 && billData.size % 2 == 0)) return

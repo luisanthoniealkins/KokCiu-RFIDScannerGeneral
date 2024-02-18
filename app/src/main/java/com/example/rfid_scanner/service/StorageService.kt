@@ -18,6 +18,7 @@ class StorageService(private val context: Context) {
         private const val SP_MAX_EPC_LENGTH = "sp_max_epc_length"
         private const val SP_EPC_DIFF_TOLERANCE = "sp_epc_diff_tolerance"
         private const val SP_PRINTER_MAC_ADDRESS = "sp_printer_mac_address"
+        private const val SP_QR_CODE_DELIMITER = "sp_qr_code_delimiter"
 
         @SuppressLint("StaticFieldLeak")
         var mInstance: StorageService? = null
@@ -33,44 +34,48 @@ class StorageService(private val context: Context) {
     }
 
     var lastConnectedBluetoothDevice
-        set(value) { getPref().edit().putString(SP_LAST_DEVICE, value).apply() }
-        get() = getPref().getString(SP_LAST_DEVICE, "-")
+        set(value) = put(SP_LAST_DEVICE, value)
+        get() = get(SP_LAST_DEVICE, "-")
 
     var ipAddress
-        set(value) { getPref().edit().putString(SP_IP, value).apply() }
-        get() = getPref().getString(SP_IP, "192.168.43.109")
+        set(value) = put(SP_IP, value)
+        get() = get(SP_IP, "192.168.43.109")
 
     var port
-        set(value) { getPref().edit().putString(SP_PORT, value).apply() }
-        get() = getPref().getString(SP_PORT, "80")
+        set(value) = put(SP_PORT, value)
+        get() = get(SP_PORT, "80")
 
     var wifi
-        set(value) { getPref().edit().putString(SP_WIFI, value).apply() }
-        get() = getPref().getString(SP_WIFI, "HUAWE-Mj")
+        set(value) = put(SP_WIFI, value)
+        get() = get(SP_WIFI, "HUAWE-Mj")
 
     var lastUsedStockId
-        set(value) { put(SP_LAST_STOCK_ID, value)}
+        set(value) = put(SP_LAST_STOCK_ID, value)
         get() = get(SP_LAST_STOCK_ID, "12020-42000 HYK#Q1")
 
     var lastUsedStockName
-        set(value) { put(SP_LAST_STOCK_NAME, value) }
+        set(value) = put(SP_LAST_STOCK_NAME, value)
         get() = get(SP_LAST_STOCK_NAME, "PION PIRING BELAKANG 6X40")
 
     var minEPCLength
-        set(value) { putInt(SP_MIN_EPC_LENGTH, value) }
+        set(value) = putInt(SP_MIN_EPC_LENGTH, value)
         get() = getInt(SP_MIN_EPC_LENGTH, 24)
 
     var maxEPCLength
-        set(value) { putInt(SP_MAX_EPC_LENGTH, value) }
+        set(value) = putInt(SP_MAX_EPC_LENGTH, value)
         get() = getInt(SP_MAX_EPC_LENGTH, 24)
 
     var epcDiffTolerance
-        set(value) { putInt(SP_EPC_DIFF_TOLERANCE, value) }
+        set(value) = putInt(SP_EPC_DIFF_TOLERANCE, value)
         get() = getInt(SP_EPC_DIFF_TOLERANCE, 3)
 
     var printerMacAddress
-        set(value) { getPref().edit().putString(SP_PRINTER_MAC_ADDRESS, value).apply() }
-        get() = getPref().getString(SP_PRINTER_MAC_ADDRESS, "66:32:26:32:44:45")
+        set(value) = put(SP_PRINTER_MAC_ADDRESS, value)
+        get() = get(SP_PRINTER_MAC_ADDRESS, "66:32:26:32:44:45")
+
+    var qrCodeDelimiter
+        set(value) = put(SP_QR_CODE_DELIMITER, value)
+        get() = get(SP_QR_CODE_DELIMITER, "/")
 
     fun setStatusChecked(from: String, to: String, isChecked: Boolean) {
         val st = "${from}>${to}"
@@ -83,7 +88,7 @@ class StorageService(private val context: Context) {
     }
 
     private fun put(key: String, value: String?) = getPref().edit().putString(key, value).apply()
-    private fun get(key: String, default: String) = getPref().getString(key, default)
+    private fun get(key: String, default: String) = getPref().getString(key, default) ?: default
 
     private fun putInt(key: String, value: Int) = getPref().edit().putInt(key, value).apply()
     private fun getInt(key: String, default: Int) = getPref().getInt(key, default)

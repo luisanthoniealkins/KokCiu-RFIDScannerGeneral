@@ -47,7 +47,7 @@
             android:textColor="@color/red_disconnect"
             android:textStyle="bold"
             android:layout_marginHorizontal="8dp"
-            tools:text="aksdkaospdkpodaskdopakpdoaskdpokkdak"/>
+            tools:text="error"/>
 
         <Button
             android:id="@+id/btn_restart_scan"
