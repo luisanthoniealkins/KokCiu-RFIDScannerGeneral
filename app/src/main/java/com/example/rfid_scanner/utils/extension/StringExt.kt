@@ -78,4 +78,8 @@ object StringExt {
         for (x in this) if (x < '0' || x > '9') return false
         return true
     }
+
+    fun String.removePrefixSuffixLength(prefix: Int, suffix: Int): String {
+        return this.drop(prefix).dropLast(suffix)
+    }
 }

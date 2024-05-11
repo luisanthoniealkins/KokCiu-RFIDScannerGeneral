@@ -74,7 +74,7 @@ class MainViewModel : BaseViewModel() {
             Manifest.permission.NFC,
         )
     }
-
+    
     private val _userMode = MutableLiveData<Users>().apply { postValue(Basic) }
     val userMode : LiveData<Users> = _userMode
     

@@ -3,6 +3,7 @@ package com.example.rfid_scanner.module.main.bluetooth
 import android.bluetooth.BluetoothDevice
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.rfid_scanner.module.main.bluetooth.DeviceListAdapter.DeviceListData
@@ -14,14 +15,6 @@ class DeviceListViewModel : BaseViewModel(), ItemClickListener {
 
     companion object {
         const val SCAN_PERIOD: Long = 10000 // 10 seconds
-
-        val bteDeviceAddressList = setOf(
-            "98:DA:B0:00:3D:59"
-        )
-
-        val bleDeviceAddressList = setOf(
-            "FE:88:A5:83:64:98"
-        )
     }
 
     val adapter = DeviceListAdapter(this)
@@ -44,10 +37,13 @@ class DeviceListViewModel : BaseViewModel(), ItemClickListener {
             }, SCAN_PERIOD)
 
             _isScanning.postValue(true)
+            Log.d("12345", "start scan")
             uhf.startScanBTDevices { bluetoothDevice: BluetoothDevice, _: Int, _: ByteArray? ->
+                Log.d("12345", "result")
                 addDevice(bluetoothDevice)
             }
         } else {
+            Log.d("12345", "stop scan")
             _isScanning.postValue(false)
             uhf.stopScanBTDevices()
         }

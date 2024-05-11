@@ -9,6 +9,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.rfid_scanner.data.model.Bill
 import com.example.rfid_scanner.service.StorageService
+import com.example.rfid_scanner.service.StorageService.Companion.storage
+import com.example.rfid_scanner.utils.constant.Constant
+import com.example.rfid_scanner.utils.constant.Constant.BluetoothDeviceType.Printer
 import com.example.rfid_scanner.utils.constant.Constant.DEVICE_TYPE_BTE
 import com.example.rfid_scanner.utils.generic.viewmodel.ScanViewModel
 import com.example.rfid_scanner.utils.helper.TextHelper.emptyString
@@ -34,17 +37,10 @@ class PrintCheckoutViewModel : ScanViewModel() {
         showToast("Connecting to printer bluetooth")
 
         Handler(Looper.getMainLooper()).postDelayed({
-//            BluetoothAdapter.getDefaultAdapter().disable()
-            mBluetoothScannerService.connectBluetooth(StorageService.getI().printerMacAddress, DEVICE_TYPE_BTE)
+            storage.btDeviceConfigs.reversed().firstOrNull { it.deviceType == Printer }?.let {
+                mBluetoothScannerService.connectBluetooth(it.macAddress, DEVICE_TYPE_BTE)
+            }
         }, 500)
-
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            BluetoothAdapter.getDefaultAdapter().enable()
-//        }, 1000)
-//
-//        Handler(Looper.getMainLooper()).postDelayed({
-//            mBluetoothScannerService.connectBluetooth(StorageService.getI().printerMacAddress!!, DEVICE_TYPE_BTE)
-//        }, 1500)
     }
 
     fun reconnectPreviousBluetooth() {

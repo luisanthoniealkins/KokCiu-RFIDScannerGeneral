@@ -2,9 +2,12 @@ package com.example.rfid_scanner.service
 
 import android.bluetooth.BluetoothDevice
 import android.os.SystemClock
+import com.example.rfid_scanner.data.model.BTDeviceConfig
 import com.example.rfid_scanner.data.model.TagEPC
 import com.example.rfid_scanner.data.model.status.MConnectionStatus
 import com.example.rfid_scanner.data.model.status.ScanStatus
+import com.example.rfid_scanner.service.StorageService.Companion.storage
+import com.example.rfid_scanner.utils.extension.StringExt.removePrefixSuffixLength
 import com.rscja.deviceapi.RFIDWithUHFBLE
 import com.rscja.deviceapi.entity.UHFTAGInfo
 import com.rscja.deviceapi.interfaces.ConnectionStatus
@@ -20,6 +23,8 @@ class BluetoothBLEService(private val coroutineScope: CoroutineScope): Connectio
     var currentDevice: BluetoothDevice? = null
         private set
 
+    private var currentDeviceConfig = BTDeviceConfig()
+
     private val _sfStatus = MutableStateFlow(MConnectionStatus())
     val sfStatus : StateFlow<MConnectionStatus> = _sfStatus
 
@@ -31,7 +36,10 @@ class BluetoothBLEService(private val coroutineScope: CoroutineScope): Connectio
 
     override fun getStatus(conStatus: ConnectionStatus, _device: Any?) {
         Runnable {
-            if (conStatus == ConnectionStatus.CONNECTED) currentDevice = _device as BluetoothDevice?
+            if (conStatus == ConnectionStatus.CONNECTED) {
+                currentDevice = _device as BluetoothDevice?
+                currentDeviceConfig = storage.btDeviceConfigs.firstOrNull { it.macAddress == currentDevice?.address } ?: BTDeviceConfig()
+            }
             else if (conStatus == ConnectionStatus.DISCONNECTED) currentDevice = null
             updateStatus()
         }.run()
@@ -63,7 +71,9 @@ class BluetoothBLEService(private val coroutineScope: CoroutineScope): Connectio
                     SystemClock.sleep(1)
                     continue
                 }
-                channelTags?.send(list.map { TagEPC(it.epc) })
+                channelTags?.send(
+                    list.map { TagEPC(it.epc.removePrefixSuffixLength(currentDeviceConfig.prefixCodeCut, currentDeviceConfig.suffixCodeCut)) }
+                )
             }
         }
 

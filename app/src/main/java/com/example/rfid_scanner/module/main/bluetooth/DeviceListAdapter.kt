@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rfid_scanner.databinding.ItemBluetoothDeviceBinding
+import com.example.rfid_scanner.service.StorageService.Companion.storage
+import com.example.rfid_scanner.utils.constant.Constant
+import com.example.rfid_scanner.utils.constant.Constant.BluetoothDeviceType.*
 import com.example.rfid_scanner.utils.listener.ItemClickListener
 
 class DeviceListAdapter(private val listener: ItemClickListener) : RecyclerView.Adapter<DeviceListAdapter.DeviceVH>() {
@@ -35,14 +38,22 @@ class DeviceListAdapter(private val listener: ItemClickListener) : RecyclerView.
             with(binding) {
                 tvName.text = data.name
                 tvAddress.text = data.address
-                when {
-                    DeviceListViewModel.bteDeviceAddressList.contains(data.address) -> {
+                when (storage.btDeviceConfigs.find { it.macAddress == data.address }?.deviceType) {
+                    ScannerLongRange -> {
+                        tvType.text = ("BLE")
+                        tvTypeRange.text = ("Jauh")
+                    }
+                    ScannerShortRange -> {
                         tvType.text = ("BTE")
                         tvTypeRange.text = ("Dekat")
                     }
-                    DeviceListViewModel.bleDeviceAddressList.contains(data.address) -> {
-                        tvType.text = ("BLE")
-                        tvTypeRange.text = ("Jauh")
+                    Printer -> {
+                        tvType.text = ("PRINTER")
+                        tvTypeRange.text = ("Printer")
+                    }
+                    else -> {
+                        tvType.text = ("BELUM TERDAFTAR")
+                        tvTypeRange.text = ("Belum Terdaftar")
                     }
                 }
                 llViewHolder.setOnClickListener { listener.onItemClick(data) }

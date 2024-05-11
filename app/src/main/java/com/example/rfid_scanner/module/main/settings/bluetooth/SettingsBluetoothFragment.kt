@@ -1,12 +1,22 @@
 package com.example.rfid_scanner.module.main.settings.bluetooth
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.rfid_scanner.data.model.BTDeviceConfig
 import com.example.rfid_scanner.databinding.FragmentSettingsBluetoothBinding
+import com.example.rfid_scanner.module.main.settings.bluetooth.dialog.BTDeviceConfigDialog
+import com.example.rfid_scanner.utils.constant.Constant
+import com.example.rfid_scanner.utils.constant.Constant.DialogResult
 import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
+import com.example.rfid_scanner.utils.helper.TagHelper
+import com.example.rfid_scanner.utils.listener.DialogConfirmationListener
+import com.example.rfid_scanner.utils.listener.ItemClickListener
 
-class SettingsBluetoothFragment : BaseFragment<FragmentSettingsBluetoothBinding, SettingsBluetoothViewModel>(){
+class SettingsBluetoothFragment : BaseFragment<FragmentSettingsBluetoothBinding, SettingsBluetoothViewModel>(), ItemClickListener,
+    DialogConfirmationListener {
 
     override fun getViewBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentSettingsBluetoothBinding.inflate(inflater, container, false)
@@ -15,35 +25,30 @@ class SettingsBluetoothFragment : BaseFragment<FragmentSettingsBluetoothBinding,
 
     override fun setUpViews() = with(binding) {
         imvBack.setOnClickListener { navigateBack() }
-        btnConfirm.setOnClickListener { validateAndConfirmInput() }
+
+        imbAddDevice.setOnClickListener { showConfigDialog(null) }
+
+        rvItem.layoutManager = LinearLayoutManager(context)
+        rvItem.adapter = viewModel.deviceAdapter
     }
 
     override fun observeData() = with(viewModel) {
-        macAddress.observeWithOwner { binding.edtPrinterAddress.setText(it) }
+        deviceAdapter.listener = this@SettingsBluetoothFragment
     }
 
-    private fun validateAndConfirmInput() {
-        val macAddress = binding.edtPrinterAddress.text.toString().trim()
+    override fun onItemClick(item: Any) {
+        showConfigDialog(item as String)
+    }
 
-        var isError = false
-        binding.tilPrinterAddress.error =
-            if (macAddress.isNotEmpty()) ""
-            else {
-                isError = true
-                "IP Address harus diisi"
-            }
+    private fun showConfigDialog(macAddress: String?) {
+        BTDeviceConfigDialog(macAddress,this@SettingsBluetoothFragment).show(requireActivity().supportFragmentManager, TagHelper.TAG_DIALOG)
+    }
 
-        if (isError) return
-
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Konfirmasi")
-            .setMessage("Apakah anda yakin untuk menjalankan operasi?")
-            .setPositiveButton("Ok") { _, _ ->
-                viewModel.updateSP(macAddress)
-                navigateBack()
-            }
-            .setNegativeButton("Batal") { _, _ -> }
-            .create()
-            .show()
+    override fun onDialogDismiss(result: DialogResult, item: Any?) {
+        when(result) {
+            DialogResult.ACTION_ADD -> viewModel.addDeviceConfig(item as BTDeviceConfig)
+            DialogResult.ACTION_UPDATE -> viewModel.updateDeviceConfig(item as BTDeviceConfig)
+            DialogResult.ACTION_DELETE -> viewModel.deleteDeviceConfig(item as BTDeviceConfig)
+        }
     }
 }

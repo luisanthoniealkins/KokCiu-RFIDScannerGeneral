@@ -6,11 +6,14 @@ import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.util.Log
+import com.example.rfid_scanner.data.model.BTDeviceConfig
 import com.example.rfid_scanner.data.model.TagEPC
 import com.example.rfid_scanner.data.model.status.MConnectionStatus
 import com.example.rfid_scanner.data.model.status.ScanStatus
+import com.example.rfid_scanner.service.StorageService.Companion.storage
 import com.example.rfid_scanner.utils.constant.Constant.BTE_START_SCAN_COMMAND
 import com.example.rfid_scanner.utils.constant.Constant.BTE_STOP_SCAN_COMMAND
+import com.example.rfid_scanner.utils.extension.StringExt.removePrefixSuffixLength
 import com.example.rfid_scanner.utils.helper.LogHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +38,10 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
             UUID.fromString("00001101-0000-1000-8000-00805F9B34FB") // "random" unique identifier
     }
 
+    var currentDevice: BluetoothDevice? = null
+        private set
+
+    private var currentDeviceConfig = BTDeviceConfig()
 
     private val _sfStatus = MutableStateFlow(MConnectionStatus())
     val sfStatus = _sfStatus.asStateFlow()
@@ -51,9 +58,6 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
         get() = mBTAdapter.isEnabled
     val isConnected: Boolean
         get() = mBTSocket?.isConnected ?: false
-
-    var currentDevice: BluetoothDevice? = null
-        private set
 
     private var isScanning = false
     private var isPressing = false
@@ -86,7 +90,8 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
                 mConnectedThread = ConnectedThread(mBTSocket)
                 mConnectedThread?.start()
                 currentDevice = device
-                StorageService.getI().lastConnectedBluetoothDevice = device.address
+                currentDeviceConfig = storage.btDeviceConfigs.firstOrNull { it.macAddress == currentDevice?.address } ?: BTDeviceConfig()
+                storage.lastConnectedBluetoothDevice = device.address
             }
             updateStatus(isFailed)
         }
@@ -143,7 +148,12 @@ class BluetoothBTEService(context: Context, private val coroutineScope: Coroutin
                             repeat(readBufferPosition) { data += mmReadBuffer[it].toInt().toChar() }
                             when(bChar) {
                                 '!' -> {
-                                    if (isScanning) tags.add(TagEPC(data))
+                                    if (isScanning) tags.add(
+                                        TagEPC(data.removePrefixSuffixLength(
+                                            currentDeviceConfig.prefixCodeCut,
+                                            currentDeviceConfig.suffixCodeCut
+                                        ))
+                                    )
                                 }
                                 '*' -> {
 //                                        if (NumberUtil.isNumeric(data)) {

@@ -14,6 +14,8 @@ import com.example.rfid_scanner.module.main.scan.transaction.checkout.TransCheck
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.dialog.CheckoutConfirmationDialog
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.qr_reader.QRReaderViewModel
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.verify.VerifyCheckoutBottomSheet
+import com.example.rfid_scanner.utils.constant.Constant
+import com.example.rfid_scanner.utils.constant.Constant.DialogResult.RESULT_POSITIVE
 import com.example.rfid_scanner.utils.generic.fragment.ScanFragment
 import com.example.rfid_scanner.utils.helper.TagHelper
 import com.example.rfid_scanner.utils.helper.TagHelper.TAG_DIALOG
@@ -165,8 +167,8 @@ class TransCheckoutFragment : ScanFragment<FragmentTransCheckoutBinding, TransCh
         viewModel.submitVerifyResult(result)
     }
 
-    override fun onDialogDismiss(result: Boolean) {
-        if (result) viewModel.commitTransaction()
+    override fun onDialogDismiss(result: Constant.DialogResult, item: Any?) {
+        if (result == RESULT_POSITIVE) viewModel.commitTransaction()
     }
 
 }

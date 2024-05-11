@@ -84,6 +84,7 @@ dependencies {
 
     // Shared Preferences
     implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation 'com.google.code.gson:gson:2.8.8'
 
     // QR Code Scanner
     implementation 'com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.2'
@@ -94,7 +95,7 @@ dependencies {
     // RX
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.7'
-
+    
     // Testing
     testImplementation 'junit:junit:'
     testImplementation 'junit:junit:4.12'

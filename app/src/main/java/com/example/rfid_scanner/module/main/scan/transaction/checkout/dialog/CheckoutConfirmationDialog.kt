@@ -3,6 +3,8 @@ package com.example.rfid_scanner.module.main.scan.transaction.checkout.dialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.rfid_scanner.databinding.DialogCheckoutConfirmationBinding
+import com.example.rfid_scanner.utils.constant.Constant
+import com.example.rfid_scanner.utils.constant.Constant.DialogResult.RESULT_POSITIVE
 import com.example.rfid_scanner.utils.generic.dialog.BaseDialog
 import com.example.rfid_scanner.utils.listener.DialogConfirmationListener
 
@@ -19,7 +21,7 @@ class CheckoutConfirmationDialog(
 
         btnCancel.setOnClickListener { dismiss() }
         btnOk.setOnClickListener {
-            listener.onDialogDismiss(true)
+            listener.onDialogDismiss(RESULT_POSITIVE, null)
             dismiss()
         }
     }

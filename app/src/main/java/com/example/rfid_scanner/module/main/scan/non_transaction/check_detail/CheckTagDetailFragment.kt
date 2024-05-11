@@ -56,19 +56,15 @@ class CheckTagDetailFragment : ScanFragment<FragmentCheckTagDetailBinding, Check
         lvTagScanned.observeWithOwner {
             if (isSearching) {
                 if (it == currentSearchTag) {
-                    binding.llTagTarget.setBackgroundColor(
-                        ContextCompat.getColor(requireContext(), R.color.green_connect)
-                    )
+                    binding.llTagTarget.setBackgroundColor(gColor(R.color.green_connect))
                     showToast("Kode RFID sesuai")
                 } else {
-                    binding.llTagTarget.setBackgroundColor(
-                        ContextCompat.getColor(requireContext(), R.color.red_disconnect)
-                    )
+                    binding.llTagTarget.setBackgroundColor(gColor(R.color.red_disconnect))
                     showToast("Kode RFID tidak sesuai")
                 }
             }
 
-            // TODO: PERLU LANGSUNG CEK
+            // TODO: PERLU LANGSUNG CEK ??
 //            stopInventory()
 //            binding.btnScan.isEnabled = false
         }

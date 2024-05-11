@@ -51,8 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="13sp"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
+                android:paddingHorizontal="8dp"
                 tools:text="6D22"/>
 
             <TextView
