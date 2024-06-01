@@ -211,4 +211,8 @@ class TransGeneralViewModel : ScanViewModel(), VerifyListener {
         return mapOfTags.map { it.value.epc }.getSimilarStrings()
     }
 
+    fun checkUnusualTags(): String {
+        return mapOfTags.filter { it.value.epc.length != 24 }.map { it.value.epc }.joinToString("\n")
+    }
+
 }

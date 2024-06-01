@@ -2,7 +2,7 @@ package com.example.rfid_scanner.utils.constant
 
 object Constant {
 
-    const val APP_VERSION = "1.3.1 Unstable"
+    const val APP_VERSION = "1.3.2 Stable"
 
     const val DEVICE_NOT_CONNECTED = "no_connection"
     const val DEVICE_TYPE_BTE = "bte" // short range

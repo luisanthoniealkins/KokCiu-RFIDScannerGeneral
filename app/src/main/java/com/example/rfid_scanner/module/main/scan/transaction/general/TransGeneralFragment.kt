@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
@@ -62,7 +61,7 @@ class TransGeneralFragment : ScanFragment<FragmentTransGeneralBinding, TransGene
         }
 
         imvInsertLast.setOnClickListener {
-            viewModel.selectStockId(StockId.getStockIdFromId(StorageService.getI().lastUsedStockId!!))
+            viewModel.selectStockId(StockId.getStockIdFromId(StorageService.getI().lastUsedStockId))
             tvId.text = StorageService.getI().lastUsedStockId
             tvName.text = StorageService.getI().lastUsedStockName
         }
@@ -174,17 +173,32 @@ class TransGeneralFragment : ScanFragment<FragmentTransGeneralBinding, TransGene
             return
         }}
 
-        val error3 = viewModel.checkSimilarTags()
-        if (error3.isNotEmpty()) {
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setTitle("Potensi Kode Duplikat")
-                .setMessage(error3)
-                .setPositiveButton("Ok") { _, _ -> showVerifyBottomSheet() }
-                .setNegativeButton("Batal") { _, _ -> }
-                .create()
-                .show()
+        runWarningSequence()
+    }
+
+    private fun runWarningSequence() {
+        warnSimilarTags {
+            warnUnusualTags {
+                showVerifyBottomSheet()
+            }
+        }
+    }
+
+    private fun warnSimilarTags(func : ()->Unit) {
+        val message = viewModel.checkSimilarTags()
+        if (message.isNotEmpty()) {
+            showConfirmationDialog("Potensi Kode Duplikat", message, func)
         } else {
-            showVerifyBottomSheet()
+            func()
+        }
+    }
+
+    private fun warnUnusualTags(func : ()->Unit) {
+        val message = viewModel.checkUnusualTags()
+        if (message.isNotEmpty()) {
+            showConfirmationDialog("Peringatan Kode Unik", message, func)
+        } else {
+            func()
         }
     }
 

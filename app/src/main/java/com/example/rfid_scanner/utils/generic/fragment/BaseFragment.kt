@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -106,6 +107,17 @@ abstract class BaseFragment<VBinding : ViewBinding, ViewModel : BaseViewModel> :
         this.observe(viewLifecycleOwner, function)
     }
 
-
-
+    fun showConfirmationDialog(
+        dialogTitle: String,
+        dialogMessage: String,
+        positiveAction: (() -> Unit),
+    ){
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(dialogTitle)
+            .setMessage(dialogMessage)
+            .setPositiveButton("Ok") { _, _ -> positiveAction() }
+            .setNegativeButton("Batal") { _, _ -> }
+            .create()
+            .show()
+    }
 }
