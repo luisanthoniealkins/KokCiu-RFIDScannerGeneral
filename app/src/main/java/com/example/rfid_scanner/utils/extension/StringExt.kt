@@ -56,12 +56,16 @@ object StringExt {
         return result
     }
 
-    fun List<String>.getSimilarStringsTo(text: String): String {
+    fun List<String>.getSimilarStringsTo(
+        text: String,
+        includeText: Boolean = true,
+        tolerance: Int = StorageService.getI().epcDiffTolerance
+    ): String {
         val set = mutableSetOf<String>()
         var result = ""
         this.map { str ->
-            if (str.isSimilarTo(text, StorageService.getI().epcDiffTolerance)) {
-                if (!set.contains(text)) {
+            if (str.isSimilarTo(text, tolerance)) {
+                if (includeText && !set.contains(text)) {
                     set.add(text)
                     result += text + "\n"
                 }

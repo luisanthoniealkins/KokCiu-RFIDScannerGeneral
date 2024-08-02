@@ -141,11 +141,27 @@ class TransCheckoutFragment : ScanFragment<FragmentTransCheckoutBinding, TransCh
             return
         }
 
-        val error3 = viewModel.checkSimilarTags()
-        if (error3.isNotEmpty()) {
+        val (error, allowPass) = viewModel.checkUnknownTagsError()
+        if (!allowPass) {
             AlertDialog.Builder(requireContext())
-                .setTitle("Potensi Kode Duplikat")
-                .setMessage(error3)
+                .setTitle("Kode tidak dikenal")
+                .setMessage("Kode ini tidak mirip dengan hasil scan\n" +
+                        "(Tidak bisa lanjut)\n\n" +
+                        error
+                )
+                .setPositiveButton("Ok") { _, _ -> }
+                .create()
+                .show()
+            return
+        }
+
+        if (error.isNotEmpty()) {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Kode tidak dikenal")
+                .setMessage("Kode ini mirip dengan hasil scan\n" +
+                        "(Bisa lanjut)\n\n" +
+                        error
+                )
                 .setPositiveButton("Ok") { _, _ -> showVerifyBottomSheet() }
                 .setNegativeButton("Batal") { _, _ -> }
                 .create()

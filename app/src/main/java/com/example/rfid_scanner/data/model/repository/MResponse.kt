@@ -4,7 +4,7 @@ class MResponse(
     val state: Int,
     val response: ResponseData?
 ) {
-
+    
     companion object {
         const val FINISHED_SUCCESS = 0
         const val FINISHED_FAILURE = 1

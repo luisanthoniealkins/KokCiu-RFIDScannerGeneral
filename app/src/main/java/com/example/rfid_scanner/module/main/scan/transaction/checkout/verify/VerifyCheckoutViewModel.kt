@@ -15,6 +15,7 @@ import com.example.rfid_scanner.data.repository.component.RequestResult
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.ErrorViewHolder
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.StockViewHolder
 import com.example.rfid_scanner.module.main.scan.transaction.general.verify.adapter.VerifyTagAdapter
+import com.example.rfid_scanner.utils.extension.StringExt.getSimilarStringsTo
 import com.example.rfid_scanner.utils.generic.viewmodel.ScanViewModel
 import com.example.rfid_scanner.utils.helper.LogHelper
 import kotlinx.coroutines.channels.Channel
@@ -72,13 +73,6 @@ class VerifyCheckoutViewModel : ScanViewModel() {
                 (func as ((StockRequirement) -> Unit))(it.copy())
             }
         }
-
-//        temp.map {
-//            LogHelper.postLog(it.stock.items.size.toString())
-//        }
-//        verifyStocks.map {
-//            LogHelper.postLog(it.stock.items.size.toString())
-//        }
 
         tagAdapter = VerifyTagAdapter(tags)
         _tagCountTag.postValue(tagAdapter.itemCount)
@@ -145,6 +139,28 @@ class VerifyCheckoutViewModel : ScanViewModel() {
     fun setShowingOK(b: Boolean) {
         tagAdapter.setShowingOK(b)
         _tagCountTag.postValue(tagAdapter.itemCount)
+    }
+
+    fun checkUnknownTagsError(): Pair<String, Boolean> {
+        val sTags = stockAdapter.dataSet.flatMap { it.stock.items }
+        val uTags = errorAdapter.getUnknownTags()
+
+        var errorTextPotentialSimilar = ""
+        var errorTextUnknown = ""
+
+        uTags.map {
+            val similarStrings = sTags.getSimilarStringsTo(it, includeText = false)
+            if (similarStrings.isEmpty()) {
+                errorTextUnknown += it
+            } else {
+                errorTextPotentialSimilar += it + "\n" +
+                        "mirip dengan\n" +
+                        similarStrings + "\n"
+            }
+        }
+
+        return if (errorTextUnknown.isNotEmpty()) Pair(errorTextUnknown, false)
+        else Pair(errorTextPotentialSimilar, true)
     }
 
 }

@@ -12,6 +12,7 @@ class GenericCustomAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>>() {
     var expressionViewHolderBinding: ((T, ViewBinding, RecyclerView.ViewHolder) -> Unit)? = null
     var expressionOnCreateViewHolder: ((ViewGroup) -> ViewBinding)? = null
     var expressionGetAdapterError: (() -> String?)? = null
+    var expressionGetUnknownTags: (() -> List<String>)? = null
     var listener: ItemClickListener? = null
 
     val dataSet = mutableListOf<T>()
@@ -29,13 +30,11 @@ class GenericCustomAdapter<T> : RecyclerView.Adapter<BaseViewHolder<T>>() {
         holder.bind(dataSet[position])
     }
 
-    override fun getItemCount(): Int {
-        return dataSet.size
-    }
+    override fun getItemCount() = dataSet.size
 
-    fun getError(): String? {
-        return expressionGetAdapterError?.let { it() }
-    }
+    fun getError() = expressionGetAdapterError?.let { it() }
+
+    fun getUnknownTags() = expressionGetUnknownTags?.let { it() } ?: listOf()
 }
 
 

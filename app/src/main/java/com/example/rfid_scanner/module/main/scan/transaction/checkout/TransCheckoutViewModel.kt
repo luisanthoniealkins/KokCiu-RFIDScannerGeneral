@@ -16,7 +16,7 @@ import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.St
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.StockViewHolder.Companion.addOrUpdateStock
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.StockViewHolder.Companion.addTagsToStock
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.StockViewHolder.Companion.clearStockTags
-import com.example.rfid_scanner.utils.extension.StringExt.getSimilarStrings
+import com.example.rfid_scanner.utils.extension.StringExt.getSimilarStringsTo
 import com.example.rfid_scanner.utils.generic.viewmodel.ScanViewModel
 import com.example.rfid_scanner.utils.helper.TextHelper.emptyString
 import kotlinx.coroutines.channels.Channel
@@ -180,10 +180,26 @@ class TransCheckoutViewModel : ScanViewModel() {
         }
     }
 
-    fun checkSimilarTags(): String {
-        val list = mutableListOf<String>()
-        stockAdapter.dataSet.map { list.addAll(it.stock.items) }
-        return list.getSimilarStrings()
+    fun checkUnknownTagsError(): Pair<String, Boolean> {
+        val sTags = stockAdapter.dataSet.flatMap { it.stock.items }
+        val uTags = errorAdapter.getUnknownTags()
+
+        var errorTextPotentialSimilar = ""
+        var errorTextUnknown = ""
+
+        uTags.map {
+            val similarStrings = sTags.getSimilarStringsTo(it, includeText = false)
+            if (similarStrings.isEmpty()) {
+                errorTextUnknown += it
+            } else {
+                errorTextPotentialSimilar += it + "\n" +
+                        "mirip dengan\n" +
+                        similarStrings + "\n"
+            }
+        }
+
+        return if (errorTextUnknown.isNotEmpty()) Pair(errorTextUnknown, false)
+        else Pair(errorTextPotentialSimilar, true)
     }
 
 }

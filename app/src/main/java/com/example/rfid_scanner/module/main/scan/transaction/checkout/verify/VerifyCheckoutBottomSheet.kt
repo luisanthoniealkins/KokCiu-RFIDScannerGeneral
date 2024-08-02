@@ -2,6 +2,7 @@ package com.example.rfid_scanner.module.main.scan.transaction.checkout.verify
 
 import android.content.DialogInterface
 import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -56,16 +57,40 @@ class VerifyCheckoutBottomSheet(
                 return@setOnClickListener
             }
 
-            showToast("Tag berhasil diverifikasi")
-            listener.onVerifyBottomSheetDismiss(true)
-            dismiss()
+            val (error, allowPass) = viewModel.checkUnknownTagsError()
+            if (!allowPass) {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Kode tidak dikenal")
+                    .setMessage("Kode ini tidak mirip dengan hasil scan\n" +
+                            "(Tidak bisa lanjut)\n\n" +
+                            error
+                    )
+                    .setPositiveButton("Ok") { _, _ -> }
+                    .create()
+                    .show()
+                return@setOnClickListener
+            }
+
+            if (error.isNotEmpty()) {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Kode tidak dikenal")
+                    .setMessage("Kode ini mirip dengan hasil scan\n" +
+                            "(Bisa lanjut)\n\n" +
+                            error
+                    )
+                    .setPositiveButton("Ok") { _, _ -> dismissSuccess() }
+                    .setNegativeButton("Batal") { _, _ -> }
+                    .create()
+                    .show()
+            } else {
+                dismissSuccess()
+            }
         }
     }
 
-    /***
-     * WOIII INI GA ADA OBVERSE WITH OWNER KAHHH
+    /**
+     * TODO: INI GA ADA OBVERSE WITH OWNER KAHHH
      */
-
     override fun observeData(): Unit = with(viewModel) {
         lifecycleScope.launchWhenStarted {
             launch {
@@ -91,6 +116,13 @@ class VerifyCheckoutBottomSheet(
         super.onDismiss(dialog)
         listener.onVerifyBottomSheetDismiss(false)
     }
+
+    private fun dismissSuccess() {
+        showToast("Tag berhasil diverifikasi")
+        listener.onVerifyBottomSheetDismiss(true)
+        dismiss()
+    }
+
 }
 
 

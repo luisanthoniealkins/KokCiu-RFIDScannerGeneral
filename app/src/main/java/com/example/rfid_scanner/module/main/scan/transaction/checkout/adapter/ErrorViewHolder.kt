@@ -1,17 +1,12 @@
 package com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import com.example.rfid_scanner.R
-import com.example.rfid_scanner.data.model.StockRequirement
 import com.example.rfid_scanner.data.model.Tag
 import com.example.rfid_scanner.data.model.Tag.Companion.isProperTag
 import com.example.rfid_scanner.databinding.ItemTagDetailBinding
 import com.example.rfid_scanner.utils.generic.adapter.GenericCustomAdapter
 import com.example.rfid_scanner.utils.helper.ColorHelper.gColor
-import com.example.rfid_scanner.utils.helper.LogHelper
-import com.example.rfid_scanner.utils.helper.TextHelper
-import com.example.rfid_scanner.utils.helper.TextHelper.emptyString
 
 class ErrorViewHolder {
 
@@ -74,7 +69,6 @@ class ErrorViewHolder {
                 for (tag in dataSet) {
                     when{
                         !tag.epc.isProperTag() -> error = "Format tag tidak sesuai"
-                        tag.status == Tag.STATUS_UNKNOWN -> error = "Beberapa barang tidak dikenal"
                         tag.status == Tag.STATUS_STORED -> error = "Beberapa barang tidak sesuai bon"
                         tag.status == Tag.STATUS_SOLD -> error = "Beberapa barang sudah dijual"
                         tag.status == Tag.STATUS_BROKEN -> error = "Beberapa barang rusak sudah keluar"
@@ -83,6 +77,10 @@ class ErrorViewHolder {
                     if (error != null) break
                 }
                 error
+            }
+
+            expressionGetUnknownTags = {
+                dataSet.filter { it.epc.isProperTag() && it.status == Tag.STATUS_UNKNOWN }.map { it.epc }
             }
 
             /**
