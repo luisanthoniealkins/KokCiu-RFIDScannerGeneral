@@ -13,9 +13,13 @@ import com.example.rfid_scanner.data.repository.component.RequestEndPoint
 import com.example.rfid_scanner.data.repository.component.RequestParam
 import com.example.rfid_scanner.data.repository.component.RequestResult
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.ErrorViewHolder
+import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.ErrorViewHolder.Companion.addErrorTag
+import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.ErrorViewHolder.Companion.addStockTag
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.StockViewHolder
+import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.StockViewHolder.Companion.addTagsToStock
 import com.example.rfid_scanner.module.main.scan.transaction.general.verify.adapter.VerifyTagAdapter
 import com.example.rfid_scanner.utils.extension.StringExt.getSimilarStringsTo
+import com.example.rfid_scanner.utils.extension.StringExt.isSimilarTo
 import com.example.rfid_scanner.utils.generic.viewmodel.ScanViewModel
 import com.example.rfid_scanner.utils.helper.LogHelper
 import kotlinx.coroutines.channels.Channel
@@ -106,13 +110,10 @@ class VerifyCheckoutViewModel : ScanViewModel() {
     private fun splitTags(tags: List<Tag>) {
         tags.map {
             if (it.status == Tag.STATUS_STORED && activeStocks.contains(it.stockCode) && it.epc.isProperTag()) {
-                stockAdapter.mapOfOperations[StockViewHolder.addTagsToStock]?.let { func ->
-                    (func as ((Tag) -> Unit))(it)
-                }
+                stockAdapter.mapOfOperations[addTagsToStock]?.let { func -> (func as ((Tag) -> Unit))(it) }
+                errorAdapter.mapOfOperations[addStockTag]?.let { func -> (func as ((Tag) -> Unit))(it) }
             } else {
-                errorAdapter.mapOfOperations[ErrorViewHolder.addErrorTag]?.let { func ->
-                    (func as ((Tag) -> Unit))(it)
-                }
+                errorAdapter.mapOfOperations[addErrorTag]?.let { func -> (func as ((Tag) -> Unit))(it) }
                 _tagCountError.postValue(errorAdapter.itemCount)
             }
         }
@@ -141,21 +142,23 @@ class VerifyCheckoutViewModel : ScanViewModel() {
         _tagCountTag.postValue(tagAdapter.itemCount)
     }
 
+
+    // COPY FROM TransCheckoutViewModel
     fun checkUnknownTagsError(): Pair<String, Boolean> {
-        val sTags = stockAdapter.dataSet.flatMap { it.stock.items }
+        val sTags = stockAdapter.dataSet.flatMap { it.stock.items.map { item -> Pair(item, it.stock.name) } }
         val uTags = errorAdapter.getUnknownTags()
 
         var errorTextPotentialSimilar = ""
         var errorTextUnknown = ""
 
-        uTags.map {
-            val similarStrings = sTags.getSimilarStringsTo(it, includeText = false)
+        uTags.map { uTag ->
+            val similarStrings = sTags.filter { it.first.isSimilarTo(uTag) }.joinToString(separator = "\n") { "[${it.second}]\n${it.first}" }
             if (similarStrings.isEmpty()) {
-                errorTextUnknown += it
+                errorTextUnknown += uTag
             } else {
-                errorTextPotentialSimilar += it + "\n" +
+                errorTextPotentialSimilar += uTag + "\n" +
                         "mirip dengan\n" +
-                        similarStrings + "\n"
+                        similarStrings + "\n\n"
             }
         }
 

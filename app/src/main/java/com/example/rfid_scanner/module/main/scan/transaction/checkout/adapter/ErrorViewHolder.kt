@@ -5,6 +5,7 @@ import com.example.rfid_scanner.R
 import com.example.rfid_scanner.data.model.Tag
 import com.example.rfid_scanner.data.model.Tag.Companion.isProperTag
 import com.example.rfid_scanner.databinding.ItemTagDetailBinding
+import com.example.rfid_scanner.utils.extension.StringExt.isSimilarTo
 import com.example.rfid_scanner.utils.generic.adapter.GenericCustomAdapter
 import com.example.rfid_scanner.utils.helper.ColorHelper.gColor
 
@@ -13,10 +14,12 @@ class ErrorViewHolder {
     companion object {
         const val addErrorTag = 0
         const val clearErrorTags = 1
+        const val addStockTag = 2
     }
 
     fun getAdapter(): GenericCustomAdapter<Tag> {
         val adapter = GenericCustomAdapter<Tag>()
+        val stockTags = mutableListOf<Tag>()
         with(adapter) {
             expressionOnCreateViewHolder = {
                 ItemTagDetailBinding.inflate(LayoutInflater.from(it.context), it, false)
@@ -26,7 +29,7 @@ class ErrorViewHolder {
                 val view = viewBinding as ItemTagDetailBinding
                 with(view) {
                     tvTagCode.text = item.epc
-                    tvStockName.text = item.stockName ?: "<no_name>"
+                    tvStockName.text = item.stockName ?: item.similarTagStockName ?: "<no_name>"
 
                     tvTagStatus.text = when {
                         !item.epc.isProperTag() -> "format tag\ntidak sesuai"
@@ -84,7 +87,7 @@ class ErrorViewHolder {
             }
 
             /**
-             * Custom operations start heere
+             * Custom operations start here
              */
             mapOfOperations[addErrorTag] = fun(tag: Tag) {
                 mapOfIndex[tag.epc]
@@ -93,6 +96,7 @@ class ErrorViewHolder {
                         notifyItemChanged(it)
                     }
                     ?: run {
+                        tag.similarTagStockName = stockTags.firstOrNull { it.epc.isSimilarTo(tag.epc) }?.stockName
                         dataSet.add(tag)
                         mapOfIndex[tag.epc] = dataSet.lastIndex
                         notifyItemInserted(dataSet.lastIndex)
@@ -101,9 +105,20 @@ class ErrorViewHolder {
 
             mapOfOperations[clearErrorTags] = fun() {
                 mapOfIndex.clear()
+                stockTags.clear()
                 while (dataSet.isNotEmpty()) {
                     dataSet.removeLast()
                     notifyItemRemoved(dataSet.size)
+                }
+            }
+
+            mapOfOperations[addStockTag] = fun (tag: Tag) {
+                stockTags.add(tag)
+                dataSet.mapIndexed { index, eTag ->
+                    if (eTag.epc.isSimilarTo(tag.epc)) {
+                        dataSet[index].similarTagStockName = tag.stockName
+                        notifyItemChanged(index)
+                    }
                 }
             }
         }

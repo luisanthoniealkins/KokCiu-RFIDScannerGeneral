@@ -35,7 +35,6 @@ class VerifyCheckoutBottomSheet(
     }
 
     override fun setUpViews(): Unit = with(binding){
-
         rvItem.layoutManager = LinearLayoutManager(context)
         rvItem.adapter = viewModel.stockAdapter
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -57,15 +56,15 @@ class VerifyCheckoutBottomSheet(
                 return@setOnClickListener
             }
 
+            // COPY FROM TransCheckoutFragment
             val (error, allowPass) = viewModel.checkUnknownTagsError()
             if (!allowPass) {
                 AlertDialog.Builder(requireContext())
-                    .setTitle("Kode tidak dikenal")
-                    .setMessage("Kode ini tidak mirip dengan hasil scan\n" +
-                            "(Tidak bisa lanjut)\n\n" +
+                    .setTitle("Kode tidak dikenal\n(TIDAK BISA LANJUT)")
+                    .setMessage("Kode ini tidak mirip dengan hasil scan\n\n" +
                             error
                     )
-                    .setPositiveButton("Ok") { _, _ -> }
+                    .setNegativeButton("Batal") { _, _ -> }
                     .create()
                     .show()
                 return@setOnClickListener
@@ -73,12 +72,11 @@ class VerifyCheckoutBottomSheet(
 
             if (error.isNotEmpty()) {
                 AlertDialog.Builder(requireContext())
-                    .setTitle("Kode tidak dikenal")
-                    .setMessage("Kode ini mirip dengan hasil scan\n" +
-                            "(Bisa lanjut)\n\n" +
+                    .setTitle("Kode tidak dikenal\n(BISA LANJUT)")
+                    .setMessage("Kode ini mirip dengan hasil scan\n\n" +
                             error
                     )
-                    .setPositiveButton("Ok") { _, _ -> dismissSuccess() }
+                    .setPositiveButton("Lanjut") { _, _ -> dismissSuccess() }
                     .setNegativeButton("Batal") { _, _ -> }
                     .create()
                     .show()

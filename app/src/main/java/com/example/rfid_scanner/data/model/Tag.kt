@@ -12,7 +12,9 @@ class Tag(
     val status: String? = null,
     val stockId: String? = null,
     val stockName: String? = null,
-    val stockUnitCount: Int = 0
+    val stockUnitCount: Int = 0,
+
+    var similarTagStockName: String? = null
 ) {
 
     companion object {

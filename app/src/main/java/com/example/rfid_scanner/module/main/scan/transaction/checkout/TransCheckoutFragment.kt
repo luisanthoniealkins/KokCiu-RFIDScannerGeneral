@@ -141,15 +141,15 @@ class TransCheckoutFragment : ScanFragment<FragmentTransCheckoutBinding, TransCh
             return
         }
 
+        // COPY TO: VerifyCheckoutBottomSheet
         val (error, allowPass) = viewModel.checkUnknownTagsError()
         if (!allowPass) {
             AlertDialog.Builder(requireContext())
-                .setTitle("Kode tidak dikenal")
-                .setMessage("Kode ini tidak mirip dengan hasil scan\n" +
-                        "(Tidak bisa lanjut)\n\n" +
+                .setTitle("Kode tidak dikenal\n(TIDAK BISA LANJUT)")
+                .setMessage("Kode ini tidak mirip dengan hasil scan\n\n" +
                         error
                 )
-                .setPositiveButton("Ok") { _, _ -> }
+                .setNegativeButton("Batal") { _, _ -> }
                 .create()
                 .show()
             return
@@ -157,12 +157,11 @@ class TransCheckoutFragment : ScanFragment<FragmentTransCheckoutBinding, TransCh
 
         if (error.isNotEmpty()) {
             AlertDialog.Builder(requireContext())
-                .setTitle("Kode tidak dikenal")
-                .setMessage("Kode ini mirip dengan hasil scan\n" +
-                        "(Bisa lanjut)\n\n" +
+                .setTitle("Kode tidak dikenal\n(BISA LANJUT)")
+                .setMessage("Kode ini mirip dengan hasil scan\n\n" +
                         error
                 )
-                .setPositiveButton("Ok") { _, _ -> showVerifyBottomSheet() }
+                .setPositiveButton("Lanjut") { _, _ -> showVerifyBottomSheet() }
                 .setNegativeButton("Batal") { _, _ -> }
                 .create()
                 .show()

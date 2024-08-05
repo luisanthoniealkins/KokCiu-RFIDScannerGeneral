@@ -31,7 +31,7 @@ object StringExt {
         return this.length in min..max
     }
 
-    fun String.isSimilarTo(others: String, maxDif: Int): Boolean {
+    fun String.isSimilarTo(others: String, maxDif: Int = StorageService.getI().epcDiffTolerance): Boolean {
         if (this.length != others.length) return false
         var dif = 0
         this.mapIndexed { index, c -> if (others[index] != c) dif++ }
@@ -42,7 +42,7 @@ object StringExt {
         val set = mutableSetOf<String>()
         var result = ""
         this.map { str -> this.map { if (str != it) {
-            if (str.isSimilarTo(it, StorageService.getI().epcDiffTolerance)) {
+            if (str.isSimilarTo(it)) {
                 if (!set.contains(str)) {
                     set.add(str)
                     result += str + "\n"
