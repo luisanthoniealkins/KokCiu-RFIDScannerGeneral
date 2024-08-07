@@ -29,7 +29,7 @@ class ErrorViewHolder {
                 val view = viewBinding as ItemTagDetailBinding
                 with(view) {
                     tvTagCode.text = item.epc
-                    tvStockName.text = item.stockName ?: item.similarTagStockName ?: "<no_name>"
+                    tvStockName.text = item.stockName ?: item.similarTagStockName?.let { "<$it>" } ?: "<no_name>"
 
                     tvTagStatus.text = when {
                         !item.epc.isProperTag() -> "format tag\ntidak sesuai"

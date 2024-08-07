@@ -57,6 +57,7 @@ class TransCheckoutViewModel : ScanViewModel() {
     val bills = mutableListOf<Bill>()
     private var activeStocks = mutableSetOf<String>()
     private var queriedTags = mutableSetOf<String>()
+    private var stockTags = mutableSetOf<String>()
 
     init {
         viewModelScope.launch {
@@ -134,6 +135,7 @@ class TransCheckoutViewModel : ScanViewModel() {
             if (it.status == Tag.STATUS_STORED && activeStocks.contains(it.stockCode) && it.epc.isProperTag()) {
                 stockAdapter.mapOfOperations[addTagsToStock]?.let { func -> (func as ((Tag) -> Unit))(it) }
                 errorAdapter.mapOfOperations[addStockTag]?.let { func -> (func as ((Tag) -> Unit))(it) }
+                stockTags.add(it.epc)
             } else {
                 errorAdapter.mapOfOperations[addErrorTag]?.let { func -> (func as ((Tag) -> Unit))(it) }
                 _tagCountError.postValue(errorAdapter.itemCount)
@@ -143,6 +145,7 @@ class TransCheckoutViewModel : ScanViewModel() {
 
     override fun resetTags() {
         queriedTags.clear()
+        stockTags.clear()
         stockAdapter.mapOfOperations[clearStockTags]?.let { func -> (func as (() -> Unit))() }
         errorAdapter.mapOfOperations[clearErrorTags]?.let { func -> (func as (() -> Unit))() }
         _tagCountError.postValue(errorAdapter.itemCount)
@@ -160,7 +163,7 @@ class TransCheckoutViewModel : ScanViewModel() {
         viewModelScope.launch { mBluetoothScannerService.setChannel(channelTags) }
     }
 
-    fun getTagCount() = queriedTags.size
+    fun getTagCount() = stockTags.size
 
     fun commitTransaction() {
         viewModelScope.launch {
@@ -188,7 +191,7 @@ class TransCheckoutViewModel : ScanViewModel() {
         var errorTextUnknown = ""
 
         uTags.map { uTag ->
-            val similarStrings = sTags.filter { it.first.isSimilarTo(uTag) }.joinToString(separator = "\n") { "[${it.second}]\n${it.first}" }
+            val similarStrings = sTags.filter { it.first.isSimilarTo(uTag) }.joinToString(separator = "\n") { "<${it.second}>\n${it.first}" }
             if (similarStrings.isEmpty()) {
                 errorTextUnknown += uTag
             } else {
@@ -201,8 +204,4 @@ class TransCheckoutViewModel : ScanViewModel() {
         return if (errorTextUnknown.isNotEmpty()) Pair(errorTextUnknown, false)
         else Pair(errorTextPotentialSimilar, true)
     }
-
-
-
-
 }

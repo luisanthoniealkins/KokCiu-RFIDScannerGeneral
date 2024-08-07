@@ -152,7 +152,7 @@ class VerifyCheckoutViewModel : ScanViewModel() {
         var errorTextUnknown = ""
 
         uTags.map { uTag ->
-            val similarStrings = sTags.filter { it.first.isSimilarTo(uTag) }.joinToString(separator = "\n") { "[${it.second}]\n${it.first}" }
+            val similarStrings = sTags.filter { it.first.isSimilarTo(uTag) }.joinToString(separator = "\n") { "<${it.second}>\n${it.first}" }
             if (similarStrings.isEmpty()) {
                 errorTextUnknown += uTag
             } else {
