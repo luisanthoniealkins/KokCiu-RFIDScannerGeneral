@@ -109,9 +109,7 @@ class TransGeneralViewModel : ScanViewModel(), VerifyListener {
     }
 
     private fun removeQueried(tags: List<TagEPC>) : List<TagEPC> {
-        val newTags = mutableListOf<TagEPC>()
-        tags.map { if (!mapOfTags.containsKey(it.epc)) newTags.add(it) }
-        return newTags
+        return tags.filter { !mapOfTags.containsKey(it.epc) }
     }
 
     private fun addTags(tags: List<Tag>) {
@@ -186,7 +184,7 @@ class TransGeneralViewModel : ScanViewModel(), VerifyListener {
                 TRANSACTION_GENERAL,
                 transactionGeneral(
                     stockId = stockId,
-                    tags = mapOfTags.map { it.value },
+                    tags = mapOfTagsOK.map { it.value.data },
                     statusFrom = statusFrom.value!!,
                     statusTo = statusTo.value!!,
                 ),
