@@ -78,3 +78,11 @@ class DetailStock(
     val curStock: Int,
     val prevStock: Int
 ) : Stock(code!!, name, brand!!, vehicleType!!, unit!!, availableStock)
+
+data class StockRFID(
+    val stockCode: String,
+    val stockName: String,
+    val stockQuantity: Int,
+    val rfidQuantity: Int,
+    val unitCounts: MutableList<Int>,
+)

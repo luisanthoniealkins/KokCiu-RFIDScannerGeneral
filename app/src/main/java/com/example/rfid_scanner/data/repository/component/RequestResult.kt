@@ -12,7 +12,6 @@ import com.example.rfid_scanner.data.model.Transaction.Companion.STATUS_RUSAK
 import com.example.rfid_scanner.data.model.repository.MResponse.ResponseData
 import com.example.rfid_scanner.utils.helper.DateHelper
 import org.json.JSONArray
-import org.json.JSONException
 import org.json.JSONObject
 
 object RequestResult {
@@ -365,6 +364,35 @@ object RequestResult {
             rfids.add(arr[i] as String)
         }
         result.data = rfids
+
+        return result
+    }
+
+    fun validateRFID(response: JSONObject): ResponseData {
+        val result = getGeneralResponse(response)
+
+        val stockRfids = mutableListOf<StockRFID>()
+        val arr = response.getJSONArray("data")
+        for (i in 0 until arr.length()) {
+            val detail = arr[i] as JSONObject
+
+            val lstUnitCount = mutableListOf<Int>()
+            val arrUnitCount = detail.getJSONArray("stock_unit_counts")
+            for (j in 0 until arrUnitCount.length()) {
+                lstUnitCount.add(arrUnitCount[j] as Int)
+            }
+
+            stockRfids.add(
+                StockRFID(
+                    detail.getString("stock_code"),
+                    detail.getString("stock_name"),
+                    detail.getInt("stock_quantity"),
+                    detail.getInt("rfid_quantity"),
+                    lstUnitCount
+                )
+            )
+        }
+        result.data = stockRfids
 
         return result
     }

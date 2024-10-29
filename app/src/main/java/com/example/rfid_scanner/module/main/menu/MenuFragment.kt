@@ -87,6 +87,10 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(){
             navigateTo(MenuFragmentDirections.toHistoryStockFragment())
         }
 
+        btnCheckFraud.setOnClickListener {
+            navigateTo(MenuFragmentDirections.toCheckDatabaseRFIDFragment())
+        }
+
         btnAddEditStock.setOnClickListener {
             navigateTo(MenuFragmentDirections.toExploreStockFragment2(false))
         }

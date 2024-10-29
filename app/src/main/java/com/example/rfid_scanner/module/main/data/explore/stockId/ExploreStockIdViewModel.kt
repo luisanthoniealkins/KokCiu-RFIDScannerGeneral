@@ -53,8 +53,4 @@ class ExploreStockIdViewModel : BaseViewModel(), ItemClickListener {
     override fun onItemClick(item: Any) {
         _selectedItem.postValue(HandledEvent(item as StockIdSelected))
     }
-
-
-
-
 }

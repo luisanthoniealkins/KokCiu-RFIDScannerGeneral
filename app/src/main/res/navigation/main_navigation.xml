@@ -70,6 +70,9 @@
         <action
             android:id="@+id/to_settingsGeneralFragment"
             app:destination="@id/settingsGeneralFragment" />
+        <action
+            android:id="@+id/to_checkDatabaseRFIDFragment"
+            app:destination="@id/checkDatabaseRFIDFragment" />
     </fragment>
 
     <fragment
@@ -314,5 +317,30 @@
         android:name="com.example.rfid_scanner.module.main.settings.general.SettingsGeneralFragment"
         android:label="fragment_settings_general"
         tools:layout="@layout/fragment_settings_general" />
+    <fragment
+        android:id="@+id/checkDatabaseRFIDFragment"
+        android:name="com.example.rfid_scanner.module.main.other.check_database_rfid.CheckDatabaseRFIDFragment"
+        android:label="fragment_check_database_rfid"
+        tools:layout="@layout/fragment_check_database_rfid" >
+        <action
+            android:id="@+id/to_adjustmentDatabaseRFIDFragment"
+            app:destination="@id/adjustmentDatabaseRFIDFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adjustmentDatabaseRFIDFragment"
+        android:name="com.example.rfid_scanner.module.main.scan.transaction.adjustment_rfid.AdjustmentDatabaseRFIDFragment"
+        android:label="fragment_adjustment_database_rfid"
+        tools:layout="@layout/fragment_adjustment_database_rfid" >
+        <argument
+            android:name="stockCode"
+            app:argType="string" />
+        <argument
+            android:name="stockName"
+            app:argType="string" />
+        <argument
+            android:name="stockUnitCount"
+            app:argType="integer" />
+    </fragment>
+
 
 </navigation>

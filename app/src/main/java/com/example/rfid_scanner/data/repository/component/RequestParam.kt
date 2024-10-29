@@ -214,5 +214,15 @@ object RequestParam {
         return obj
     }
 
+    fun adjustRFID(stockCode: String, stockUnitCount: Int, rfidCode: String): JSONObject {
+        val obj = JSONObject()
+        obj.put("bill_code", DateHelper.getFormattedDateTimeCurrent("yyMMddhhmmss"))
+        obj.put("bill_date", DateHelper.getFormattedDateTimeCurrent("yyyy-MM-dd HH:mm:ss"))
+
+        obj.put("stock_code", stockCode)
+        obj.put("stock_unit_count", stockUnitCount)
+        obj.put("rfid_code", rfidCode)
+        return obj
+    }
 
 }

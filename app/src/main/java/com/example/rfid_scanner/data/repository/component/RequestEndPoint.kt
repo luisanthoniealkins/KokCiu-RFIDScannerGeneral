@@ -33,6 +33,8 @@ class RequestEndPoint {
         const val GET_ALL_STOCK_IDS = "getAllStockIds"
         const val TRANSACTION_GENERAL = "transactionGeneral"
         const val GET_TRANSACTION_RFIDS = "getTransactionRFIDS"
+        const val VALIDATE_RFID = "validateRFID"
+        const val ADJUST_RFID = "adjustRFID"
     }
 
 }
