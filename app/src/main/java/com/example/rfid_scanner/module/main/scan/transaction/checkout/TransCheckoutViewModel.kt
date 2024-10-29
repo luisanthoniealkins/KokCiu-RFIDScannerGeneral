@@ -9,6 +9,7 @@ import com.example.rfid_scanner.data.repository.VolleyRepository
 import com.example.rfid_scanner.data.repository.component.RequestEndPoint
 import com.example.rfid_scanner.data.repository.component.RequestParam
 import com.example.rfid_scanner.data.repository.component.RequestResult
+import com.example.rfid_scanner.data.repository.component.ResponseCode
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.ErrorViewHolder
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.ErrorViewHolder.Companion.addErrorTag
 import com.example.rfid_scanner.module.main.scan.transaction.checkout.adapter.ErrorViewHolder.Companion.addStockTag
@@ -178,6 +179,9 @@ class TransCheckoutViewModel : ScanViewModel() {
                 RequestResult::getGeneralResponse
             ).collect {
                 _commitState.postValue(it.state)
+                if (it.response?.code != ResponseCode.OK) {
+                    it.response?.let { it1 -> showToast(it1.message) }
+                }
             }
         }
     }

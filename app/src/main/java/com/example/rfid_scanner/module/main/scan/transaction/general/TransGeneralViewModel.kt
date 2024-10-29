@@ -17,6 +17,7 @@ import com.example.rfid_scanner.data.repository.component.RequestParam
 import com.example.rfid_scanner.data.repository.component.RequestParam.transactionGeneral
 import com.example.rfid_scanner.data.repository.component.RequestResult
 import com.example.rfid_scanner.data.repository.component.RequestResult.getGeneralResponse
+import com.example.rfid_scanner.data.repository.component.ResponseCode
 import com.example.rfid_scanner.module.main.scan.transaction.general.adapter.ErrorAdapter
 import com.example.rfid_scanner.module.main.scan.transaction.general.adapter.TagAdapter
 import com.example.rfid_scanner.module.main.scan.transaction.general.adapter.TagAdapter.TagData
@@ -191,6 +192,9 @@ class TransGeneralViewModel : ScanViewModel(), VerifyListener {
                 ::getGeneralResponse
             ).collect {
                 _commitState.postValue(it.state)
+                if (it.response?.code != ResponseCode.OK) {
+                    it.response?.let { it1 -> showToast(it1.message) }
+                }
             }
         }
     }

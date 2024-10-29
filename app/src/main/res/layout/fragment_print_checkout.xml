@@ -25,7 +25,7 @@
             android:id="@+id/btn_force_exit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Force Exit"
+            android:text="KELUAR PAKSA"
             android:layout_marginEnd="8dp"
             android:visibility="gone"/>
     </LinearLayout>
