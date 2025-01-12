@@ -86,7 +86,7 @@ class VolleyRepository(private val context: Context) {
 
         if (useRetryPolicy) {
             request.retryPolicy = DefaultRetryPolicy(
-                10000,
+                20000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
             )
