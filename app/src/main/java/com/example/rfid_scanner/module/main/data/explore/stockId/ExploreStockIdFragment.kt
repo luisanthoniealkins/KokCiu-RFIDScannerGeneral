@@ -5,12 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rfid_scanner.R
 import com.example.rfid_scanner.databinding.FragmentExploreBinding
-import com.example.rfid_scanner.module.main.data.explore.property.ExplorePropertyFragmentDirections
 import com.example.rfid_scanner.module.main.data.explore.stockId.ExploreStockIdViewModel.Companion.KEY_STOCK_ID
 import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
 
@@ -24,7 +22,7 @@ class ExploreStockIdFragment : BaseFragment<FragmentExploreBinding, ExploreStock
     override fun retrieveArgs() {
         val args: ExploreStockIdFragmentArgs by navArgs()
         viewModel.searching = args.isSearching
-        viewModel.getAllStockIds()
+        viewModel.executeGetAllStockIds("")
     }
 
     override fun setUpViews() = with(binding) {
@@ -36,7 +34,7 @@ class ExploreStockIdFragment : BaseFragment<FragmentExploreBinding, ExploreStock
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String) = false
             override fun onQueryTextChange(newText: String): Boolean {
-                viewModel.exploreAdapter.filter(newText)
+                viewModel.executeGetAllStockIds(newText)
                 return false
             }
         })

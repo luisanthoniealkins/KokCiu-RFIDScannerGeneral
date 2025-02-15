@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rfid_scanner.R
 import com.example.rfid_scanner.data.model.Bill
+import com.example.rfid_scanner.data.model.repository.MResponse
 import com.example.rfid_scanner.databinding.FragmentHistoryTransactionBinding
 import com.example.rfid_scanner.module.main.menu.MenuFragmentDirections
 import com.example.rfid_scanner.utils.generic.fragment.BaseFragment
@@ -46,10 +47,16 @@ class HistoryTransactionFragment : BaseFragment<FragmentHistoryTransactionBindin
         actvDate.setAdapter(ArrayAdapter(requireContext(), R.layout.item_date, dates))
         actvDate.setText(dates[0], false)
         actvDate.setOnItemClickListener { adapterView: AdapterView<*>, _: View?, i: Int, _: Long ->
-            viewModel.adapter.setTransactions(mutableListOf())
-            viewModel.getAllTransactions(DateHelper.getDate("MMMM, yyyy", adapterView.getItemAtPosition(i).toString())!!)
+            viewModel.setTransactionDate(adapterView.getItemAtPosition(i).toString())
         }
 
+        chipCheckIn.isChecked = viewModel.checkInChecked
+        chipCheckOut.isChecked = viewModel.checkOutChecked
+        chipReturn.isChecked = viewModel.returnChecked
+        chipBroken.isChecked = viewModel.brokenChecked
+        chipClear.isChecked = viewModel.clearChecked
+        chipAdjustment.isChecked = viewModel.adjustChecked
+        chipOthers.isChecked = viewModel.othersChecked
         listOf(
             chipCheckIn, chipCheckOut, chipReturn, chipBroken, chipClear, chipAdjustment, chipOthers
         ).map {
@@ -86,24 +93,29 @@ class HistoryTransactionFragment : BaseFragment<FragmentHistoryTransactionBindin
                 0
             )
         }
+
+        btnQueryAll.setOnClickListener {
+            viewModel.getAllTransactions(isLimited = false)
+        }
+
     }
 
     private fun applyFilter() = with(binding) {
-        viewModel.adapter.setChecked(
+        viewModel.setFilter(
             chipCheckIn.isChecked,
             chipCheckOut.isChecked,
             chipReturn.isChecked,
             chipBroken.isChecked,
             chipClear.isChecked,
             chipAdjustment.isChecked,
-            chipOthers.isChecked,
+            chipOthers.isChecked
         )
     }
 
     override fun observeData() = with(viewModel) {
         lvTransactionDates.observeWithOwner {
             binding.actvDate.setAdapter(ArrayAdapter(requireContext(), R.layout.item_date, it.reversed()))
-            viewModel.getAllTransactions(DateHelper.getDate("MMMM, yyyy",binding.actvDate.text.toString())!!)
+            viewModel.setTransactionDate(binding.actvDate.text.toString())
         }
 
         lvSelectedItem.observeWithOwner { heCode ->
@@ -115,6 +127,20 @@ class HistoryTransactionFragment : BaseFragment<FragmentHistoryTransactionBindin
                     navigateTo(HistoryTransactionFragmentDirections.toTransactionRFIDFragment(it as String))
                 }
             }
+        }
+
+        lvQueryState.observeWithOwner {
+            binding.pbLoading.visibility = if (it.state == MResponse.LOADING) View.VISIBLE else View.GONE
+            binding.imvDone.visibility = if (it.state == MResponse.FINISHED_SUCCESS) View.VISIBLE else View.GONE
+            binding.imvFail.visibility = if (it.state == MResponse.FINISHED_FAILURE) View.VISIBLE else View.GONE
+        }
+
+        lvShowQueryAllButton.observeWithOwner {
+            binding.btnQueryAll.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
+        lvQueryInfo.observeWithOwner {
+            binding.tvText.text = it
         }
     }
 

@@ -34,21 +34,21 @@ class SettingsTagFragment : BaseFragment<FragmentSettingsTagBinding, SettingsTag
             if (minEPCLength.isNotEmpty()) ""
             else {
                 isError = true
-                "IP Address harus diisi"
+                "Kolom harus diisi"
             }
 
         binding.tilMaxEpc.error =
             if (maxEPCLength.isNotEmpty()) ""
             else {
                 isError = true
-                "Port harus diisi"
+                "Kolom harus diisi"
             }
 
         binding.tilToleranceTagDiff.error =
             if (epcDiffTolerance.isNotEmpty()) ""
             else {
                 isError = true
-                "Nama Wifi harus diisi"
+                "Kolom harus diisi"
             }
 
         if (isError) return

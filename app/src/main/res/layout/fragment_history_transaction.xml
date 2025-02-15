@@ -76,7 +76,6 @@
             android:id="@+id/chip_check_in"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:checked="true"
             android:text="Masuk"
             app:chipBackgroundColor="@color/bg_chip_state_list_green" />
 
@@ -85,7 +84,6 @@
             android:id="@+id/chip_check_out"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:checked="true"
             android:text="Keluar"
             app:chipBackgroundColor="@color/bg_chip_state_list_red" />
 
@@ -94,7 +92,6 @@
             android:id="@+id/chip_return"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:checked="true"
             android:text="Retur"
             app:chipBackgroundColor="@color/bg_chip_state_list_blue" />
 
@@ -113,7 +110,6 @@
             android:id="@+id/chip_broken"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:checked="true"
             android:text="Rusak"
             app:chipBackgroundColor="@color/bg_chip_state_list_brown" />
 
@@ -122,7 +118,6 @@
             android:id="@+id/chip_clear"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:checked="true"
             android:text="Hapus"
             app:chipBackgroundColor="@color/bg_chip_state_list_gray" />
 
@@ -131,7 +126,6 @@
             android:id="@+id/chip_adjustment"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:checked="true"
             android:text="Penyesuaian"
             app:chipBackgroundColor="@color/bg_chip_state_list_yellow" />
 
@@ -149,7 +143,6 @@
             android:id="@+id/chip_others"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:checked="false"
             android:text="Tambahan"
             app:chipBackgroundColor="@color/bg_chip_state_list_blue_gray" />
 
@@ -166,6 +159,57 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginHorizontal="8dp">
+
+        <TextView
+            android:id="@+id/tv_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:text="10 Transaksi Terakhir"
+            android:textStyle="bold"
+            android:paddingVertical="8dp"/>
+
+        <ImageView
+            android:id="@+id/imv_done"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_baseline_check_24"
+            app:tint="@color/black" />
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/black"/>
+
+        <ImageView
+            android:id="@+id/imv_fail"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_baseline_clear_24"
+            android:visibility="gone"
+            app:tint="@color/black" />
+
+        <Button
+            android:id="@+id/btn_query_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tampilkan Semua"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_item"

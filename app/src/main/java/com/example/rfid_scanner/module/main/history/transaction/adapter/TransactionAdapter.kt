@@ -29,7 +29,6 @@ class TransactionAdapter(
 ): RecyclerView.Adapter<TransactionAdapter.TransactionHolder>(), Filterable {
 
     private var mTransactions = mutableListOf<Transaction>()
-    private var checkedStatus = HashMap<String, Boolean>()
     private var textFilter = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, i: Int): TransactionHolder =
@@ -51,26 +50,6 @@ class TransactionAdapter(
         notifyDataSetChanged()
     }
 
-    fun setChecked(
-        checkIn: Boolean,
-        checkOut: Boolean,
-        _return: Boolean,
-        broken: Boolean,
-        clear: Boolean,
-        adjust: Boolean,
-        other: Boolean
-    ) {
-        checkedStatus[Transaction.STATUS_MASUK] = checkIn
-        checkedStatus[Transaction.STATUS_KELUAR] = checkOut
-        checkedStatus[Transaction.STATUS_RETUR] = _return
-        checkedStatus[Transaction.STATUS_RUSAK] = broken
-        checkedStatus[Transaction.STATUS_HAPUS] = clear
-        checkedStatus[Transaction.STATUS_PENYESUAIAN] = adjust
-        checkedStatus[Transaction.STATUS_PAKAI_ULANG] = other
-        checkedStatus[Transaction.STATUS_CUSTOM] = other
-        refresh()
-    }
-
     override fun getFilter(): Filter {
         return codeFilter
     }
@@ -80,7 +59,6 @@ class TransactionAdapter(
             val filteredList: MutableList<Transaction> = ArrayList()
             textFilter = ""
             for (tr in mTransactionsFull) {
-                if (!checkedStatus[tr.type]!!) continue
                 if (constraint.isNotEmpty()) {
                     val filterPattern =
                         constraint.toString().lowercase(Locale.getDefault()).trim { it <= ' ' }

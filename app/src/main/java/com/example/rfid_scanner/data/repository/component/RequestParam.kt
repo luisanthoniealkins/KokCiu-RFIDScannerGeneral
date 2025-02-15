@@ -1,6 +1,7 @@
 package com.example.rfid_scanner.data.repository.component
 
 import com.example.rfid_scanner.data.model.*
+import com.example.rfid_scanner.service.StorageService
 import com.example.rfid_scanner.utils.helper.DateHelper
 import org.json.JSONArray
 import org.json.JSONException
@@ -148,10 +149,37 @@ object RequestParam {
         return obj
     }
 
-    fun getAllTransactions(date: Date?): JSONObject {
+    fun getAllStockIds(textFilter: String): JSONObject {
+        val obj = JSONObject()
+        obj.put("filter_pattern", textFilter)
+        obj.put("limit", StorageService.getI().stockIdQueryLimit)
+        return obj
+    }
+
+    fun getAllTransactions(
+        date: Date?,
+        isLimited: Boolean,
+        checkInChecked: Boolean,
+        checkOutChecked: Boolean,
+        returnChecked: Boolean,
+        brokenChecked: Boolean,
+        clearChecked: Boolean,
+        adjustChecked: Boolean,
+        othersChecked: Boolean
+    ): JSONObject {
         val obj = JSONObject()
         obj.put("year", DateHelper.getDateAttribute(date, Calendar.YEAR))
         obj.put("month", DateHelper.getDateAttribute(date, Calendar.MONTH) + 1)
+        obj.put("limit", if (isLimited) StorageService.getI().transactionHistoryQueryLimit else -1)
+
+        obj.put("check_in_checked", checkInChecked)
+        obj.put("check_out_checked", checkOutChecked)
+        obj.put("return_checked", returnChecked)
+        obj.put("broken_checked", brokenChecked)
+        obj.put("clear_checked", clearChecked)
+        obj.put("adjust_checked", adjustChecked)
+        obj.put("others_checked", othersChecked)
+
         return obj
     }
 

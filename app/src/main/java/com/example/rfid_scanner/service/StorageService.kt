@@ -5,11 +5,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.example.rfid_scanner.data.model.BTDeviceConfig
-import com.example.rfid_scanner.utils.constant.Constant
 import com.example.rfid_scanner.utils.constant.Constant.BluetoothDeviceType.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
 
 class StorageService(private val context: Context) {
 
@@ -24,6 +22,8 @@ class StorageService(private val context: Context) {
         private const val SP_MAX_EPC_LENGTH = "sp_max_epc_length"
         private const val SP_EPC_DIFF_TOLERANCE = "sp_epc_diff_tolerance"
         private const val SP_QR_CODE_DELIMITER = "sp_qr_code_delimiter"
+        private const val SP_TRANSACTION_HISTORY_QUERY_LIMIT = "sp_transaction_history_query_limit"
+        private const val SP_STOCK_ID_QUERY_LIMIT = "sp_stock_id_query_limit"
 
         private const val SP_BT_DEVICE_CONFIGS = "sp_bt_device_configs"
 
@@ -84,6 +84,14 @@ class StorageService(private val context: Context) {
     var qrCodeDelimiter
         set(value) = put(SP_QR_CODE_DELIMITER, value)
         get() = get(SP_QR_CODE_DELIMITER, "/")
+
+    var transactionHistoryQueryLimit
+        set(value) = putInt(SP_TRANSACTION_HISTORY_QUERY_LIMIT, value)
+        get() = getInt(SP_TRANSACTION_HISTORY_QUERY_LIMIT, 20)
+
+    var stockIdQueryLimit
+        set(value) = putInt(SP_STOCK_ID_QUERY_LIMIT, value)
+        get() = getInt(SP_STOCK_ID_QUERY_LIMIT, 30)
 
     val btDeviceConfigs =
         Gson().fromJson<MutableList<BTDeviceConfig>?>(
