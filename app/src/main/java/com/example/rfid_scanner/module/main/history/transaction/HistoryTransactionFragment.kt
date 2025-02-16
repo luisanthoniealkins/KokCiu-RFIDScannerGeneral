@@ -66,6 +66,7 @@ class HistoryTransactionFragment : BaseFragment<FragmentHistoryTransactionBindin
         rvItem.layoutManager = LinearLayoutManager(requireContext())
         rvItem.adapter = viewModel.adapter
 
+        btnFilter.text = "Filter (${viewModel.getFilterCount()})"
         btnFilter.setOnClickListener {
             viewModel.showFilterList = !viewModel.showFilterList
             llChipContainer1.visibility = if (viewModel.showFilterList) View.VISIBLE else View.GONE
@@ -97,8 +98,8 @@ class HistoryTransactionFragment : BaseFragment<FragmentHistoryTransactionBindin
         btnQueryAll.setOnClickListener {
             viewModel.getAllTransactions(isLimited = false)
         }
-
     }
+
 
     private fun applyFilter() = with(binding) {
         viewModel.setFilter(
@@ -110,6 +111,7 @@ class HistoryTransactionFragment : BaseFragment<FragmentHistoryTransactionBindin
             chipAdjustment.isChecked,
             chipOthers.isChecked
         )
+        btnFilter.text = "Filter (${viewModel.getFilterCount()})"
     }
 
     override fun observeData() = with(viewModel) {

@@ -114,4 +114,7 @@ class StorageService(private val context: Context) {
 
     private fun putInt(key: String, value: Int) = getPref().edit().putInt(key, value).apply()
     private fun getInt(key: String, default: Int) = getPref().getInt(key, default)
+
+    fun isTransactionFilterChecked(filterType: String, defaultValue: Boolean) = getPref().getBoolean("filter-${filterType}", defaultValue)
+    fun setTransactionFilterChecked(filterType: String, isChecked: Boolean) = getPref().edit().putBoolean("filter-${filterType}", isChecked).apply()
 }

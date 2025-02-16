@@ -10,6 +10,7 @@ import com.example.rfid_scanner.data.repository.component.RequestEndPoint
 import com.example.rfid_scanner.data.repository.component.RequestParam
 import com.example.rfid_scanner.data.repository.component.RequestResult
 import com.example.rfid_scanner.module.main.history.transaction.adapter.TransactionAdapter
+import com.example.rfid_scanner.service.StorageService
 import com.example.rfid_scanner.utils.custom.kclass.HandledEvent
 import com.example.rfid_scanner.utils.generic.viewmodel.BaseViewModel
 import com.example.rfid_scanner.utils.helper.DateHelper
@@ -19,24 +20,35 @@ import java.util.*
 
 class HistoryTransactionViewModel : BaseViewModel(), ItemClickListener {
 
+    companion object {
+        const val STATUS_MASUK = "MASUK"
+        const val STATUS_KELUAR = "KELUAR"
+        const val STATUS_RETUR = "RETUR"
+        const val STATUS_RUSAK = "RUSAK"
+        const val STATUS_HAPUS = "HAPUS"
+        const val STATUS_PENYESUAIAN = "PENYESUAIAN"
+        const val STATUS_TAMBAHAN = "TAMBAHAN"
+    }
+
+
     val adapter = TransactionAdapter(mutableListOf(), this)
 
     var showFilterList = false
 
     private val _lvTransactionDates = MutableLiveData<List<String>>()
-    val lvTransactionDates : LiveData<List<String>> = _lvTransactionDates
+    val lvTransactionDates: LiveData<List<String>> = _lvTransactionDates
 
     private val _lvQueryInfo = MutableLiveData<String>()
-    val lvQueryInfo : LiveData<String> = _lvQueryInfo
+    val lvQueryInfo: LiveData<String> = _lvQueryInfo
 
     private val _lvSelectedItem = MutableLiveData<HandledEvent<Any>>()
-    val lvSelectedItem : LiveData<HandledEvent<Any>> = _lvSelectedItem
+    val lvSelectedItem: LiveData<HandledEvent<Any>> = _lvSelectedItem
 
     private val _lvShowQueryAllButton = MutableLiveData<Boolean>()
-    val lvShowQueryAllButton : LiveData<Boolean> = _lvShowQueryAllButton
+    val lvShowQueryAllButton: LiveData<Boolean> = _lvShowQueryAllButton
 
     private val _lvQueryState = MutableLiveData<MResponse>()
-    val lvQueryState : LiveData<MResponse> = _lvQueryState
+    val lvQueryState: LiveData<MResponse> = _lvQueryState
 
     fun getAllTransactionDates() {
         viewModelScope.launch {
@@ -44,7 +56,7 @@ class HistoryTransactionViewModel : BaseViewModel(), ItemClickListener {
                 RequestEndPoint.GET_ALL_TRANSACTIONS_DATES,
                 null,
                 RequestResult::getAllTransactionsDates
-            ).collect{ res ->
+            ).collect { res ->
                 res.response?.data?.let {
                     _lvTransactionDates.postValue(it as List<String>)
                 }
@@ -56,17 +68,17 @@ class HistoryTransactionViewModel : BaseViewModel(), ItemClickListener {
         _lvSelectedItem.postValue(HandledEvent(item))
     }
 
-    private var selectedTransactionDate : Date? = null
-    var checkInChecked = true
-    var checkOutChecked = true
-    var returnChecked = true
-    var brokenChecked = true
-    var clearChecked = true
-    var adjustChecked = true
-    var othersChecked = false
+    private var selectedTransactionDate: Date? = null
+    var checkInChecked = StorageService.getI().isTransactionFilterChecked(STATUS_MASUK, true)
+    var checkOutChecked = StorageService.getI().isTransactionFilterChecked(STATUS_KELUAR, true)
+    var returnChecked = StorageService.getI().isTransactionFilterChecked(STATUS_RETUR, true)
+    var brokenChecked = StorageService.getI().isTransactionFilterChecked(STATUS_RUSAK, true)
+    var clearChecked = StorageService.getI().isTransactionFilterChecked(STATUS_HAPUS, true)
+    var adjustChecked = StorageService.getI().isTransactionFilterChecked(STATUS_PENYESUAIAN, true)
+    var othersChecked = StorageService.getI().isTransactionFilterChecked(STATUS_TAMBAHAN, false)
 
     fun setTransactionDate(toString: String) {
-        selectedTransactionDate = DateHelper.getDate("MMMM, yyyy",toString)!!
+        selectedTransactionDate = DateHelper.getDate("MMMM, yyyy", toString)!!
 
         getAllTransactions()
     }
@@ -90,7 +102,7 @@ class HistoryTransactionViewModel : BaseViewModel(), ItemClickListener {
                     othersChecked,
                 ),
                 RequestResult::getAllTransactions
-            ).collect{ res ->
+            ).collect { res ->
                 _lvQueryState.postValue(res)
                 res.response?.data?.let {
                     adapter.setTransactions(it as List<Transaction>)
@@ -122,6 +134,25 @@ class HistoryTransactionViewModel : BaseViewModel(), ItemClickListener {
         this.adjustChecked = adjustChecked
         this.othersChecked = othersChecked
 
+        StorageService.getI().setTransactionFilterChecked(STATUS_MASUK, checkInChecked)
+        StorageService.getI().setTransactionFilterChecked(STATUS_KELUAR, checkOutChecked)
+        StorageService.getI().setTransactionFilterChecked(STATUS_RETUR, returnChecked)
+        StorageService.getI().setTransactionFilterChecked(STATUS_RUSAK, brokenChecked)
+        StorageService.getI().setTransactionFilterChecked(STATUS_HAPUS, clearChecked)
+        StorageService.getI().setTransactionFilterChecked(STATUS_PENYESUAIAN, adjustChecked)
+        StorageService.getI().setTransactionFilterChecked(STATUS_TAMBAHAN, othersChecked)
+
         getAllTransactions()
     }
+
+    fun getFilterCount() = listOf(
+        checkInChecked,
+        checkOutChecked,
+        returnChecked,
+        brokenChecked,
+        clearChecked,
+        adjustChecked,
+        othersChecked
+    ).count { it }
+
 }
