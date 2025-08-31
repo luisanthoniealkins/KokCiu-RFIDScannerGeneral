@@ -45,6 +45,7 @@ class MainViewModel : BaseViewModel() {
             R.id.settingsBluetoothFragment,
             R.id.transactionRFIDFragment,
             R.id.settingsGeneralFragment,
+            R.id.takePictureFragment,
         )
 
         @RequiresApi(Build.VERSION_CODES.S)

@@ -92,5 +92,4 @@ class ExplorePropertyFragment : BaseFragment<FragmentExploreBinding, ExploreProp
 
 
 
-
 }

@@ -74,9 +74,6 @@ class AlterStockViewModel : BaseViewModel() {
             ).collect{ res ->
                 res.response?.let {
                     val codesInStock = it.data as Stock
-                    Log.d("12345", "1$hasPickedBrand")
-                    Log.d("12345", "2$hasPickedVehicleType")
-                    Log.d("12345", "3$hasPickedUnit")
 
                     if (!hasPickedBrand) {
                         currentStock.brand = codesInStock.brand

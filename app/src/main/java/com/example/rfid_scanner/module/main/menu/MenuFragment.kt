@@ -39,6 +39,10 @@ class MenuFragment : BaseFragment<FragmentMenuBinding, MenuViewModel>(){
             navigateTo(MenuFragmentDirections.toTagScannerFragment())
         }
 
+        btnTakePicture.setOnClickListener {
+            navigateTo(MenuFragmentDirections.toTakePictureFragment())
+        }
+
         btnTransactionGeneral.setOnClickListener {
             navigateTo(MenuFragmentDirections.toTransGeneralFragment(GENERAL))
         }

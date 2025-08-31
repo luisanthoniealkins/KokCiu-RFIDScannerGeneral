@@ -21,6 +21,13 @@
             android:layout_margin="8dp"
             android:text="Scan RFID"/>
 
+        <Button
+            android:id="@+id/btn_take_picture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="Take Picture"/>
+
         <LinearLayout
             android:id="@+id/ll_online"
             android:layout_width="match_parent"

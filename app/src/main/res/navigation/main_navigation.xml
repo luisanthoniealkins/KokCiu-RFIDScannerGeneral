@@ -73,6 +73,9 @@
         <action
             android:id="@+id/to_checkDatabaseRFIDFragment"
             app:destination="@id/checkDatabaseRFIDFragment" />
+        <action
+            android:id="@+id/to_takePictureFragment"
+            app:destination="@id/takePictureFragment" />
     </fragment>
 
     <fragment
@@ -341,6 +344,11 @@
             android:name="stockUnitCount"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/takePictureFragment"
+        android:name="com.example.rfid_scanner.module.main.take_picture.TakePictureFragment"
+        android:label="fragment_take_picture"
+        tools:layout="@layout/fragment_take_picture" />
 
 
 </navigation>
